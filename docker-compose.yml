@@ -5,7 +5,7 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_NAME=demo
+      - POSTGRES_DB=demo
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
     restart: unless-stopped

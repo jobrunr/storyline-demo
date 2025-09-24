@@ -31,10 +31,11 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'org.jobrunr:jobrunr-pro-spring-boot-3-starter:8.0.5'
+    implementation 'org.springframework.boot:spring-boot-starter'               // spring boot
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'          // data source autoconfig
+    implementation 'org.jobrunr:jobrunr-pro-spring-boot-3-starter:8.0.5'        // jobrunr pro
 
-    implementation 'com.zaxxer:HikariCP:6.2.1'
+    implementation 'com.zaxxer:HikariCP:6.2.1'                                  // postgres + conpooling
     implementation 'org.postgresql:postgresql:42.7.4'
 
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.18.2'
