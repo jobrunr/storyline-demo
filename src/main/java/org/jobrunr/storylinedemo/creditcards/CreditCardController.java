@@ -1,4 +1,4 @@
-package org.jobrunr.storylinedemo;
+package org.jobrunr.storylinedemo.creditcards;
 
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -12,6 +12,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class CreditCardController {
 
+    private final CreditCardService creditCardService;
+
+    public CreditCardController(CreditCardService creditCardService) {
+        this.creditCardService = creditCardService;
+    }
+
     @GetMapping({"/", "/register"})
     public String showRegistrationForm(Model model) {
         model.addAttribute("creditCard", new CreditCard());
@@ -24,7 +30,8 @@ public class CreditCardController {
             return "index";
         }
 
-        redirectAttributes.addFlashAttribute("message", "Application submitted successfully! Check your inbox.");
+        creditCardService.processRegistration(creditCard);
+        redirectAttributes.addFlashAttribute("message", "Application submitted successfully! A reminder will be sent in a week.");
         return "redirect:/register";
     }
 }
