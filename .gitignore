@@ -6,6 +6,7 @@ build/
 !**/src/test/**/build/
 
 gradle.properties
+jobrunr-pro.license
 
 ### STS ###
 .apt_generated

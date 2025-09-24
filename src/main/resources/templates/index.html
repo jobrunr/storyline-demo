@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Credit Card Registration</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div class="container">
+    <div th:if="${message}" class="success-message">
+        <span th:text="${message}"></span>
+    </div>
+
+    <h1>Apply for a Credit Card</h1>
+    <p>Please provide your information below to begin the application process.</p>
+
+    <img class="card-image" src="https://placehold.co/450x250/2c3e50/ecf0f1?text=Your+Credit+Card" alt="Generic Credit Card Image">
+
+    <form action="#" th:action="@{/register}" th:object="${creditCard}" method="post">
+        <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" th:field="*{name}" placeholder="Enter your full name">
+            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error-message"></span>
+        </div>
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" th:field="*{email}" placeholder="Enter your email address">
+            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-message"></span>
+        </div>
+        <button type="submit">Submit Application</button>
+    </form>
+</div>
+
+</body>
+</html>
