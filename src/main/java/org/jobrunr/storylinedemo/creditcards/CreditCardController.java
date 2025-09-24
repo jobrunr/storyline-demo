@@ -25,14 +25,13 @@ public class CreditCardController {
     }
 
     @PostMapping("/register")
-    public String processRegistration(@Valid @ModelAttribute("creditCard") CreditCard creditCard, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String processRegistration(@Valid @ModelAttribute("creditCard") CreditCard creditCard, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "index";
         }
 
         creditCardService.processRegistration(creditCard);
-        redirectAttributes.addFlashAttribute("message", "Application submitted successfully! A reminder will be sent in a week.");
-        return "redirect:/register";
+        return "redirect:/register?success";
     }
 }
 

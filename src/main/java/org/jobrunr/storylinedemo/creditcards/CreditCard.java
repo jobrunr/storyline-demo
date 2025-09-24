@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -23,12 +24,23 @@ public class CreditCard {
     @Email(message = "Please provide a valid email address")
     private String email;
 
+    @NotNull(message = "Credit card type is required")
+    private CardType type;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public CardType getType() {
+        return type;
+    }
+
+    public void setType(CardType cardType) {
+        this.type = cardType;
     }
 
     public String getName() {
@@ -51,6 +63,7 @@ public class CreditCard {
     public String toString() {
         return "CreditCard{" +
                 "id='" + id + '\'' +
+                "type='" + type + '\'' +
                 "name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 '}';

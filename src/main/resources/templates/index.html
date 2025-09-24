@@ -1,37 +1,66 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bank Credit Card Registration</title>
+    <title>Credit Card Registration</title>
     <link rel="stylesheet" href="/style.css">
 </head>
-<body>
-
-<div class="container">
-    <div th:if="${message}" class="success-message">
-        <span th:text="${message}"></span>
+<body class="flex-center">
+<header>
+    <a href="http://localhost:8000/dashboard" target="_blank">
+        <img src="/jobrunr-logo-white.webp" title="To JobRunr Pro Dashboard" style="width: 100px; position: relative; top: 5px;" />
+        <span>Dashboard</span>
+    </a>
+</header>
+<div class="card-container">
+    <div class="header">
+        <h1>Apply for a Credit Card</h1>
+        <p>Fill out the form below to get your new card.</p>
     </div>
 
-    <h1>Apply for a Credit Card</h1>
-    <p>Please provide your information below to begin the application process.</p>
+    <img id="card-image" class="card-image" src="/mastercard.png" alt="Credit card">
 
-    <img class="card-image" src="/creditcard.png" alt="JobRunr Credit Card">
-
-    <form action="#" th:action="@{/register}" th:object="${creditCard}" method="post">
-        <div class="form-group">
+    <form th:action="@{/register}" th:object="${creditCard}" method="post">
+        <div class="form-field">
             <label for="name">Full Name</label>
             <input type="text" id="name" th:field="*{name}" placeholder="Enter your full name">
-            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error-message"></span>
+            <p class="error-message" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
         </div>
-        <div class="form-group">
+        <div class="form-field">
             <label for="email">Email Address</label>
             <input type="email" id="email" th:field="*{email}" placeholder="Enter your email address">
-            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-message"></span>
+            <p class="error-message" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
         </div>
-        <button type="submit">Submit Application</button>
+        <div class="form-field">
+            <label for="type">Card Type</label>
+            <select id="type" th:field="*{type}">
+                <option value="" disabled selected>Select a card type</option>
+                <option th:each="type : ${T(org.jobrunr.storylinedemo.creditcards.CardType).values()}" th:value="${type}" th:text="${type}"></option>
+            </select>
+            <p class="error-message" th:if="${#fields.hasErrors('type')}" th:errors="*{type}"></p>
+        </div>
+        <button type="submit" class="submit-btn">
+            Register
+        </button>
     </form>
+
+    <div th:if="${param.success}" class="success-message">
+        Registration successful! We will be in touch shortly.
+    </div>
 </div>
 
+<script th:inline="javascript">
+    const cardImages = {
+        'MASTERCARD': '/mastercard.png',
+        'AMERICAN_EXPRESS': '/americanexpress.png'
+    };
+
+    document.getElementById('type').addEventListener('change', (event) => {
+        const selectedType = event.target.value;
+        if (cardImages[selectedType]) {
+            document.getElementById('card-image').src = cardImages[selectedType];
+        }
+    });
+</script>
 </body>
 </html>

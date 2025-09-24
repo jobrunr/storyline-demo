@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+import static org.jobrunr.scheduling.JobBuilder.aJob;
+
 @Service
 public class CreditCardService {
 
@@ -17,7 +19,9 @@ public class CreditCardService {
     }
 
     public void processRegistration(CreditCard creditCard) {
-        jobScheduler.enqueue(() -> createNewCreditCard(creditCard));
+        jobScheduler.create(aJob()
+                .withLabels(creditCard.getType().name())
+                .withDetails(() -> createNewCreditCard(creditCard)));
         jobScheduler.schedule(LocalDateTime.now().plusDays(7), () -> sendReminderEmail(creditCard));
     }
 
