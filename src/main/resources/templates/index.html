@@ -7,10 +7,18 @@
 </head>
 <body class="flex-center">
 <header>
-    <a href="http://localhost:8000/dashboard" target="_blank">
-        <img src="/jobrunr-logo-white.webp" title="To JobRunr Pro Dashboard" style="width: 100px; position: relative; top: 5px;" />
-        <span>Dashboard</span>
+    <a id="header-admin-link">
+        <span>Admin Mode →</span>
     </a>
+
+    <div id="header-menu">
+        <hr/>
+        <a href="/bulk-add-cards">💳 Bulk Add 1000 Registrations</a><br/>
+        <a href="/bulk-generate-expenses">🧾 Bulk Create 1000 Expenses</a><br/><br/>
+        <a href="http://localhost:8000/dashboard" target="_blank">
+            <img src="/jobrunr-logo-white.webp" title="To JobRunr Pro Dashboard" style="width: 100px; position: relative; top: 5px;" /> DASHBOARD →
+        </a>
+    </div>
 </header>
 <div class="card-container">
     <div class="header">
@@ -53,14 +61,23 @@
     const cardImages = {
         'MASTERCARD': '/mastercard.png',
         'AMERICAN_EXPRESS': '/americanexpress.png'
-    };
+    }
 
-    document.getElementById('type').addEventListener('change', (event) => {
-        const selectedType = event.target.value;
-        if (cardImages[selectedType]) {
-            document.getElementById('card-image').src = cardImages[selectedType];
+    document.querySelector("#header-admin-link").addEventListener('click', () => {
+        const menu = document.querySelector("#header-menu")
+        if(menu.classList.contains("is-visible")) {
+            menu.classList.remove("is-visible")
+        } else {
+            menu.classList.add("is-visible")
         }
-    });
+    })
+
+    document.querySelector('#type').addEventListener('change', (event) => {
+        const selectedType = event.target.value
+        if (cardImages[selectedType]) {
+            document.querySelector('#card-image').src = cardImages[selectedType];
+        }
+    })
 </script>
 </body>
 </html>

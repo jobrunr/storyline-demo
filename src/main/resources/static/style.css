@@ -18,13 +18,30 @@ header {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-header, header a {
+header, header a, header a:visited {
     background-color: black;
     color: white;
+    text-decoration: unset;
 }
 
 header a:hover {
     background-color: gray;
+}
+
+#header-admin-link {
+    cursor: pointer;
+}
+
+#header-menu {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+}
+
+#header-menu.is-visible {
+    max-height: 500px;
+    opacity: 1;
 }
 
 .card-container {

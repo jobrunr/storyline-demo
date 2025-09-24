@@ -27,6 +27,15 @@ public class CreditCard {
     @NotNull(message = "Credit card type is required")
     private CardType type;
 
+    public CreditCard() {
+    }
+
+    public CreditCard(String name, String email, CardType type) {
+        this.name = name;
+        this.email = email;
+        this.type = type;
+    }
+
     public Long getId() {
         return id;
     }

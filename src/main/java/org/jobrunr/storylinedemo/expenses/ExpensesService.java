@@ -37,20 +37,24 @@ public class ExpensesService {
     }
 
     public void generateSummaryReport() {
-        generatePDF();
+        generatePDFThatSometimesFails();
         System.out.println("Summary Report generated");
     }
 
-    private void generateExpenseReportFor(CreditCard creditCard) {
+    public void generateExpenseReportFor(CreditCard creditCard) {
         generatePDF();
         System.out.println("Monthly expenses generated for " + creditCard);
     }
 
-    private static void generatePDF() {
+    private static void generatePDFThatSometimesFails() {
         if(new Random().nextBoolean()) {
             throw new RuntimeException("Something went wrong while generating pdf");
         }
 
+        generatePDF();
+    }
+
+    private static void generatePDF() {
         // Pretend PDFs are being generated
         try {
             Thread.sleep(5000);
