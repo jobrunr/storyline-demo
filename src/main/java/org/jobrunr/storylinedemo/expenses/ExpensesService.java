@@ -20,12 +20,13 @@ public class ExpensesService {
         this.jobScheduler = jobScheduler;
     }
 
-    // At 00:00 on day-of-month 1
+    // Step 2: at 00:00 on day-of-month 1, create a recurring job to start processing monthly expenses
     @Recurring(cron = "0 0 1 * *")
     @Job
     public void startGenerateMonthlyExpensesJob() {
         jobScheduler
                 .startBatch(this::generateMonthlyExpensesForEachCreditCardUser)
+                // Step 3: continue with a summary report by batching
                 .continueWith(this::generateSummaryReport);
     }
 

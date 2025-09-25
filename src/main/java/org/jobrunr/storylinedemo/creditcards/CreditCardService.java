@@ -19,7 +19,9 @@ public class CreditCardService {
     }
 
     public void processRegistration(CreditCard creditCard) {
+        // Step 1: enqueue creation of a card + schedule one in seven days to send a reminder email
         jobScheduler.create(aJob()
+                // Step 5: filters by credit card type
                 .withLabels(creditCard.getType().name())
                 .withDetails(() -> createNewCreditCard(creditCard)));
         jobScheduler.schedule(LocalDateTime.now().plusDays(7), () -> sendReminderEmail(creditCard));

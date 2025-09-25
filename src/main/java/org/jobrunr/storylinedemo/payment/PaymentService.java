@@ -17,6 +17,7 @@ public class PaymentService {
     }
 
     @Recurring(cron = "0 3 * * *")
+    // Step 7: payment jobs have higher prio
     @Job(queue = "high-prio")
     public void processAllPaymentsNightly() {
         System.out.println("Processing all nightly payments");
@@ -25,9 +26,20 @@ public class PaymentService {
             var customerType = CustomerType.random();
             var randomPayment = Payment.randomPayment(i);
 
-            jobScheduler.create(aJob()
+            var job = jobScheduler.create(aJob()
+                    // Step 8: configure queues by customer type
                     .withLabels("customer:" + customerType.name())
+                    // Step 9: international payments on another server
+                    .withServerTag(randomPayment.getRegion())
                     .withDetails(() -> processPayments(randomPayment)));
+
+            // Step 10: export payment to external system but use rate limiting
+            if(randomPayment.international()) {
+                jobScheduler.create(aJob()
+                        .withRateLimiter("external")
+                        .runAfterSuccessOf(job.asUUID())
+                        .withDetails(() -> exportPaymentToExternalSystem(randomPayment)));
+            }
         }
     }
 
@@ -38,6 +50,10 @@ public class PaymentService {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void exportPaymentToExternalSystem(Payment payment) {
+        System.out.println("Exporting payment to external system: " + payment);
     }
 
 }

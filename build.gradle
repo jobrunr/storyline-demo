@@ -47,8 +47,6 @@ dependencies {
     // Postgres
     implementation 'com.zaxxer:HikariCP:6.2.1'
     implementation 'org.postgresql:postgresql:42.7.4'
-
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {
