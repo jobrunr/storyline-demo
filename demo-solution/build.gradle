@@ -1,0 +1,59 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.5.6'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'org.jobrunr'
+version = '0.0.1-SNAPSHOT'
+description = 'storyline-demo'
+
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+    options.release = 21
+}
+
+compileTestJava {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://repo.jobrunr.io/private-releases/"
+        credentials {
+            username "$mavenUser"
+            password "$mavenPass"
+        }
+    }
+}
+
+dependencies {
+    // Spring dependencies: templating, validation, data source autoconfig, metrics actuator
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // Micrometer <-> Prometheus support
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+
+    // JobRunr Pro & Jackson serialization
+    implementation 'org.jobrunr:jobrunr-pro-spring-boot-3-starter:8.0.5'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.18.2'
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.18.2'
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jdk8', version: '2.18.2'
+
+    // Postgres
+    implementation 'com.zaxxer:HikariCP:6.2.1'
+    implementation 'org.postgresql:postgresql:42.7.4'
+}
+
+test {
+    useJUnitPlatform()
+}
+

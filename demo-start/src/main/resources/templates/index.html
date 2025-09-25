@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Registration</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body class="flex-center">
+<header>
+    <a id="header-admin-link">
+        <span>Admin Mode →</span>
+    </a>
+
+    <div id="header-menu">
+        <hr/>
+        <a href="/bulk-add-cards">💳 Bulk Add 1000 Registrations</a><br/>
+        <a href="/bulk-generate-expenses">🧾 Bulk Create 1000 Expenses</a><br/><br/>
+        <a href="http://localhost:8000/dashboard" target="_blank">
+            <img src="/jobrunr-logo-white.webp" title="To JobRunr Pro Dashboard" style="width: 100px; position: relative; top: 5px;" /> DASHBOARD →
+        </a><br/>
+        <a href="http://localhost:9090/query?g0.expr=jobrunr_jobs_by_state&g0.show_tree=0&g0.tab=graph&g0.range_input=5m&g0.res_type=auto&g0.res_density=medium&g0.display_mode=lines&g0.show_exemplars=0" target="_blank">
+            <img src="/prometheus-logo.png" title="To Prometheus Dashboard" style="width: 100px; position: relative; top: 5px;" /> DASHBOARD →
+        </a>
+    </div>
+</header>
+<div class="card-container">
+    <div class="header">
+        <h1>Apply for a Credit Card</h1>
+        <p>Fill out the form below to get your new card.</p>
+    </div>
+
+    <img id="card-image" class="card-image" src="/mastercard.png" alt="Credit card">
+
+    <form th:action="@{/register}" th:object="${creditCard}" method="post">
+        <div class="form-field">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" th:field="*{name}" placeholder="Enter your full name">
+            <p class="error-message" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+        </div>
+        <div class="form-field">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" th:field="*{email}" placeholder="Enter your email address">
+            <p class="error-message" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+        </div>
+        <div class="form-field">
+            <label for="type">Card Type</label>
+            <select id="type" th:field="*{type}">
+                <option value="" disabled selected>Select a card type</option>
+                <option th:each="type : ${T(org.jobrunr.storylinedemo.creditcards.CardType).values()}" th:value="${type}" th:text="${type}"></option>
+            </select>
+            <p class="error-message" th:if="${#fields.hasErrors('type')}" th:errors="*{type}"></p>
+        </div>
+        <button type="submit" class="submit-btn">
+            Register
+        </button>
+    </form>
+
+    <div th:if="${param.success}" class="success-message">
+        Registration successful! We will be in touch shortly.
+    </div>
+</div>
+
+<script th:inline="javascript">
+    const cardImages = {
+        'MASTERCARD': '/mastercard.png',
+        'AMERICAN_EXPRESS': '/americanexpress.png'
+    }
+
+    document.querySelector("#header-admin-link").addEventListener('click', () => {
+        const menu = document.querySelector("#header-menu")
+        if(menu.classList.contains("is-visible")) {
+            menu.classList.remove("is-visible")
+        } else {
+            menu.classList.add("is-visible")
+        }
+    })
+
+    document.querySelector('#type').addEventListener('change', (event) => {
+        const selectedType = event.target.value
+        if (cardImages[selectedType]) {
+            document.querySelector('#card-image').src = cardImages[selectedType];
+        }
+    })
+</script>
+</body>
+</html>

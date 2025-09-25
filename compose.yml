@@ -10,3 +10,11 @@ services:
       - POSTGRES_PASSWORD=password
     restart: unless-stopped
     command: postgres -c 'max_connections=315' -c 'shared_buffers=256MB'
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    restart: unless-stopped
