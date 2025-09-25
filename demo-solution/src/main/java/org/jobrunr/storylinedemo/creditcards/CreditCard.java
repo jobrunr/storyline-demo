@@ -12,6 +12,8 @@ import jakarta.validation.constraints.Size;
 @Entity
 public class CreditCard {
 
+
+    // todo gene jpa, maar spring data jdbc
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

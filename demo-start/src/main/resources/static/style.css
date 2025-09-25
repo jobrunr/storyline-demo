@@ -19,7 +19,7 @@ header {
 }
 
 header, header a, header a:visited {
-    background-color: black;
+    background-color: #242424;
     color: white;
     text-decoration: unset;
 }

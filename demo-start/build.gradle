@@ -8,17 +8,6 @@ group = 'org.jobrunr'
 version = '0.0.1-SNAPSHOT'
 description = 'storyline-demo'
 
-compileJava {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
-    options.release = 21
-}
-
-compileTestJava {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
-}
-
 repositories {
     mavenCentral()
     maven {
@@ -31,8 +20,9 @@ repositories {
 }
 
 dependencies {
-    // Spring dependencies: templating, validation, data source autoconfig
+    // Spring dependencies + hot reload, templating, validation, data source autoconfig, metrics actuator
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
@@ -52,8 +42,3 @@ dependencies {
     implementation 'com.zaxxer:HikariCP:6.2.1'
     implementation 'org.postgresql:postgresql:42.7.4'
 }
-
-test {
-    useJUnitPlatform()
-}
-

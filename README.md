@@ -18,6 +18,27 @@ The project contains two subprojects:
 - `demo-solution`; the implemented version
 - `demo-start`; the version without any JobRunr specifics
 
+## Adding JobRunr credentials
+
+You will need to enter your JobRunr credentials in two ways:
+
+**Private Maven repository credentials**
+
+Create `gradle.properties` in the root folder of this project with the following contents:
+
+```
+PRIVATE_MAVEN_REPO_URL=https://repo.jobrunr.io
+org.gradle.jvmargs=-Xmx2048M -Dfile.encoding=UTF-8 --add-opens=java.base/java.io=ALL-UNNAMED
+org.gradle.caching=true
+
+mavenUser=yourUserName
+mavenPass=yourPassword
+```
+
+**JobRunr Pro license key**
+
+Create `jobrunr-pro.license` in `src/main/resources` of each of the subprojects and paste in your license key.
+
 ## Starting the application
 
 1. Start the database container: `docker compose up`
@@ -49,7 +70,6 @@ Cause: did you spin up the database container using `compose.yml`?
 
 # TODOs
 
-- [ ] embedded dashboard?
-- [ ] observability; prometheus/grafana container + integration tonen? 
-- [ ] 2nd bg server; hoe aanpakken
+- [ ] embedded dashboard? -> in comment + laten zien
+- [x] 2nd bg server; hoe aanpakken -> spring params doorgeven poort overschrijven met properties; geen apart project nodig.(env vars) 
 - [ ] pdf die soms faalt: in batch faalt altijd de hele batch
