@@ -36,6 +36,11 @@ public class CreditCard {
         this.type = type;
     }
 
+    public static CreditCard randomCreditCard(int index) {
+        var cardType = index % 2 == 0 ? CardType.AMERICAN_EXPRESS : CardType.MASTERCARD;
+        return new CreditCard("Random Name #" + index, "random.email" + index + "@gmail.com", cardType);
+    }
+
     public Long getId() {
         return id;
     }

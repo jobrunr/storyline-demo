@@ -2,7 +2,6 @@ package org.jobrunr.storylinedemo.expenses;
 
 import org.jobrunr.jobs.annotations.Job;
 import org.jobrunr.jobs.annotations.Recurring;
-import org.jobrunr.scheduling.BackgroundJob;
 import org.jobrunr.scheduling.JobScheduler;
 import org.jobrunr.storylinedemo.creditcards.CreditCard;
 import org.jobrunr.storylinedemo.creditcards.CreditCardRepository;
