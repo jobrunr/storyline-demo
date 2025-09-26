@@ -15,6 +15,7 @@ You can easily locate these by searching for the comment in your favourite IDE (
 8. **Queues**: Well-paying `ENTERPRISE` customers should have priority over `PRO` customers. Create a `customer:` prefix and add `CustomerType.name()` as the label suffix. Switch to _weighted round-robin_ to showcase the difference.
 9. International payments should be processed on **another server** using server tags. (To start the second server, see the Gradle command below.) 
 10. International payments should also be exported to an external system that has to be **rate-limited** to avoid DDoSing their system.
+11. Showcase **observability** possibilities: Micrometer metrics are exposed to the Prometheus Docker container by adding two more properties. Prometheus runs at http://localhost:9090. 
 
 The project contains two subprojects:
 
@@ -47,6 +48,8 @@ Create `jobrunr-pro.license` in `src/main/resources` of each of the subprojects 
 1. Start the database container: `docker compose up`
 2. Start the Spring Boot container: run `StorylineDemoApplication` or use Gradle: `./gradlew :demo-solution:bootRun`.
 3. Navigate to http://localhost:8080/.
+   - The JobRunr dashboard runs at http://localhost:8000/ (and on the same port in the solution to showcase the embedded dashboard)
+   - Prometheus runs at http://localhost:9090/.
 
 To run the second background server, override these properties: 
 `server.port`, `jobrunr.dashboard.enabled`, and set the correct server tags with `jobrunr.background-job-server.tags`:
