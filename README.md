@@ -1,6 +1,9 @@
 # JobRunr Finance Storyline Demo
 
-In this demo, we gradually explore the capabilities of JobRunr Pro by following these steps:
+In this demo, we gradually explore the capabilities of JobRunr Pro by following the steps below.
+
+Find and complete all the `// TODO Step x` comments in project `demo-start`! 
+You can easily locate these by searching for the comment in your favourite IDE (e.g. `⌘+SHIFT+F` in IntelliJ).
 
 1. Create 2 **basic jobs**: (a) creation of the credit card, (b) Schedule a future job in a week: a reminder email to confirm receival. 
 2. **Recurring Jobs**: reports of expenses need to be generated each month. Simulate PDF generation using `Thread.sleep()`. Cron `0 0 1 * *` = "at 00:00 on day-of-month 1".
@@ -15,8 +18,8 @@ In this demo, we gradually explore the capabilities of JobRunr Pro by following 
 
 The project contains two subprojects:
 
-- `demo-solution`; the implemented version
-- `demo-start`; the version without any JobRunr specifics
+- `demo-solution`; the implemented version;
+- `demo-start`; the version without any JobRunr specifics where the above steps have yet to be implemented.
 
 ## Adding JobRunr credentials
 
@@ -52,7 +55,3 @@ To run the second background server, override these properties:
 ./gradlew :demo-start:bootRun --args='--server.port=8081 --jobrunr.dashboard.enabled=false --jobrunr.background-job-server.tags=international'
 ./gradlew :demo-solution:bootRun --args='--server.port=8081 --jobrunr.dashboard.enabled=false --jobrunr.background-job-server.tags=international'
 ```
-
-# TODOs
-
-- [ ] pdf die soms faalt: in batch faalt altijd de hele batch
