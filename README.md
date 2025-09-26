@@ -10,7 +10,7 @@ In this demo, we gradually explore the capabilities of JobRunr Pro by following 
 6. Show the **Pro Dashboard** to inspect which credit cards are created, which jobs failed, various filters, ...
 7. **High-prio jobs**: payment should have priority over monthly report generation . Create `high-prio,low-prio` queues. Trigger 1000 expenses and showcase the high-prios still get done.
 8. **Queues**: Well-paying `ENTERPRISE` customers should have priority over `PRO` customers. Create a `customer:` prefix and add `CustomerType.name()` as the label suffix. Switch to _weighted round-robin_ to showcase the difference.
-9. International payments should be processed on **another server** using server tags. 
+9. International payments should be processed on **another server** using server tags. (To start the second server, see the Gradle command below.) 
 10. International payments should also be exported to an external system that has to be **rate-limited** to avoid DDoSing their system.
 
 The project contains two subprojects:
@@ -45,31 +45,14 @@ Create `jobrunr-pro.license` in `src/main/resources` of each of the subprojects 
 2. Start the Spring Boot container: run `StorylineDemoApplication` or use Gradle: `./gradlew :demo-solution:bootRun`.
 3. Navigate to http://localhost:8080/.
 
-# FAQ
-
-## Common errors
-
-**Unable to determine Dialect without JDBC metadata**
-
-Exception during startup:
+To run the second background server, override these properties: 
+`server.port`, `jobrunr.dashboard.enabled`, and set the correct server tags with `jobrunr.background-job-server.tags`:
 
 ```
-Caused by: org.hibernate.HibernateException: Unable to determine Dialect without JDBC metadata (please set 'jakarta.persistence.jdbc.url' for common cases or 'hibernate.dialect' when a custom Dialect implementation must be provided)
-	at org.hibernate.engine.jdbc.dialect.internal.DialectFactoryImpl.determineDialect(DialectFactoryImpl.java:191) ~[hibernate-core-6.6.29.Final.jar:6.6.29.Final]
-	at org.hibernate.engine.jdbc.dialect.internal.DialectFactoryImpl.buildDialect(DialectFactoryImpl.java:87) ~[hibernate-core-6.6.29.Final.jar:6.6.29.Final]
-	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator.getJdbcEnvironmentWithDefaults(JdbcEnvironmentInitiator.java:186) ~[hibernate-core-6.6.29.Final.jar:6.6.29.Final]
-	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator.getJdbcEnvironmentUsingJdbcMetadata(JdbcEnvironmentInitiator.java:410) ~[hibernate-core-6.6.29.Final.jar:6.6.29.Final]
-	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator.initiateService(JdbcEnvironmentInitiator.java:129) ~[hibernate-core-6.6.29.Final.jar:6.6.29.Final]
-	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator.initiateService(JdbcEnvironmentInitiator.java:81) ~[hibernate-core-6.6.29.Final.jar:6.6.29.Final]
-	at org.hibernate.boot.registry.internal.StandardServiceRegistryImpl.initiateService(StandardServiceRegistryImpl.java:130) ~[hibernate-core-6.6.29.Final.jar:6.6.29.Final]
-	at org.hibernate.service.internal.AbstractServiceRegistryImpl.createService(AbstractServiceRegistryImpl.java:263) ~[hibernate-core-6.6.29.Final.jar:6.6.29.Final]
-	... 30 common frames omitted
+./gradlew :demo-start:bootRun --args='--server.port=8081 --jobrunr.dashboard.enabled=false --jobrunr.background-job-server.tags=international'
+./gradlew :demo-solution:bootRun --args='--server.port=8081 --jobrunr.dashboard.enabled=false --jobrunr.background-job-server.tags=international'
 ```
-
-Cause: did you spin up the database container using `compose.yml`?
 
 # TODOs
 
-- [ ] embedded dashboard? -> in comment + laten zien
-- [x] 2nd bg server; hoe aanpakken -> spring params doorgeven poort overschrijven met properties; geen apart project nodig.(env vars) 
 - [ ] pdf die soms faalt: in batch faalt altijd de hele batch

@@ -8,6 +8,17 @@ group = 'org.jobrunr'
 version = '0.0.1-SNAPSHOT'
 description = 'storyline-demo'
 
+tasks.register('runSecondBackgroundServer', org.springframework.boot.gradle.tasks.run.BootRun) {
+    dependsOn(tasks.named('classes'))
+    mainClass = 'org.jobrunr.storylinedemo.StorylineDemoApplication'
+
+    args = [
+            '--server.port=8181',
+            '--jobrunr.dashboard.enabled=false',
+            '--jobrunr.background-job-server.tags=international'
+    ]
+}
+
 dependencies {
     // Spring dependencies + hot reload, templating, validation, data source autoconfig, metrics actuator
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -15,7 +26,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     // Micrometer <-> Prometheus support
