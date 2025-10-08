@@ -32,6 +32,10 @@ dependencies {
     // Micrometer <-> Prometheus support
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
 
+    // Tracing support
+    implementation 'io.micrometer:micrometer-tracing-bridge-otel'
+    implementation 'io.opentelemetry:opentelemetry-exporter-otlp'
+
     // JobRunr Pro & Jackson serialization
     implementation 'org.jobrunr:jobrunr-pro-spring-boot-3-starter:8.0.5'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.18.2'

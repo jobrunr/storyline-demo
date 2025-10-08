@@ -3,7 +3,10 @@ package org.jobrunr.storylinedemo.payment;
 import org.jobrunr.jobs.annotations.Job;
 import org.jobrunr.jobs.annotations.Recurring;
 import org.jobrunr.scheduling.JobScheduler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 
 import static org.jobrunr.scheduling.JobBuilder.aJob;
 
@@ -11,9 +14,13 @@ import static org.jobrunr.scheduling.JobBuilder.aJob;
 public class PaymentService {
 
     private final JobScheduler jobScheduler;
+    private final RestClient restClient;
 
-    public PaymentService(JobScheduler jobScheduler) {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PaymentService.class);
+
+    public PaymentService(JobScheduler jobScheduler, RestClient.Builder restClientBuilder) {
         this.jobScheduler = jobScheduler;
+        this.restClient = restClientBuilder.baseUrl("http://localhost:8089").build();
     }
 
     @Recurring(cron = "0 3 * * *")
@@ -53,7 +60,8 @@ public class PaymentService {
     }
 
     public void exportPaymentToExternalSystem(Payment payment) {
-        System.out.println("Exporting payment to external system: " + payment);
+        var verified = this.restClient.get().uri("/verify").retrieve().body(String.class);
+        LOGGER.info("Exported and verified: {} - verified: {}", payment, verified);
     }
 
 }

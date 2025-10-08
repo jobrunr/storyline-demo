@@ -18,3 +18,10 @@ services:
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     restart: unless-stopped
+
+  collector:
+    image: jaegertracing/jaeger
+    ports:
+      - "4318:4318"
+      - "16686:16686"
+    restart: unless-stopped
