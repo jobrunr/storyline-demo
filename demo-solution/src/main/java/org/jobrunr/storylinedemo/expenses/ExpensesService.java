@@ -32,7 +32,7 @@ public class ExpensesService {
 
     public void generateMonthlyExpensesForEachCreditCardUser() {
         creditCardRepository.findAll().forEach(creditCard -> {
-            generateExpenseReportFor(creditCard);
+            jobScheduler.enqueue(() -> generateExpenseReportFor(creditCard));
         });
     }
 
