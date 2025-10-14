@@ -15,12 +15,19 @@ You can easily locate these by searching for the comment in your favourite IDE (
 8. **Queues**: Well-paying `ENTERPRISE` customers should have priority over `PRO` customers. Create a `customer:` prefix and add `CustomerType.name()` as the label suffix. Switch to _weighted round-robin_ to showcase the difference.
 9. International payments should be processed on **another server** using server tags. (To start the second server, see the Gradle command below.) 
 10. International payments should also be exported to an external system that has to be **rate-limited** to avoid DDoSing their system.
-11. Showcase **observability** possibilities: Micrometer metrics are exposed to the Prometheus Docker container by adding two more properties. Prometheus runs at http://localhost:9090. 
+11. Showcase **observability/metrics** possibilities: Micrometer metrics are exposed to the Prometheus Docker container by adding two more properties. Prometheus runs at http://localhost:9090.
+12. Showcase **observability/tracing** possibilities: Traces are being exported to the Jaeger Docker container by adding two Spring Boot & two JobRunr Pro properties. Jaeger runs at http://localhost:16686.
 
-The project contains two subprojects:
+The project contains three subprojects:
 
 - `demo-solution`; the implemented version;
 - `demo-start`; the version without any JobRunr specifics where the above steps have yet to be implemented.
+- `government-app`; a mostly empty app representing the government where expenses need to be exported to
+  - Runs at port `8089` and supports GET to `/verify` returning the string `looks good to me!`
+
+The following schematic describes the project structure, its actions (registering a new credit card), and its JobRunr jobs running in the background:
+
+![](structure.png)
 
 ## Adding JobRunr credentials
 
@@ -47,12 +54,16 @@ Create `jobrunr-pro.license` in `src/main/resources` of each of the subprojects 
 
 1. Start the database container: `docker compose up`
 2. Start the Spring Boot container: run `StorylineDemoApplication` or use Gradle: `./gradlew :demo-solution:bootRun`.
+   public class GovernmentApp {
+3. To showcase distributed tracing, also start the government app by running `GovernmentApp` or using Gradle: `./gradlew :governmentApp:bootRun`.
 3. Navigate to http://localhost:8080/.
    - The JobRunr dashboard runs at http://localhost:8000/ (and on the same port in the solution to showcase the embedded dashboard)
+   - The government app runs at http://localhost:8089/.
    - Prometheus runs at http://localhost:9090/.
+   - Jaeger runs at http://localhost:16686/.
 
 To run the second background server, override these properties: 
-`server.port`, `jobrunr.dashboard.enabled`, and set the correct server tags with `jobrunr.background-job-server.tags`:
+`server.port` (set to `8081`), `jobrunr.dashboard.enabled` (set to `false`), and set the correct server tags with `jobrunr.background-job-server.tags` (set to `international`):
 
 ```
 ./gradlew :demo-start:bootRun --args='--server.port=8081 --jobrunr.dashboard.enabled=false --jobrunr.background-job-server.tags=international'

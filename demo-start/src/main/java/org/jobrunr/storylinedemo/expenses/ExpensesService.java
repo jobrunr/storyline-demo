@@ -3,6 +3,8 @@ package org.jobrunr.storylinedemo.expenses;
 import org.jobrunr.scheduling.JobScheduler;
 import org.jobrunr.storylinedemo.creditcards.CreditCard;
 import org.jobrunr.storylinedemo.creditcards.CreditCardRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
@@ -12,6 +14,7 @@ public class ExpensesService {
 
     private final JobScheduler jobScheduler;
     private final CreditCardRepository creditCardRepository;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExpensesService.class);
 
     public ExpensesService(CreditCardRepository creditCardRepository, JobScheduler jobScheduler) {
         this.creditCardRepository = creditCardRepository;
@@ -31,12 +34,12 @@ public class ExpensesService {
 
     public void generateSummaryReport() {
         generatePDFThatSometimesFails();
-        System.out.println("Summary Report generated");
+        LOGGER.info("Summary Report generated");
     }
 
     public void generateExpenseReportFor(CreditCard creditCard) {
         generatePDF();
-        System.out.println("Monthly expenses generated for " + creditCard);
+        LOGGER.info("Monthly expenses generated for {}", creditCard);
     }
 
     private static void generatePDFThatSometimesFails() {

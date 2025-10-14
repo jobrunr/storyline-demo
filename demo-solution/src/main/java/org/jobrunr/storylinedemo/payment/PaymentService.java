@@ -27,7 +27,7 @@ public class PaymentService {
     // Step 7: payment jobs have higher prio
     @Job(queue = "high-prio")
     public void processAllPaymentsNightly() {
-        System.out.println("Processing all nightly payments");
+        LOGGER.info("Processing all nightly payments");
 
         for(int i = 1; i <= 100; i++) {
             var customerType = CustomerType.random();
@@ -51,7 +51,7 @@ public class PaymentService {
     }
 
     public void processPayments(Payment payment) {
-        System.out.println("Processing payment: " + payment);
+        LOGGER.info("Processing payment: {}", payment);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
