@@ -37,7 +37,7 @@ dependencies {
     implementation 'io.opentelemetry:opentelemetry-exporter-otlp'
 
     // JobRunr Pro & Jackson serialization
-    implementation 'org.jobrunr:jobrunr-pro-spring-boot-3-starter:8.0.5'
+    implementation 'org.jobrunr:jobrunr-pro-spring-boot-3-starter:8.2.0'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.18.2'
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.18.2'
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jdk8', version: '2.18.2'
