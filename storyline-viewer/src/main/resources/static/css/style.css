@@ -1,0 +1,64 @@
+/* Index page styles - JobRunr branded */
+:root {
+    --jobrunr-purple: #7c3aed;
+    --jobrunr-blue: #3b82f6;
+    --jobrunr-cyan: #06b6d4;
+    --jobrunr-dark: #1e293b;
+    --jobrunr-gray: #64748b;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    color: #1e293b;
+}
+
+.hero.is-primary {
+    background: linear-gradient(135deg, var(--jobrunr-purple) 0%, var(--jobrunr-blue) 50%, var(--jobrunr-cyan) 100%);
+}
+
+.button.is-primary {
+    background: linear-gradient(135deg, var(--jobrunr-purple) 0%, var(--jobrunr-blue) 100%);
+    border: none;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.button.is-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(124, 58, 237, 0.3);
+}
+
+.card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    height: 100%;
+    border-radius: 8px;
+    border: 1px solid #e8e8e8;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.card-header {
+    border-bottom: none;
+    background: linear-gradient(135deg, var(--jobrunr-blue) 0%, var(--jobrunr-cyan) 100%);
+    border-radius: 8px 8px 0 0;
+}
+
+.card-header-title {
+    color: white;
+}
+
+.title {
+    color: var(--jobrunr-dark-gray);
+}
+
+a {
+    color: var(--jobrunr-purple);
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: var(--jobrunr-blue);
+}

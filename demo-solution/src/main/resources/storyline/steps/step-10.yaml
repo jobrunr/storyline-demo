@@ -1,0 +1,19 @@
+title: Rate Limiting - Play Nice with External APIs
+icon: 🚦
+estimatedTime: PT4M
+
+challenge: |
+  We export payments to a government API that can only handle 10 requests/second. Exceeding this
+  DDoS's their system and gets us blocked!
+
+solution: |
+  Use JobRunr's rate limiter to throttle job execution. Guarantee we never exceed the external
+  API's limits.
+
+tryIt: |
+  Export 1000 payments and watch them process at exactly 10/second without overwhelming the
+  government API.
+
+dashboardLink: http://localhost:8080/dashboard/jobs
+
+codeReference: payment/PaymentService.java#exportToGovernment

@@ -17,7 +17,7 @@ public class CreditCardController {
         this.creditCardService = creditCardService;
     }
 
-    @GetMapping({"/", "/register"})
+    @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("creditCard", new CreditCard());
         return "index";

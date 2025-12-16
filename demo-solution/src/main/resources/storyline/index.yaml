@@ -1,0 +1,36 @@
+title: JobRunr Finance Demo Guide
+subtitle: Master Background Job Processing Through Banking
+slogan: An interactive guide to JobRunr Pro's powerful features using a real-world banking scenario
+intro: |
+  Welcome to <strong>JobRunr Finance</strong>, a fictional bank where you'll discover how
+  JobRunr Pro powers mission-critical background job processing. Through 12 hands-on steps,
+  you'll solve real banking challenges like processing credit card applications, generating
+  expense reports, handling payments, and ensuring regulatory compliance.
+  <br><br>
+  Each step presents a business problem, demonstrates the solution using JobRunr Pro,
+  and lets you try it yourself with live code examples and interactive demos.
+
+codeRoot: demo-solution/src/main/java
+githubLink: https://github.com/jobrunr/storyline-demo
+
+flow:
+  - category: 🚀 Basics
+    steps:
+      - ./steps/step-01.yaml
+      - ./steps/step-02.yaml
+      - ./steps/step-03.yaml
+  - category: ⚙️ Reliability
+    steps:
+      - ./steps/step-04.yaml
+      - ./steps/step-06.yaml
+  - category: 🎯 Performance
+    steps:
+      - ./steps/step-07.yaml
+      - ./steps/step-08.yaml
+      - ./steps/step-09.yaml
+  - category: 🔧 Production Ready
+    steps:
+      - ./steps/step-10.yaml
+      - ./steps/step-11.yaml
+      - ./steps/step-12.yaml
+      - ./steps/step-13.yaml

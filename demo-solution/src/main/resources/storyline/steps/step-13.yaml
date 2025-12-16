@@ -1,0 +1,16 @@
+title: Distributed Tracing - Debug Across Services
+icon: 🔍
+estimatedTime: PT4M
+
+challenge: |
+  When a payment fails, we need to trace it through our web app → JobRunr → government API to
+  find where it broke.
+
+solution: |
+  JobRunr integrates with Jaeger for distributed tracing. See the complete journey of each job
+  across all systems.
+
+tryIt: |
+  Make a payment and follow its trace through all services in Jaeger.
+
+dashboardLink: http://localhost:16686/search

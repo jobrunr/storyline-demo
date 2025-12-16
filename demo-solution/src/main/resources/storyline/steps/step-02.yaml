@@ -1,0 +1,17 @@
+title: Recurring Jobs - Monthly Expense Reports
+icon: 📊
+estimatedTime: PT3M
+
+challenge: |
+  The finance team needs expense reports generated automatically on the 1st of every month.
+  Manual generation is error-prone and wastes time.
+
+solution: |
+  Set up recurring jobs with cron expressions. JobRunr ensures the job runs exactly once per
+  schedule, even if the server restarts.
+
+tryIt: |
+  Trigger the monthly report generation and see it scheduled for the next month automatically.
+
+dashboardLink: http://localhost:8080/dashboard/recurring-jobs
+codeReference: expenses/ExpensesService.java#generateMonthlyExpenseReport

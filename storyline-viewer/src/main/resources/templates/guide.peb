@@ -1,0 +1,227 @@
+    {% extends "base" %}
+
+        {% block head %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@samlam140330/bulma-timeline@1.0.3/dist/css/bulma-timeline.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+    <link rel="stylesheet" href="/css/guide.css">
+    <script src="https://unpkg.com/htmx.org@2.0.8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.9.0/highlightjs-line-numbers.min.js"></script>
+    {% endblock %}
+
+    {% block content %}
+    <nav class="navbar is-dark" role="navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="/">
+                <img src="/jobrunr-logo-white.webp" alt="JobRunr" style="max-height: 32px; margin-right: 0.5rem;">
+                <strong>JobRunr Finance</strong>
+            </a>
+        </div>
+        <div class="navbar-menu">
+            <div class="navbar-end">
+                <div class="navbar-item navbar-progress">
+                    <span style="margin-right: 0.5rem;">Progress:</span>
+                    <span id="progress-text">0/12</span>
+                    <progress class="progress is-primary" value="0" max="12" id="progress-bar">0%</progress>
+                </div>
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a href="http://localhost:8080/dashboard" target="_blank" class="button is-light is-small">
+                            <span class="icon"><i class="fas fa-tachometer-alt"></i></span>
+                            <span>Dashboard</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="columns is-gapless" style="height: calc(100vh - 52px);">
+        <!-- Left sidebar: Timeline -->
+        <div class="column is-one-third timeline-sidebar">
+            <div class="p-4">
+                <h2 class="title is-4 has-text-white mb-5">
+                    <i class="fas fa-route"></i> Your Learning Path
+                </h2>
+
+                <!-- Timeline -->
+                <div class="timeline">
+                    {% for entry in storyline.stepsByCategory %}
+                        <header class="timeline-header">
+                            <span class="tag is-primary">{{ entry.key }}</span>
+                        </header>
+                        {% for step in entry.value %}
+                        <div class="timeline-item" data-step="{{ step.number }}">
+                            <div class="timeline-marker is-icon" data-step-marker="{{ step.number }}">
+                                <i class="fas fa-circle"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <a href="#step-{{ step.number }}" class="step-link" data-step="{{ step.number }}">
+                                    <div class="box step-box">
+                                        <p class="heading">Step {{ step.number }} · ⏱️ {{ step.estimatedTime.toMinutes }} minutes</p>
+                                        <p class="title is-6">{{ step.icon }} {{ step.title }}</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+    {% endfor %}
+                    <div class="timeline-header">
+                        <span class="tag is-medium is-success">Complete!</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right content area -->
+        <div class="column content-area">
+            <div class="p-5" id="content-container">
+                <!-- Welcome screen -->
+                <div id="welcome-screen" class="content-screen active">
+                    <div class="hero is-medium">
+                        <div class="hero-body has-text-centered">
+                            <h1 class="title is-1">
+                                Welcome to JobRunr Finance! 🏦
+                            </h1>
+                            <p class="subtitle is-4 mt-4">
+                                Click on any step in the timeline to begin your journey
+                            </p>
+                            <div class="buttons is-centered mt-6">
+                                <a href="#step-1" class="button is-primary is-large">
+                                    <span class="icon"><i class="fas fa-play"></i></span>
+                                    <span>Start with Step 1</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step content screens (dynamically populated) -->
+                {% for entry in storyline.stepsByCategory %}
+        {% for step in entry.value %}
+                <div id="step-{{ step.number }}" class="content-screen" data-step="{{ step.number }}">
+                    <div class="level mb-5">
+                        <div class="level-left">
+                            <div class="level-item">
+                                <div>
+                                    <div class="mb-3">
+                                        <span class="heading mr-2">Step {{ step.number }} of 12</span>
+                                        ·
+                                        <span class="is-size-6 has-text-grey ml-2">
+                                            ⏱️ {{ step.estimatedTime.toMinutes }} minutes
+                                        </span>
+                                    </div>
+
+                                    <h1 class="title is-2">
+                                        {{ step.icon }} {{ step.title }}
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="level-right">
+                            <div class="level-item">
+                                <button class="button is-success" onclick="markStepComplete({{ step.number }})">
+                                    <span class="icon"><i class="fas fa-check"></i></span>
+                                    <span>Mark Complete</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- The Challenge -->
+                    <div class="box has-background-warning-light">
+                        <h3 class="title is-4">🎯 The Challenge</h3>
+                        <p class="is-size-5">{{ step.challenge }}</p>
+                    </div>
+
+                    <!-- The Solution -->
+                    <div class="box has-background-success-light">
+                        <h3 class="title is-4">💡 The Solution</h3>
+                        <p class="is-size-5">{{ step.solution }}</p>
+                    </div>
+
+                    <!-- Try It / Dashboard Link -->
+                    <div class="box has-background-info-light">
+                        <h3 class="title is-4">👉 Try It Yourself</h3>
+                        <p class="is-size-5 mb-4">{{ step.tryIt }}</p>
+                        <a href="{{ step.dashboardLink }}" target="_blank" class="button is-link">
+                            <span class="icon"><i class="fas fa-external-link-alt"></i></span>
+                            <span>Open JobRunr Dashboard</span>
+                        </a>
+                    </div>
+
+                    <!-- Toggle between Code and Demo -->
+                    <div class="tabs is-boxed is-large">
+                        <ul>
+                            <li class="tab-link {% if step.codeReferences|length > 0 %}is-active{% endif %}" data-tab="code-{{ step.number }}">
+                                <a>
+                                    <span class="icon"><i class="fas fa-code"></i></span>
+                                    <span>View Code</span>
+                                </a>
+                            </li>
+                            <li class="tab-link" data-tab="demo-{{ step.number }}">
+                                <a>
+                                    <span class="icon"><i class="fas fa-play-circle"></i></span>
+                                    <span>Try Demo</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Code view -->
+                    <div id="code-{{ step.number }}" class="tab-content {% if step.codeReferences|length > 0 %}is-active{% endif %}">
+                        {% if step.codeReferences|length > 0 %}
+                        <div>
+                            <p class="has-text-weight-bold mb-3">
+                                <i class="fas fa-file-code"></i> {{ step.codeReferences[0] }}
+                            </p>
+                            <pre class="p-0"><code class="language-java" data-code-reference="{{ step.codeReferences[0] }}">Loading code...</code></pre>
+                        </div>
+                        {% else %}
+                        <div class="notification is-info">
+                            <p>This step focuses on dashboard exploration. No specific code to display.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Demo view -->
+                    <div id="demo-{{ step.number }}" class="tab-content">
+                        <div class="box">
+                            <div id="demo-container-{{ step.number }}">
+                                <!-- Demo content loaded via HTMX -->
+                                <p class="has-text-grey-light">Demo interface will be loaded here...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation -->
+                    <div class="buttons is-centered mt-6">
+                        {% if step.number > 1 %}
+                        <a href="#step-{{ step.number - 1 }}" class="button is-light is-medium">
+                            <span class="icon"><i class="fas fa-arrow-left"></i></span>
+                            <span>Previous</span>
+                        </a>
+                        {% endif %}
+
+            {% if step.number < storyline.storylineMetadata.totalAmountOfSteps %}
+                        <a href="#step-{{ step.number + 1 }}" class="button is-primary is-medium">
+                            <span>Next</span>
+                            <span class="icon"><i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        {% else %}
+                        <a href="/" class="button is-success is-medium">
+                            <span class="icon"><i class="fas fa-trophy"></i></span>
+                            <span>Complete!</span>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+    {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/guide.js"></script>
+{% endblock %}

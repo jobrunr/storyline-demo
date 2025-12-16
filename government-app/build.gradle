@@ -8,17 +8,6 @@ group = 'org.jobrunr'
 version = '0.0.1-SNAPSHOT'
 description = 'government-app'
 
-repositories {
-    mavenCentral()
-    maven {
-        url "https://repo.jobrunr.io/private-releases/"
-        credentials {
-            username "$mavenUser"
-            password "$mavenPass"
-        }
-    }
-}
-
 dependencies {
     // Spring dependencies
     implementation 'org.springframework.boot:spring-boot-starter-web'

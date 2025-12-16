@@ -1,22 +1,21 @@
-
 subprojects {
-    plugins.withType(JavaPlugin) {
+    plugins.withType(JavaPlugin).configureEach {
         tasks.withType(JavaCompile).configureEach {
-            sourceCompatibility = JavaVersion.VERSION_21
-            targetCompatibility = JavaVersion.VERSION_21
-            options.release.set(21)
+            sourceCompatibility = JavaVersion.VERSION_25
+            targetCompatibility = JavaVersion.VERSION_25
+            options.release.set(25)
         }
     }
 
     repositories {
+        mavenLocal()
         mavenCentral()
         maven {
             url "https://repo.jobrunr.io/private-releases/"
             credentials {
-                username "$mavenUser"
-                password "$mavenPass"
+                username "$jobRunrRepoUser"
+                password "$jobRunrRepoPassword"
             }
         }
     }
-
 }

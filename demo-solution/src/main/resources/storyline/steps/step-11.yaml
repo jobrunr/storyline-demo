@@ -1,0 +1,16 @@
+title: Dashboard Deep Dive - Monitor Everything
+icon: 📈
+estimatedTime: PT5M
+
+challenge: |
+  How do we know our background job system is healthy? How many jobs succeeded? Failed? Which
+  queues are backed up?
+
+solution: |
+  Explore the JobRunr Pro Dashboard: real-time job monitoring, filtering, searching, and manual
+  job management.
+
+tryIt: |
+  Navigate through the dashboard sections: jobs, recurring jobs, servers, and explore the various filters.
+
+dashboardLink: http://localhost:8080/dashboard

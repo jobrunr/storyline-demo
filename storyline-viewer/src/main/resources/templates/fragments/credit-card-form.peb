@@ -1,0 +1,53 @@
+<div class="box">
+    <h3 class="title is-4">
+        <i class="fas fa-credit-card"></i> Apply for a Credit Card
+    </h3>
+
+    <form hx-post="/demo/credit-card-submit" hx-target="#form-result" hx-swap="innerHTML">
+        <div class="field">
+            <label class="label">Full Name</label>
+            <div class="control has-icons-left">
+                <input class="input" type="text" name="name" placeholder="John Doe" required>
+                <span class="icon is-small is-left">
+                    <i class="fas fa-user"></i>
+                </span>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label">Email Address</label>
+            <div class="control has-icons-left">
+                <input class="input" type="email" name="email" placeholder="john@example.com" required>
+                <span class="icon is-small is-left">
+                    <i class="fas fa-envelope"></i>
+                </span>
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label">Card Type</label>
+            <div class="control">
+                <div class="select is-fullwidth">
+                    <select name="cardType" required>
+                        <option value="">Select a card type</option>
+                        <option value="MASTERCARD">Mastercard</option>
+                        <option value="AMERICAN_EXPRESS">American Express</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="field">
+            <div class="control">
+                <button type="submit" class="button is-primary is-fullwidth">
+                    <span class="icon">
+                        <i class="fas fa-paper-plane"></i>
+                    </span>
+                    <span>Submit Application</span>
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <div id="form-result" class="mt-4"></div>
+</div>

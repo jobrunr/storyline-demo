@@ -1,0 +1,18 @@
+title: Automatic Retries - Handling Failures Gracefully
+icon: 🔄
+estimatedTime: PT4M
+
+challenge: |
+  PDF generation sometimes fails due to network issues, memory pressure, or external API timeouts.
+  We can't lose these jobs!
+
+solution: |
+  JobRunr automatically retries failed jobs with exponential backoff. View failed jobs in the
+  dashboard and watch them retry.
+
+tryIt: |
+  Trigger multiple expense reports and see how JobRunr handles failures automatically.
+
+dashboardLink: http://localhost:8080/dashboard/jobs?state=FAILED
+
+codeReference: expenses/ExpensesService.java#generateExpenseReportFor

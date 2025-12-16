@@ -1,0 +1,19 @@
+title: Priority Queues - Urgent Payments First
+icon: ⚡
+estimatedTime: PT5M
+
+challenge: |
+  Customer payments should never wait behind monthly report generation. Reports can wait;
+  payments cannot!
+
+solution: |
+  Create high-priority and low-priority queues. Critical jobs (payments) jump to the front
+  of the line.
+
+tryIt: |
+  Trigger 1000 expense reports, then make a payment. Watch the payment complete immediately
+  despite the backlog.
+
+dashboardLink: http://localhost:8080/dashboard/jobs?queue=high-prio
+
+codeReference: payment/PaymentService.java#processPayment

@@ -1,0 +1,18 @@
+title: Job Labels - Organize and Filter Your Jobs
+icon: 🏷️
+estimatedTime: PT2M
+
+challenge: |
+  With thousands of jobs running, finding specific credit card types (MASTERCARD vs AMEX) or
+  customer types is like finding a needle in a haystack.
+
+solution: |
+  Add labels to jobs for easy filtering. Labels can represent card types, customer tiers,
+  regions, or any business dimension.
+
+tryIt: |
+  Register different card types and use dashboard filters to view jobs by label.
+
+dashboardLink: http://localhost:8080/dashboard/jobs
+
+codeReference: creditcards/CreditCardService.java#processRegistration

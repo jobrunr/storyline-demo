@@ -1,0 +1,16 @@
+title: Metrics & Monitoring - Prometheus Integration
+icon: 📊
+estimatedTime: PT3M
+
+challenge: |
+  We need to track job throughput, success rates, and queue depths over time for capacity planning
+  and alerting.
+
+solution: |
+  JobRunr exposes Micrometer metrics that feed into Prometheus. Create alerts, dashboards, and
+  track SLAs.
+
+tryIt: |
+  View JobRunr metrics in Prometheus and see real-time graphs of job execution.
+
+dashboardLink: http://localhost:9090/query?g0.expr=jobrunr_jobs_by_state

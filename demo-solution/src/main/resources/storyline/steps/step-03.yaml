@@ -1,0 +1,18 @@
+title: Job Batches - Coordinating Multiple Jobs
+icon: 🔗
+estimatedTime: PT3M
+
+challenge: |
+  After generating individual expense reports, we need to create a summary report. But the summary
+  should only run AFTER all individual reports complete successfully.
+
+solution: |
+  Use JobRunr's batch feature to create job dependencies. The summary job waits for all parent
+  jobs to succeed before executing.
+
+tryIt: |
+  Generate expense reports for multiple cards and watch the summary job execute only when all are done.
+
+dashboardLink: http://localhost:8080/dashboard/jobs?state=SUCCEEDED
+
+codeReference: expenses/ExpensesService.java#generateExpenseReportFor

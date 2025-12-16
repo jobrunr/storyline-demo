@@ -8,17 +8,6 @@ group = 'org.jobrunr'
 version = '0.0.1-SNAPSHOT'
 description = 'storyline-demo'
 
-repositories {
-    mavenCentral()
-    maven {
-        url "https://repo.jobrunr.io/private-releases/"
-        credentials {
-            username "$mavenUser"
-            password "$mavenPass"
-        }
-    }
-}
-
 dependencies {
     // Spring dependencies + hot reload, templating, validation, data source autoconfig, metrics actuator
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -33,10 +22,7 @@ dependencies {
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
 
     // JobRunr Pro & Jackson serialization
-    implementation 'org.jobrunr:jobrunr-pro-spring-boot-3-starter:8.2.0'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.18.2'
-    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.18.2'
-    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jdk8', version: '2.18.2'
+    implementation 'org.jobrunr:jobrunr-pro-spring-boot-4-starter:1.0.0-SNAPSHOT'
 
     // Postgres
     implementation 'com.zaxxer:HikariCP:6.2.1'

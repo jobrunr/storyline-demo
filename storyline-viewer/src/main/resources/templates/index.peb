@@ -1,0 +1,85 @@
+    {% extends "base" %}
+
+    {% block content %}
+<section class="hero is-primary is-medium">
+    <div class="hero-body">
+        <div class="container has-text-centered">
+            <img src="/jobrunr-logo-white.webp" alt="JobRunr" style="max-width: 200px; margin-bottom: 1rem;">
+            <h1 class="title is-1">
+                {{ storyline.title }}
+            </h1>
+            <h2 class="subtitle is-3">
+                {{ storyline.subTitle }}
+            </h2>
+            <p class="is-size-5 mt-4">
+                {{ storyline.slogan }}
+            </p>
+            <a href="/storyline" class="button is-white is-large is-rounded mt-5">
+                <span class="icon">
+                    <i class="fas fa-play"></i>
+                </span>
+                <span>Start the Interactive Guide</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="content">
+            <h2 class="title is-2 has-text-centered mb-6">What You'll Learn</h2>
+            <div class="columns is-centered">
+                <div class="column is-8">
+                    <div class="box has-background-light">
+                        <p class="is-size-5">
+                            {{ storyline.intro | raw }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="columns is-multiline mt-6">
+            {% for entry in storyline.stepsByCategory %}
+            <div class="column is-6">
+                <div class="card">
+                    <header class="card-header has-background-info-light">
+                        <p class="card-header-title is-size-4">
+                            {{ entry.key }}
+                        </p>
+                    </header>
+                    <div class="card-content">
+                        <div class="content">
+                            {% for step in entry.value %}
+                            <div class="mb-4">
+                                <div class="is-justify-content-space-between mb-3">
+                                    <span class="is-pulled-right is-size-7 has-text-grey">
+                                        ⏱️ {{ step.estimatedTime.toMinutes }} minutes
+                                    </span>
+                                    <span class="has-text-weight-bold">
+                                        {{ step.icon }} Step {{ step.number }}: {{ step.title }}
+                                    </span>
+                                </div>
+                                <p class="is-size-6">
+                                    {{ step.challenge }}
+                                </p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="has-text-centered mt-6">
+            <a href="/guide" class="button is-primary is-large is-rounded">
+                <span class="icon">
+                    <i class="fas fa-rocket"></i>
+                </span>
+                <span>Begin Your Journey</span>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

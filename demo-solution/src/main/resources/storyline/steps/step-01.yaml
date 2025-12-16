@@ -1,0 +1,16 @@
+title: Your First Jobs - New Customer Onboarding
+icon: 🎯
+estimatedTime: PT2M
+
+challenge: |
+  When customers order a credit card, we need to create the card immediately AND send a reminder
+  email in 7 days if they haven't activated it.
+
+solution: |
+  Use JobRunr to enqueue background jobs and schedule future work without blocking the user.
+
+tryIt: |
+  Register a credit card and watch JobRunr handle both the immediate creation and the scheduled reminder.
+
+dashboardLink: http://localhost:8080/dashboard/jobs
+codeReference: org/jobrunr/storylinedemo/creditcards/CreditCardService.java#processRegistration

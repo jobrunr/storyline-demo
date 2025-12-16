@@ -1,0 +1,18 @@
+title: Distributed Processing - Server Tags
+icon: 🌍
+estimatedTime: PT6M
+
+challenge: |
+  International payments must be processed on specific servers with special compliance certifications.
+  Domestic servers cannot handle them.
+
+solution: |
+  Tag servers with capabilities (e.g., 'international'). Jobs target specific server tags, ensuring
+  they run on the right infrastructure.
+
+tryIt: |
+  Make an international payment and see it route to the tagged server automatically.
+
+dashboardLink: http://localhost:8080/dashboard/servers
+
+codeReference: payment/PaymentService.java#processPayment

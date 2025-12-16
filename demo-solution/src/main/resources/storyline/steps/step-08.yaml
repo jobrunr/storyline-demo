@@ -1,0 +1,17 @@
+title: Weighted Queues - VIP Customer Treatment
+icon: 👑
+estimatedTime: PT5M
+
+challenge: |
+  ENTERPRISE customers pay premium fees and expect faster service than PRO customers. We need
+  to process their jobs more frequently.
+
+solution: |
+  Use weighted round-robin queuing. ENTERPRISE queue gets processed 3x more often than PRO queue.
+
+tryIt: |
+  Create expenses for both customer types and watch ENTERPRISE jobs complete faster.
+
+dashboardLink: http://localhost:8080/dashboard/jobs
+
+codeReference: payment/PaymentService.java#processPayment
