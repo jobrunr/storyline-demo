@@ -1,18 +1,18 @@
-title: Automatic Retries - Handling Failures Gracefully
-icon: 🔄
-estimatedTime: PT4M
+title: Job Batches - Coordinating Multiple Jobs
+icon: 🔗
+estimatedTime: PT3M
 
 challenge: |
-  PDF generation sometimes fails due to network issues, memory pressure, or external API timeouts.
-  We can't lose these jobs!
+  After generating individual expense reports, we need to create a summary report. But the summary
+  should only run AFTER all individual reports complete successfully.
 
 solution: |
-  JobRunr automatically retries failed jobs with exponential backoff. View failed jobs in the
-  dashboard and watch them retry.
+  Use JobRunr's batch feature to create job dependencies. The summary job waits for all parent
+  jobs to succeed before executing.
 
 tryIt: |
-  Trigger multiple expense reports and see how JobRunr handles failures automatically.
+  Generate expense reports for multiple cards and watch the summary job execute only when all are done.
 
-dashboardLink: http://localhost:8080/dashboard/jobs?state=FAILED
+dashboardLink: http://localhost:8080/dashboard/jobs?state=SUCCEEDED
 
 codeReference: expenses/ExpensesService.java#generateExpenseReportFor

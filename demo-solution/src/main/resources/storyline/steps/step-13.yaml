@@ -1,16 +1,16 @@
-title: Distributed Tracing - Debug Across Services
-icon: 🔍
-estimatedTime: PT4M
+title: Metrics & Monitoring - Prometheus Integration
+icon: 📊
+estimatedTime: PT3M
 
 challenge: |
-  When a payment fails, we need to trace it through our web app → JobRunr → government API to
-  find where it broke.
+  We need to track job throughput, success rates, and queue depths over time for capacity planning
+  and alerting.
 
 solution: |
-  JobRunr integrates with Jaeger for distributed tracing. See the complete journey of each job
-  across all systems.
+  JobRunr exposes Micrometer metrics that feed into Prometheus. Create alerts, dashboards, and
+  track SLAs.
 
 tryIt: |
-  Make a payment and follow its trace through all services in Jaeger.
+  View JobRunr metrics in Prometheus and see real-time graphs of job execution.
 
-dashboardLink: http://localhost:16686/search
+dashboardLink: http://localhost:9090/query?g0.expr=jobrunr_jobs_by_state

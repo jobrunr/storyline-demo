@@ -28,7 +28,7 @@
             <label class="label">Card Type</label>
             <div class="control">
                 <div class="select is-fullwidth">
-                    <select name="cardType" required>
+                    <select name="type" required>
                         <option value="">Select a card type</option>
                         <option value="MASTERCARD">Mastercard</option>
                         <option value="AMERICAN_EXPRESS">American Express</option>

@@ -1,4 +1,4 @@
-title: JobRunr Finance Demo Guide
+title: JobRunr Finance Demo 🏦
 subtitle: Master Background Job Processing Through Banking
 slogan: An interactive guide to JobRunr Pro's powerful features using a real-world banking scenario
 intro: |
@@ -22,15 +22,17 @@ flow:
   - category: ⚙️ Reliability
     steps:
       - ./steps/step-04.yaml
+      - ./steps/step-05.yaml
       - ./steps/step-06.yaml
+      - ./steps/step-07.yaml
   - category: 🎯 Performance
     steps:
-      - ./steps/step-07.yaml
       - ./steps/step-08.yaml
       - ./steps/step-09.yaml
+      - ./steps/step-10.yaml
   - category: 🔧 Production Ready
     steps:
-      - ./steps/step-10.yaml
       - ./steps/step-11.yaml
       - ./steps/step-12.yaml
       - ./steps/step-13.yaml
+      - ./steps/step-14.yaml

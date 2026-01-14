@@ -1,18 +1,17 @@
-title: Distributed Processing - Server Tags
-icon: 🌍
-estimatedTime: PT6M
+title: Weighted Queues - VIP Customer Treatment
+icon: 👑
+estimatedTime: PT5M
 
 challenge: |
-  International payments must be processed on specific servers with special compliance certifications.
-  Domestic servers cannot handle them.
+  ENTERPRISE customers pay premium fees and expect faster service than PRO customers. We need
+  to process their jobs more frequently.
 
 solution: |
-  Tag servers with capabilities (e.g., 'international'). Jobs target specific server tags, ensuring
-  they run on the right infrastructure.
+  Use weighted round-robin queuing. ENTERPRISE queue gets processed 3x more often than PRO queue.
 
 tryIt: |
-  Make an international payment and see it route to the tagged server automatically.
+  Create expenses for both customer types and watch ENTERPRISE jobs complete faster.
 
-dashboardLink: http://localhost:8080/dashboard/servers
+dashboardLink: http://localhost:8080/dashboard/jobs
 
 codeReference: payment/PaymentService.java#processPayment

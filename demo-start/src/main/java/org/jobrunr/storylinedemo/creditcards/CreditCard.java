@@ -9,6 +9,11 @@ import org.springframework.data.annotation.Id;
 
 public class CreditCard {
 
+    public enum Type {
+        MASTERCARD,
+        AMERICAN_EXPRESS
+    }
+
     @Id
     private Long id;
 
@@ -21,19 +26,19 @@ public class CreditCard {
     private String email;
 
     @NotNull(message = "Credit card type is required")
-    private CardType type;
+    private CreditCard.Type type;
 
     public CreditCard() {
     }
 
-    public CreditCard(String name, String email, CardType type) {
+    public CreditCard(String name, String email, Type type) {
         this.name = name;
         this.email = email;
         this.type = type;
     }
 
     public static CreditCard randomCreditCard(int index) {
-        var cardType = index % 2 == 0 ? CardType.AMERICAN_EXPRESS : CardType.MASTERCARD;
+        var cardType = index % 2 == 0 ? Type.AMERICAN_EXPRESS : Type.MASTERCARD;
         return new CreditCard("Random Name #" + index, "random.email" + index + "@gmail.com", cardType);
     }
 
@@ -45,12 +50,12 @@ public class CreditCard {
         this.id = id;
     }
 
-    public CardType getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(CardType cardType) {
-        this.type = cardType;
+    public void setType(Type type) {
+        this.type = type;
     }
 
     public String getName() {

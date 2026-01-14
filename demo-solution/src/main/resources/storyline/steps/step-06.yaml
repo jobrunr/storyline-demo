@@ -1,18 +1,18 @@
-title: Job Labels - Organize and Filter Your Jobs
-icon: 🏷️
-estimatedTime: PT2M
+title: Idempotency and Reentrancy - Run methods only once
+icon: 🔄
+estimatedTime: PT4M
 
 challenge: |
-  With thousands of jobs running, finding specific credit card types (MASTERCARD vs AMEX) or
-  customer types is like finding a needle in a haystack.
+  Some jobs perform irreversible operations (like charging a credit card or sending an email).
+  When jobs fail and retry, we need to ensure these operations don't happen multiple times!
 
 solution: |
-  Add labels to jobs for easy filtering. Labels can represent card types, customer tiers,
-  regions, or any business dimension.
+  Use `JobContext.runStepOnce("step-name", () -> yourLogic)` to mark critical sections.
+  JobRunr remembers completed steps, so retries skip already-successful operations.
 
 tryIt: |
-  Register different card types and use dashboard filters to view jobs by label.
+  Trigger expense reports and observe how failed jobs retry without duplicating completed steps.
 
-dashboardLink: http://localhost:8080/dashboard/jobs
+dashboardLink: http://localhost:8080/dashboard/jobs?state=FAILED
 
-codeReference: creditcards/CreditCardService.java#processRegistration
+codeReference: expenses/ExpensesService.java#generateExpenseReportFor

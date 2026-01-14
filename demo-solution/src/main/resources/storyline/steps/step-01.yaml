@@ -7,10 +7,16 @@ challenge: |
   email in 7 days if they haven't activated it.
 
 solution: |
-  Use JobRunr to enqueue background jobs and schedule future work without blocking the user.
+  Open the <code>CreditCardService.java</code> file and implement the method responsible for creating a credit card using background jobs.
+  
+  Make sure to <a href="https://www.jobrunr.io/en/documentation/background-methods/enqueueing-jobs/" target="_blank">enqueue a job</a> to create the actual credit card
+  and to <a href="https://www.jobrunr.io/en/documentation/background-methods/scheduling-jobs/">schedule a job</a> to send a reminder email in 7 days.
 
 tryIt: |
-  Register a credit card and watch JobRunr handle both the immediate creation and the scheduled reminder.
+  After implementing the <code>CreditCardService.java</code>, you can now register a credit card and watch JobRunr handle both the immediate creation and the scheduled reminder.
 
-dashboardLink: http://localhost:8080/dashboard/jobs
-codeReference: org/jobrunr/storylinedemo/creditcards/CreditCardService.java#processRegistration
+codeReferences:
+  - org/jobrunr/storylinedemo/creditcards/CreditCardService.java?focus=L27-L30
+  - org/jobrunr/storylinedemo/creditcards/events/listeners/ScheduleEmailOnCreditCardRegistered.java?focus=L27-L32
+tryItUrl: /credit-cards/register
+dashboardUrl: http://localhost:8080/dashboard/jobs?state=SUCCEEDED

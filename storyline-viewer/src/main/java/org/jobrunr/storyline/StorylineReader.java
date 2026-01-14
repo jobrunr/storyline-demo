@@ -46,9 +46,12 @@ public class StorylineReader {
                             stepYaml.challenge,
                             stepYaml.solution,
                             stepYaml.tryIt,
-                            stepYaml.codeReference != null ? List.of(stepYaml.codeReference) : List.of(),
-                            stepYaml.dashboardLink,
-                            null // videoUrl
+                            stepYaml.codeReferences != null ?
+                                    stepYaml.codeReferences :
+                                    stepYaml.codeReference != null ? List.of(stepYaml.codeReference) : List.of(),
+                            stepYaml.tryItUrl,
+                            stepYaml.dashboardUrl,
+                            stepYaml.videoUrl
                     );
                     steps.add(step);
                 }
@@ -109,6 +112,9 @@ public class StorylineReader {
         public String solution;
         public String tryIt;
         public String codeReference;
-        public String dashboardLink;
+        public List<String> codeReferences;
+        public String tryItUrl;
+        public String dashboardUrl;
+        public String videoUrl;
     }
 }

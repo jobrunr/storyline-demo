@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Registration</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body class="flex-center">
+
+<div class="card-container" hx-boost="true">
+    <div class="header">
+        <h1>Apply for a Credit Card</h1>
+        <p>Fill out the form below to get your new card.</p>
+    </div>
+
+    <img id="card-image" class="card-image" src="/mastercard.png" alt="Credit card">
+
+    <form id="credit-card-registration-form" action="/credit-cards/register" method="post">
+        <div class="form-field">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" placeholder="Enter your full name" value="{{ creditCard.name }}">
+            {% if errors.name %}
+            <p class="error-message">{{ errors.name }}</p>
+            {% endif %}
+        </div>
+        <div class="form-field">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email address" value="{{ creditCard.email }}">
+            {% if errors.email %}
+            <p class="error-message">{{ errors.email }}</p>
+            {% endif %}
+        </div>
+        <div class="form-field">
+            <label for="type">Card Type</label>
+            <select id="type" name="type">
+                <option value="" disabled {% if creditCard.type is null %}selected{% endif %}>Select a card type</option>
+                {% for type in cardTypes %}
+                <option value="{{ type }}" {% if creditCard.type == type %}selected{% endif %}>{{ type }}</option>
+                {% endfor %}
+            </select>
+            {% if errors.type %}
+            <p class="error-message">{{ errors.type }}</p>
+            {% endif %}
+        </div>
+        <button type="submit" class="submit-btn">
+            Register
+        </button>
+    </form>
+
+    {% if success %}
+    <div class="success-message">
+        Registration successful! We will be in touch shortly.
+    </div>
+    {% endif %}
+</div>
+
+<script type="text/javascript">
+    const cardImages = {
+        'MASTERCARD': '/mastercard.png',
+        'AMERICAN_EXPRESS': '/americanexpress.png'
+    }
+
+    document.querySelector('#type').addEventListener('change', (event) => {
+        const selectedType = event.target.value
+        if (cardImages[selectedType]) {
+            document.querySelector('#card-image').src = cardImages[selectedType];
+        }
+    })
+</script>
+</body>
+</html>

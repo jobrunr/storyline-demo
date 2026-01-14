@@ -1,18 +1,17 @@
-title: Job Batches - Coordinating Multiple Jobs
-icon: 🔗
+title: Recurring Jobs - Monthly Credit Card Statement Reports
+icon: 📊
 estimatedTime: PT3M
 
 challenge: |
-  After generating individual expense reports, we need to create a summary report. But the summary
-  should only run AFTER all individual reports complete successfully.
+  All customers need monthly credit card statement reports generated automatically on the 1st of every month.
+  Manual generation is error-prone and wastes time.
 
 solution: |
-  Use JobRunr's batch feature to create job dependencies. The summary job waits for all parent
-  jobs to succeed before executing.
+  Set up recurring jobs with cron expressions. JobRunr ensures the job runs exactly once per
+  schedule, even if the server restarts.
 
 tryIt: |
-  Generate expense reports for multiple cards and watch the summary job execute only when all are done.
+  Trigger the monthly report generation and see it scheduled for the next month automatically.
 
-dashboardLink: http://localhost:8080/dashboard/jobs?state=SUCCEEDED
-
-codeReference: expenses/ExpensesService.java#generateExpenseReportFor
+codeReference: org/jobrunr/storylinedemo/expenses/ExpensesService.java#generateMonthlyExpenseReport
+dashboardLink: http://localhost:8080/dashboard/recurring-jobs

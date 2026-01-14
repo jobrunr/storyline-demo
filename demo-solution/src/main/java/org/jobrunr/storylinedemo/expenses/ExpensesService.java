@@ -39,18 +39,18 @@ public class ExpensesService {
         });
     }
 
-    public void generateSummaryReport() {
-        generatePDFThatSometimesFails();
-        LOGGER.info("Summary Report generated");
-    }
-
     public void generateExpenseReportFor(CreditCard creditCard) {
         generatePDF();
         LOGGER.info("Monthly expenses generated for {}", creditCard);
     }
 
+    public void generateSummaryReport() {
+        generatePDFThatSometimesFails();
+        LOGGER.info("Summary Report generated");
+    }
+
     private static void generatePDFThatSometimesFails() {
-        if(new Random().nextBoolean()) {
+        if (new Random().nextBoolean()) {
             throw new RuntimeException("Something went wrong while generating pdf");
         }
 

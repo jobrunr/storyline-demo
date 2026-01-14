@@ -1,6 +1,8 @@
 CREATE TABLE IF NOT EXISTS credit_card (
     id BIGSERIAL PRIMARY KEY,
+    number VARCHAR(16) NOT NULL,
     name VARCHAR(200) NOT NULL,
     email VARCHAR(255) NOT NULL,
-    type VARCHAR(50) NOT NULL
+    type VARCHAR(50) NOT NULL,
+    state VARCHAR(50) NOT NULL
 );

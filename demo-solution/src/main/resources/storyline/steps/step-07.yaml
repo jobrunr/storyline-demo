@@ -1,19 +1,18 @@
-title: Priority Queues - Urgent Payments First
-icon: ⚡
-estimatedTime: PT5M
+title: Job Labels - Organize and Filter Your Jobs
+icon: 🏷️
+estimatedTime: PT2M
 
 challenge: |
-  Customer payments should never wait behind monthly report generation. Reports can wait;
-  payments cannot!
+  With thousands of jobs running, finding specific credit card types (MASTERCARD vs AMEX) or
+  customer types is like finding a needle in a haystack.
 
 solution: |
-  Create high-priority and low-priority queues. Critical jobs (payments) jump to the front
-  of the line.
+  Add labels to jobs for easy filtering. Labels can represent card types, customer tiers,
+  regions, or any business dimension.
 
 tryIt: |
-  Trigger 1000 expense reports, then make a payment. Watch the payment complete immediately
-  despite the backlog.
+  Register different card types and use dashboard filters to view jobs by label.
 
-dashboardLink: http://localhost:8080/dashboard/jobs?queue=high-prio
+dashboardLink: http://localhost:8080/dashboard/jobs
 
-codeReference: payment/PaymentService.java#processPayment
+codeReference: creditcards/CreditCardService.java#processRegistration

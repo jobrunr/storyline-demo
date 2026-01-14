@@ -1,31 +1,12 @@
 // Progress tracking
 const STORAGE_KEY = 'jobrunr-guide-progress';
 
-
-// Demo component mapping - maps step numbers to demo endpoints
-const DEMO_COMPONENTS = {
-    1: '/demo/credit-card-form',
-    2: '/demo/expense-trigger',
-    3: '/demo/expense-trigger',
-    4: '/demo/expense-trigger',
-    5: '/demo/credit-card-form',
-    6: '/demo/payment-form',
-    7: '/demo/payment-form',
-    8: '/demo/payment-form',
-    9: '/demo/payment-form',
-    10: null, // Dashboard exploration only
-    11: null, // Metrics exploration only
-    12: null  // Tracing exploration only
-};
-
 // Initialize on page load
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     loadProgress();
     updateProgressDisplay();
     initializeNavigation();
     initializeTabSwitching();
-    loadCodeSnippets();
-    loadDemoComponents();
 
     // Handle initial hash or show welcome screen
     if (window.location.hash) {
@@ -114,13 +95,13 @@ function updateProgressDisplay() {
 
 // Navigation handling
 function initializeNavigation() {
-    window.addEventListener('hashchange', function() {
+    window.addEventListener('hashchange', function () {
         navigateToHash(window.location.hash);
     });
 
     // Step links
     document.querySelectorAll('.step-link').forEach(link => {
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', function (e) {
             e.preventDefault();
             const hash = this.getAttribute('href');
             window.location.hash = hash;
@@ -141,7 +122,7 @@ function navigateToHash(hash) {
         // Scroll timeline to active step
         const timelineItem = document.querySelector(`.timeline-item[data-step="${stepNumber}"]`);
         if (timelineItem) {
-            timelineItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            timelineItem.scrollIntoView({behavior: 'smooth', block: 'center'});
         }
     }
 }
@@ -191,7 +172,7 @@ function showScreen(screenId) {
 // Tab switching
 function initializeTabSwitching() {
     document.querySelectorAll('.tab-link').forEach(tab => {
-        tab.addEventListener('click', function(e) {
+        tab.addEventListener('click', function (e) {
             e.preventDefault();
             const targetId = this.dataset.tab;
 
@@ -214,57 +195,6 @@ function initializeTabSwitching() {
                 targetContent.classList.add('is-active');
             }
         });
-    });
-}
-
-// Load code snippets from local project or GitHub
-function loadCodeSnippets() {
-    // Find all code elements with data-code-reference attribute
-    document.querySelectorAll('[data-code-reference]').forEach(codeElement => {
-        const codeReference = codeElement.dataset.codeReference;
-        if (codeReference) {
-            fetch(`/code/${codeReference}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}`);
-                    }
-                    return response.text();
-                })
-                .then(code => {
-                    codeElement.textContent = code;
-                    hljs.highlightElement(codeElement);
-                })
-                .catch(error => {
-                    console.error(`Failed to load code for reference ${codeReference}:`, error);
-                    codeElement.textContent = '// Failed to load code. File not found.';
-                });
-        }
-    });
-}
-
-// Load demo components via HTMX
-function loadDemoComponents() {
-    Object.keys(DEMO_COMPONENTS).forEach(stepNum => {
-        const demoUrl = DEMO_COMPONENTS[stepNum];
-        const demoContainer = document.getElementById(`demo-container-${stepNum}`);
-
-        if (demoContainer && demoUrl) {
-            fetch(demoUrl)
-                .then(response => response.text())
-                .then(html => {
-                    demoContainer.innerHTML = html;
-                    // Re-process HTMX attributes
-                    if (window.htmx) {
-                        htmx.process(demoContainer);
-                    }
-                })
-                .catch(error => {
-                    console.error(`Failed to load demo for step ${stepNum}:`, error);
-                    demoContainer.innerHTML = '<div class="notification is-warning">Failed to load demo component.</div>';
-                });
-        } else if (demoContainer && !demoUrl) {
-            demoContainer.innerHTML = '<div class="notification is-info">This step focuses on exploring external dashboards. No interactive demo needed.</div>';
-        }
     });
 }
 

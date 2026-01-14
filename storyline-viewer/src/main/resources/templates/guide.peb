@@ -1,6 +1,6 @@
-    {% extends "base" %}
+{% extends "base" %}
 
-        {% block head %}
+{% block head %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@samlam140330/bulma-timeline@1.0.3/dist/css/bulma-timeline.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
     <link rel="stylesheet" href="/css/guide.css">
@@ -8,14 +8,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.9.0/highlightjs-line-numbers.min.js"></script>
-    {% endblock %}
+{% endblock %}
 
     {% block content %}
     <nav class="navbar is-dark" role="navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="/">
                 <img src="/jobrunr-logo-white.webp" alt="JobRunr" style="max-height: 32px; margin-right: 0.5rem;">
-                <strong>JobRunr Finance</strong>
+                <strong>{{ storyline.title }}</strong>
             </a>
         </div>
         <div class="navbar-menu">
@@ -25,23 +25,15 @@
                     <span id="progress-text">0/12</span>
                     <progress class="progress is-primary" value="0" max="12" id="progress-bar">0%</progress>
                 </div>
-                <div class="navbar-item">
-                    <div class="buttons">
-                        <a href="http://localhost:8080/dashboard" target="_blank" class="button is-light is-small">
-                            <span class="icon"><i class="fas fa-tachometer-alt"></i></span>
-                            <span>Dashboard</span>
-                        </a>
-                    </div>
-                </div>
             </div>
         </div>
     </nav>
 
     <div class="columns is-gapless" style="height: calc(100vh - 52px);">
         <!-- Left sidebar: Timeline -->
-        <div class="column is-one-third timeline-sidebar">
+        <div class="column is-one-fifth timeline-sidebar">
             <div class="p-4">
-                <h2 class="title is-4 has-text-white mb-5">
+                <h2 class="title is-4 has-text-dark mb-5">
                     <i class="fas fa-route"></i> Your Learning Path
                 </h2>
 
@@ -52,21 +44,21 @@
                             <span class="tag is-primary">{{ entry.key }}</span>
                         </header>
                         {% for step in entry.value %}
-                        <div class="timeline-item" data-step="{{ step.number }}">
-                            <div class="timeline-marker is-icon" data-step-marker="{{ step.number }}">
-                                <i class="fas fa-circle"></i>
+                            <div class="timeline-item" data-step="{{ step.number }}">
+                                <div class="timeline-marker is-icon" data-step-marker="{{ step.number }}">
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <div class="timeline-content">
+                                    <a href="#step-{{ step.number }}" class="step-link" data-step="{{ step.number }}">
+                                        <div class="box step-box">
+                                            <p class="heading mb-1">Step {{ step.number }} · ⏱️ {{ step.estimatedTime.toMinutes }} minutes</p>
+                                            <p class="title is-6">{{ step.icon }} {{ step.title }}</p>
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
-                            <div class="timeline-content">
-                                <a href="#step-{{ step.number }}" class="step-link" data-step="{{ step.number }}">
-                                    <div class="box step-box">
-                                        <p class="heading">Step {{ step.number }} · ⏱️ {{ step.estimatedTime.toMinutes }} minutes</p>
-                                        <p class="title is-6">{{ step.icon }} {{ step.title }}</p>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
                         {% endfor %}
-    {% endfor %}
+                    {% endfor %}
                     <div class="timeline-header">
                         <span class="tag is-medium is-success">Complete!</span>
                     </div>
@@ -82,7 +74,7 @@
                     <div class="hero is-medium">
                         <div class="hero-body has-text-centered">
                             <h1 class="title is-1">
-                                Welcome to JobRunr Finance! 🏦
+                                Welcome to {{ storyline.title }}
                             </h1>
                             <p class="subtitle is-4 mt-4">
                                 Click on any step in the timeline to begin your journey
@@ -138,13 +130,13 @@
                     <!-- The Solution -->
                     <div class="box has-background-success-light">
                         <h3 class="title is-4">💡 The Solution</h3>
-                        <p class="is-size-5">{{ step.solution }}</p>
+                        <p class="is-size-5">{{ step.solution | raw}}</p>
                     </div>
 
                     <!-- Try It / Dashboard Link -->
                     <div class="box has-background-info-light">
                         <h3 class="title is-4">👉 Try It Yourself</h3>
-                        <p class="is-size-5 mb-4">{{ step.tryIt }}</p>
+                        <p class="is-size-5 mb-4">{{ step.tryIt | raw}}</p>
                         <a href="{{ step.dashboardLink }}" target="_blank" class="button is-link">
                             <span class="icon"><i class="fas fa-external-link-alt"></i></span>
                             <span>Open JobRunr Dashboard</span>
@@ -166,17 +158,36 @@
                                     <span>Try Demo</span>
                                 </a>
                             </li>
+                            {% if step.dashboardUrl %}
+                            <li class="tab-link" data-tab="dashboard-{{ step.number }}">
+                                <a>
+                                    <span class="icon"><i class="fas fa-dashboard"></i></span>
+                                    <span>Dashboard</span>
+                                </a>
+                            </li>
+                            {% endif %}
                         </ul>
                     </div>
+
+                    <script>
+                        function highlightCode(el) {
+                            delete el.dataset.highlighted;
+                            hljs.highlightElement(el);
+                        }
+                    </script>
 
                     <!-- Code view -->
                     <div id="code-{{ step.number }}" class="tab-content {% if step.codeReferences|length > 0 %}is-active{% endif %}">
                         {% if step.codeReferences|length > 0 %}
                         <div>
-                            <p class="has-text-weight-bold mb-3">
-                                <i class="fas fa-file-code"></i> {{ step.codeReferences[0] }}
-                            </p>
-                            <pre class="p-0"><code class="language-java" data-code-reference="{{ step.codeReferences[0] }}">Loading code...</code></pre>
+                            {% for codeReference in step.codeReferences %}
+                            {% set fileName = (codeReference | split('/') | last) | split ('\?') | first %}
+                            <span class="has-text-weight-bold is-inline-block mb-3 is-clickable" hx-get="/code/{{ codeReference }}" hx-target="next pre code" hx-on::after-settle="highlightCode(this.parentElement.querySelector('pre code')))">
+                                <i class="fas fa-file-code"></i> {{ fileName }}
+                            </span>
+                            <a id="{{ fileName }}-view-switch" class="is-inline-block mr-2" hx-get="/code/{{ codeReference }}" hx-target="next pre code" hx-on::after-settle="highlightCode(this.parentElement.querySelector('pre code'));">(view complete file)</a>
+                            {% endfor %}
+                            <pre class="p-0"><code class="language-java" hx-trigger="load" hx-get="/code/{{ step.codeReferences[0] }}" hx-on::after-request="hljs.highlightElement(this)">Loading code...</code></pre>
                         </div>
                         {% else %}
                         <div class="notification is-info">
@@ -185,15 +196,28 @@
                         {% endif %}
                     </div>
 
-                    <!-- Demo view -->
+                    {% if step.tryItUrl %}
                     <div id="demo-{{ step.number }}" class="tab-content">
-                        <div class="box">
-                            <div id="demo-container-{{ step.number }}">
-                                <!-- Demo content loaded via HTMX -->
-                                <p class="has-text-grey-light">Demo interface will be loaded here...</p>
-                            </div>
+                        <div id="demo-container-{{ step.number }}">
+                            <iframe src="{{ step.tryItUrl }}"
+                                scrolling="no"
+                                style="height: 700px; width:100%; border:none; overflow:hidden;">
+                            </iframe>
                         </div>
                     </div>
+                    {% endif %}
+
+                    {% if step.dashboardUrl %}
+                    <div id="dashboard-{{ step.number }}" class="tab-content" style="padding: 0">
+                        <div id="dashboard-container-{{ step.number }}">
+                            <iframe src="{{ step.dashboardUrl }}"
+                                scrolling="no"
+                                style="height: 700px; width:100%; border:none; overflow:hidden;">
+                            </iframe>
+                        </div>
+                    </div>
+                    {% endif %}
+
 
                     <!-- Navigation -->
                     <div class="buttons is-centered mt-6">
@@ -204,7 +228,7 @@
                         </a>
                         {% endif %}
 
-            {% if step.number < storyline.storylineMetadata.totalAmountOfSteps %}
+                        {% if step.number < storyline.storylineMetadata.totalAmountOfSteps %}
                         <a href="#step-{{ step.number + 1 }}" class="button is-primary is-medium">
                             <span>Next</span>
                             <span class="icon"><i class="fas fa-arrow-right"></i></span>

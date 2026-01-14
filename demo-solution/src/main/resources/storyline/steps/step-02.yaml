@@ -1,17 +1,20 @@
-title: Recurring Jobs - Monthly Expense Reports
+title: Cancelling Existing Jobs and Naming Jobs
 icon: 📊
 estimatedTime: PT3M
 
 challenge: |
-  The finance team needs expense reports generated automatically on the 1st of every month.
-  Manual generation is error-prone and wastes time.
+  As soon as the credit card is activated, the reminder email must not be sent anymore. 
+  And, to make things easier in the dashboard, we will name the job and add the customer's name and credit card number.
 
 solution: |
-  Set up recurring jobs with cron expressions. JobRunr ensures the job runs exactly once per
-  schedule, even if the server restarts.
+  Using the JobScheduler, we can mark the existing job as not applicable. 
+  Thanks to the @Job Annotation, we can name the job with the customer's name and credit card number.
 
 tryIt: |
   Trigger the monthly report generation and see it scheduled for the next month automatically.
 
-dashboardLink: http://localhost:8080/dashboard/recurring-jobs
-codeReference: expenses/ExpensesService.java#generateMonthlyExpenseReport
+codeReferences:
+  - org/jobrunr/storylinedemo/creditcards/CreditCardService.java?focus=L42-L50
+  - org/jobrunr/storylinedemo/creditcards/events/listeners/CancelScheduledEmailOnCreditCardActivated.java?focus=L21-L29
+tryItUrl: /credit-cards/activate
+dashboardUrl: http://localhost:8080/dashboard/jobs?state=NOT_APPLICABLE

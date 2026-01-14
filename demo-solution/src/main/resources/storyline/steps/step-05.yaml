@@ -1,17 +1,17 @@
-title: Idempotency and Reentrancy - Run methods only once
+title: Automatic Retries - Handling Failures Gracefully
 icon: 🔄
 estimatedTime: PT4M
 
 challenge: |
-  Some jobs perform irreversible operations (like charging a credit card or sending an email).
-  When jobs fail and retry, we need to ensure these operations don't happen multiple times!
+  PDF generation sometimes fails due to network issues, memory pressure, or external API timeouts.
+  We can't lose these jobs!
 
 solution: |
-  Use `JobContext.runStepOnce("step-name", () -> yourLogic)` to mark critical sections.
-  JobRunr remembers completed steps, so retries skip already-successful operations.
+  JobRunr automatically retries failed jobs with exponential backoff. View failed jobs in the
+  dashboard and watch them retry.
 
 tryIt: |
-  Trigger expense reports and observe how failed jobs retry without duplicating completed steps.
+  Trigger multiple expense reports and see how JobRunr handles failures automatically.
 
 dashboardLink: http://localhost:8080/dashboard/jobs?state=FAILED
 

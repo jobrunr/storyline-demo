@@ -7,10 +7,27 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.annotation.Id;
 
+import java.util.Random;
+
 public class CreditCard {
+
+    public enum Type {
+        MASTERCARD,
+        AMERICAN_EXPRESS
+    }
+
+    public enum State {
+        REQUESTED,
+        ACTIVE,
+        CANCELLED
+    }
 
     @Id
     private Long id;
+
+    @NotBlank(message = "CreditCard Number is required")
+    @Size(min = 16, max = 16, message = "Number must be exactly 16 numbers")
+    private String number;
 
     @NotBlank(message = "Name is required")
     @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
@@ -21,19 +38,22 @@ public class CreditCard {
     private String email;
 
     @NotNull(message = "Credit card type is required")
-    private CardType type;
+    private CreditCard.Type type;
+
+    private CreditCard.State state = State.REQUESTED;
 
     public CreditCard() {
+        this.number = createCreditCardNumber();
     }
 
-    public CreditCard(String name, String email, CardType type) {
+    public CreditCard(String name, String email, Type type) {
         this.name = name;
         this.email = email;
         this.type = type;
     }
 
     public static CreditCard randomCreditCard(int index) {
-        var cardType = index % 2 == 0 ? CardType.AMERICAN_EXPRESS : CardType.MASTERCARD;
+        var cardType = index % 2 == 0 ? Type.AMERICAN_EXPRESS : Type.MASTERCARD;
         return new CreditCard("Random Name #" + index, "random.email" + index + "@gmail.com", cardType);
     }
 
@@ -45,12 +65,12 @@ public class CreditCard {
         this.id = id;
     }
 
-    public CardType getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(CardType cardType) {
-        this.type = cardType;
+    public void setType(Type type) {
+        this.type = type;
     }
 
     public String getName() {
@@ -69,13 +89,33 @@ public class CreditCard {
         this.email = email;
     }
 
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public void activate() {
+        this.state = State.ACTIVE;
+    }
+
     @Override
     public String toString() {
         return "CreditCard{" +
-                "id='" + id + '\'' +
-                "type='" + type + '\'' +
-                "name='" + name + '\'' +
+                "number='" + number + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    private static String createCreditCardNumber() {
+        Random rand = new Random();
+        long number = 1 + rand.nextInt(9); // ensures that the 16th digit isn't 0
+        for (int i = 0; i < 15; i++) {
+            number *= 10L;
+            number += rand.nextInt(10);
+        }
+        return String.valueOf(number);
     }
 }

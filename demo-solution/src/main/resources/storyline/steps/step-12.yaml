@@ -1,16 +1,16 @@
-title: Metrics & Monitoring - Prometheus Integration
-icon: 📊
-estimatedTime: PT3M
+title: Dashboard Deep Dive - Monitor Everything
+icon: 📈
+estimatedTime: PT5M
 
 challenge: |
-  We need to track job throughput, success rates, and queue depths over time for capacity planning
-  and alerting.
+  How do we know our background job system is healthy? How many jobs succeeded? Failed? Which
+  queues are backed up?
 
 solution: |
-  JobRunr exposes Micrometer metrics that feed into Prometheus. Create alerts, dashboards, and
-  track SLAs.
+  Explore the JobRunr Pro Dashboard: real-time job monitoring, filtering, searching, and manual
+  job management.
 
 tryIt: |
-  View JobRunr metrics in Prometheus and see real-time graphs of job execution.
+  Navigate through the dashboard sections: jobs, recurring jobs, servers, and explore the various filters.
 
-dashboardLink: http://localhost:9090/query?g0.expr=jobrunr_jobs_by_state
+dashboardLink: http://localhost:8080/dashboard
