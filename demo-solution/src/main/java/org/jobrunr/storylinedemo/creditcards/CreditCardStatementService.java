@@ -1,10 +1,8 @@
-package org.jobrunr.storylinedemo.expenses;
+package org.jobrunr.storylinedemo.creditcards;
 
 import org.jobrunr.jobs.annotations.Job;
 import org.jobrunr.jobs.annotations.Recurring;
 import org.jobrunr.scheduling.JobScheduler;
-import org.jobrunr.storylinedemo.creditcards.CreditCard;
-import org.jobrunr.storylinedemo.creditcards.CreditCardRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -12,28 +10,29 @@ import org.springframework.stereotype.Service;
 import java.util.Random;
 
 @Service
-public class ExpensesService {
+public class CreditCardStatementService {
 
     private final JobScheduler jobScheduler;
     private final CreditCardRepository creditCardRepository;
-    private static final Logger LOGGER = LoggerFactory.getLogger(ExpensesService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CreditCardStatementService.class);
 
-    public ExpensesService(CreditCardRepository creditCardRepository, JobScheduler jobScheduler) {
+    public CreditCardStatementService(CreditCardRepository creditCardRepository, JobScheduler jobScheduler) {
         this.creditCardRepository = creditCardRepository;
         this.jobScheduler = jobScheduler;
     }
 
-    // Step 2: at 00:00 on day-of-month 1, create a recurring job to start processing monthly expenses
+    // At 00:00 on day-of-month 1, create a recurring job to start processing monthly expenses
     @Recurring(cron = "0 0 1 * *")
-    @Job
-    public void startGenerateMonthlyExpensesJob() {
+    @Job(name = "Generate Monthly Credit Card Statements for all cardholders")
+    public void generateMonthlyCreditCardStatements() {
+        // Step 1: start a batch job to process monthly expenses for all cardholders
         jobScheduler
-                .startBatch(this::generateMonthlyExpensesForEachCreditCardUser)
-                // Step 3: continue with a summary report by batching
+                .startBatch(this::generateMonthlyExpensesForAllCreditCardHolders)
+                // Step 2: continue with a summary report when the batch ended
                 .continueWith(this::generateSummaryReport);
     }
 
-    public void generateMonthlyExpensesForEachCreditCardUser() {
+    public void generateMonthlyExpensesForAllCreditCardHolders() {
         creditCardRepository.findAll().forEach(creditCard -> {
             jobScheduler.enqueue(() -> generateExpenseReportFor(creditCard));
         });
@@ -65,5 +64,4 @@ public class ExpensesService {
             throw new RuntimeException(e);
         }
     }
-
 }

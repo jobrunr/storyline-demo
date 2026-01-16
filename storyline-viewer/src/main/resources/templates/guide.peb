@@ -137,10 +137,6 @@
                     <div class="box has-background-info-light">
                         <h3 class="title is-4">👉 Try It Yourself</h3>
                         <p class="is-size-5 mb-4">{{ step.tryIt | raw}}</p>
-                        <a href="{{ step.dashboardLink }}" target="_blank" class="button is-link">
-                            <span class="icon"><i class="fas fa-external-link-alt"></i></span>
-                            <span>Open JobRunr Dashboard</span>
-                        </a>
                     </div>
 
                     <!-- Toggle between Code and Demo -->
@@ -152,12 +148,14 @@
                                     <span>View Code</span>
                                 </a>
                             </li>
+                            {% if step.tryItUrl %}
                             <li class="tab-link" data-tab="demo-{{ step.number }}">
                                 <a>
                                     <span class="icon"><i class="fas fa-play-circle"></i></span>
                                     <span>Try Demo</span>
                                 </a>
                             </li>
+                            {% endif %}
                             {% if step.dashboardUrl %}
                             <li class="tab-link" data-tab="dashboard-{{ step.number }}">
                                 <a>
@@ -211,8 +209,7 @@
                     <div id="dashboard-{{ step.number }}" class="tab-content" style="padding: 0">
                         <div id="dashboard-container-{{ step.number }}">
                             <iframe src="{{ step.dashboardUrl }}"
-                                scrolling="no"
-                                style="height: 700px; width:100%; border:none; overflow:hidden;">
+                                style="height: 700px; width:100%; border:none; ">
                             </iframe>
                         </div>
                     </div>

@@ -15,12 +15,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
+import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.joining;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.substringAfter;
+import static org.apache.commons.lang3.StringUtils.substringBefore;
 
 @Controller
 public class CodeController {
@@ -34,23 +35,29 @@ public class CodeController {
     @GetMapping(value = "/code/{*codeReference}", produces = MediaType.TEXT_PLAIN_VALUE)
     @ResponseBody
     public String code(@PathVariable String codeReference, HttpServletRequest request) {
-        String codeFile = codeReference;
         String focus = request.getParameter("focus");
         String show = Optional.ofNullable(request.getParameter("show")).orElse("focus");
 
-        // Try to load from local project first
-        String code = loadFromLocalProject(codeFile)
-                .or(() -> loadFromGitHub(codeFile))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Code file not found: " + codeFile));
-        if (focus != null && focus.startsWith("L") && "focus".equals(show)) {
-            int startLine = Integer.parseInt(StringUtils.substringBefore(focus, "-").replace("L", ""));
-            int endLine = Integer.parseInt(StringUtils.substringAfter(focus, "-").replace("L", ""));
-            code = Arrays.stream(code.split(System.lineSeparator()))
+        String code = getCodeFileAsStringFromProjectOrGithub(codeReference);
+        code = getCodeToShow(code, focus, show);
+        code += getFileViewSwitch(codeReference, focus, show);
+        return code;
+    }
+
+    private static String getCodeToShow(String code, String focus, String show) {
+        if (isNotBlank(focus) && "focus".equals(show)) {
+            int startLine = -1, endLine = -1;
+            if (focus.startsWith("L")) {
+                startLine = Integer.parseInt(substringBefore(focus, "-").replace("L", ""));
+                endLine = Integer.parseInt(substringAfter(focus, "-").replace("L", ""));
+            } else if (focus.startsWith("#")) { // find relevant method
+                throw new UnsupportedOperationException("Method focus not implemented yet");
+            }
+            return stream(code.split(System.lineSeparator()))
                     .skip(startLine - 1)
                     .limit(endLine - startLine + 1)
                     .collect(joining(System.lineSeparator()));
         }
-        code += getFileViewSwitch(codeFile, focus, show);
         return code;
     }
 
@@ -61,6 +68,13 @@ public class CodeController {
         return System.lineSeparator() + String.format("""
                 <a id="%s-view-switch" hx-swap-oob="true" class="is-inline-block mr-2" hx-get="/code%s" hx-target="next pre code" hx-on::after-settle="highlightCode(this.parentElement.querySelector('pre code'));">(%s)</a>
                 """, fileName, codeFile + "?focus=" + focus + "&show=" + toShow, label);
+    }
+
+    private String getCodeFileAsStringFromProjectOrGithub(String codeFile) {
+        // Try to load from local project first
+        return loadFromLocalProject(codeFile)
+                .or(() -> loadFromGitHub(codeFile))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Code file not found: " + codeFile));
     }
 
     private Optional<String> loadFromLocalProject(String codeFile) {
@@ -79,38 +93,5 @@ public class CodeController {
         // TODO: Implement GitHub fetching using WebClient or similar
         // For now, return null to indicate not implemented
         return Optional.empty();
-    }
-
-    private String extractMethod(String code, String methodName) {
-        String[] lines = code.split("\n");
-        List<String> methodLines = new ArrayList<>();
-        boolean inMethod = false;
-        int braceCount = 0;
-        boolean foundMethod = false;
-
-        for (String line : lines) {
-            // Look for method declaration
-            if (!inMethod && line.contains(methodName) && (line.contains("public") || line.contains("private") || line.contains("protected"))) {
-                inMethod = true;
-                foundMethod = true;
-            }
-
-            if (inMethod) {
-                methodLines.add(line);
-
-                // Count braces to know when method ends
-                for (char c : line.toCharArray()) {
-                    if (c == '{') braceCount++;
-                    if (c == '}') braceCount--;
-                }
-
-                // Method ends when braces are balanced
-                if (braceCount == 0 && line.contains("}")) {
-                    break;
-                }
-            }
-        }
-
-        return foundMethod ? String.join("\n", methodLines) : code;
     }
 }

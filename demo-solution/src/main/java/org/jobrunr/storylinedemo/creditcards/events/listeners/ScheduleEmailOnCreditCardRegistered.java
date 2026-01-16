@@ -26,10 +26,11 @@ public class ScheduleEmailOnCreditCardRegistered implements ApplicationListener<
 
     @Override
     public void onApplicationEvent(CreditCardRegisteredEvent event) {
+        CreditCard creditCard = event.getCreditCard();
         jobScheduler.create(aJob()
                 .scheduleAt(LocalDateTime.now().plusDays(7))
                 .withLabels("customer: " + event.getCreditCard().getEmail())
-                .withDetails(() -> sendActivationReminderEmail(event.getCreditCard())));
+                .withDetails(() -> sendActivationReminderEmail(creditCard)));
     }
 
     public void sendActivationReminderEmail(CreditCard creditCard) {

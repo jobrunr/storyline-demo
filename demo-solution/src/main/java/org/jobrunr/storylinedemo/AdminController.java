@@ -3,7 +3,7 @@ package org.jobrunr.storylinedemo;
 import org.jobrunr.scheduling.JobScheduler;
 import org.jobrunr.storylinedemo.creditcards.CreditCard;
 import org.jobrunr.storylinedemo.creditcards.CreditCardService;
-import org.jobrunr.storylinedemo.expenses.ExpensesService;
+import org.jobrunr.storylinedemo.creditcards.CreditCardStatementService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -11,18 +11,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class AdminController {
 
     private final CreditCardService creditCardService;
-    private final ExpensesService expensesService;
+    private final CreditCardStatementService creditCardStatementService;
     private final JobScheduler jobScheduler;
 
-    public AdminController(CreditCardService creditCardService, ExpensesService expensesService, JobScheduler jobScheduler) {
+    public AdminController(CreditCardService creditCardService, CreditCardStatementService creditCardStatementService, JobScheduler jobScheduler) {
         this.creditCardService = creditCardService;
-        this.expensesService = expensesService;
+        this.creditCardStatementService = creditCardStatementService;
         this.jobScheduler = jobScheduler;
     }
 
     @GetMapping({"/bulk-add-cards"})
     public String bulkAddCreditCards() {
-        for(int i = 1; i <= 1000; i++) {
+        for (int i = 1; i <= 1000; i++) {
             var creditCard = CreditCard.randomCreditCard(i);
             this.creditCardService.processRegistration(creditCard);
         }
@@ -32,9 +32,9 @@ public class AdminController {
 
     @GetMapping({"/bulk-generate-expenses"})
     public String triggerMonthlyExpenses() {
-        for(int i = 1; i <= 1000; i++) {
+        for (int i = 1; i <= 1000; i++) {
             var creditCard = CreditCard.randomCreditCard(i);
-            jobScheduler.enqueue(() -> expensesService.generateExpenseReportFor(creditCard));
+            jobScheduler.enqueue(() -> creditCardStatementService.generateExpenseReportFor(creditCard));
         }
 
         return "redirect:/";

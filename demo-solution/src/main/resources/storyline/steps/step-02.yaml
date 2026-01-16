@@ -11,7 +11,7 @@ solution: |
   Thanks to the @Job Annotation, we can name the job with the customer's name and credit card number.
 
 tryIt: |
-  Trigger the monthly report generation and see it scheduled for the next month automatically.
+  Activate the credit card and see the scheduled job change to state <code>NOT_APPLICABLE</code>. It will be deleted automatically after 3 days.
 
 codeReferences:
   - org/jobrunr/storylinedemo/creditcards/CreditCardService.java?focus=L42-L50
