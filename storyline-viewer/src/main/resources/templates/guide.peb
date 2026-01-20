@@ -209,6 +209,7 @@
                     <div id="dashboard-{{ step.number }}" class="tab-content" style="padding: 0">
                         <div id="dashboard-container-{{ step.number }}">
                             <iframe src="{{ step.dashboardUrl }}"
+                                loading="lazy"
                                 style="height: 700px; width:100%; border:none; ">
                             </iframe>
                         </div>
