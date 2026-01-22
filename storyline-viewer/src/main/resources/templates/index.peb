@@ -1,7 +1,7 @@
     {% extends "base" %}
 
     {% block content %}
-<section class="hero is-primary is-medium" style="background-image: url('/img-background.png');">
+<section class="hero is-primary is-medium">
     <div class="hero-body">
         <div class="container has-text-centered">
             <img src="/logo.svg" alt="JobRunr" style="max-width: 200px; margin-bottom: 1rem;">
@@ -28,11 +28,12 @@
 <section class="section">
     <div class="container">
         <div class="content">
+            <p class="has-text-centered has-text-primary is-size-6 has-text-weight-semibold mb-2">Go from fragile scripts to resilient workflows</p>
             <h2 class="title is-2 has-text-centered mb-6">What You'll Learn</h2>
             <div class="columns is-centered">
                 <div class="column is-8">
-                    <div class="box has-background-light">
-                        <p class="is-size-5">
+                    <div class="box" style="background: #f8f9fa; border: none;">
+                        <p class="is-size-5 has-text-grey-dark">
                             {{ storyline.intro | raw }}
                         </p>
                     </div>
@@ -44,8 +45,11 @@
             {% for entry in storyline.stepsByCategory %}
             <div class="column is-6">
                 <div class="card">
-                    <header class="card-header has-background-info-light">
-                        <p class="card-header-title is-size-4">
+                    <header class="card-header">
+                        <span class="card-header-icon">
+                            {% if loop.index == 1 %}☀️{% elseif loop.index == 2 %}⚠️{% elseif loop.index == 3 %}🔥{% elseif loop.index == 4 %}🌍{% else %}🛡️{% endif %}
+                        </span>
+                        <p class="card-header-title is-size-5">
                             {{ entry.key }}
                         </p>
                     </header>
@@ -61,7 +65,7 @@
                                         {{ step.icon }} Step {{ step.number }}: {{ step.title }}
                                     </span>
                                 </div>
-                                <p class="is-size-6">
+                                <p class="is-size-6 has-text-grey">
                                     {{ step.challenge }}
                                 </p>
                             </div>

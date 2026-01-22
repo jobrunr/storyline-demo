@@ -25,7 +25,6 @@ dependencies {
     implementation 'io.opentelemetry:opentelemetry-exporter-otlp'
 
     // JobRunr Pro & Jackson serialization
-    implementation project(':storyline-viewer')
     implementation 'org.jobrunr:jobrunr-pro-spring-boot-4-starter:1.0.0-SNAPSHOT'
 
     implementation 'com.zaxxer:HikariCP'

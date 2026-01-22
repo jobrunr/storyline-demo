@@ -1,16 +1,42 @@
-title: Distributed Tracing - Debug Across Services
-icon: 🔍
-estimatedTime: PT4M
+title: "Cross-Border Payments"
+icon: 🌍
+estimatedTime: PT5M
+
+scenario: |
+  Cross-border payments require special compliance certifications that 
+  only certain servers have. Domestic servers cannot process international 
+  payments — it's a regulatory requirement.
+  <br><br>
+  We need to route specific jobs to specific servers based on their capabilities.
 
 challenge: |
-  When a payment fails, we need to trace it through our web app → JobRunr → government API to
-  find where it broke.
+  How do we route specific jobs to specific servers based on their capabilities?
 
 solution: |
-  JobRunr integrates with Jaeger for distributed tracing. See the complete journey of each job
-  across all systems.
+  Use <strong>Server Tags</strong> to match jobs with capable servers:
+  <br><br>
+  <pre>
+  // Tag the job
+  jobScheduler.create(aJob()
+      .withServerTag(payment.getRegion())  // "international" or "national"
+      .withDetails(() -> processPayment(payment)));
+  
+  // In application.properties
+  jobrunr.background-job-server.tags=national  // This server handles national only
+  </pre>
+  <br>
+  Start a second server with <code>tags=international</code> to handle cross-border payments!
+
+codeReferences:
+  - org/jobrunr/storylinedemo/payment/PaymentService.java?focus=L36-L42
 
 tryIt: |
-  Make a payment and follow its trace through all services in Jaeger.
+  1. Process payments (some are international, some national)
+  2. Watch national payments process immediately
+  3. International payments wait in SCHEDULED until you start the international server:
+  <br><br>
+  <code>./gradlew :demo-solution:bootRun --args='--server.port=8081 --jobrunr.dashboard.enabled=false --jobrunr.background-job-server.tags=international'</code>
 
-dashboardLink: http://localhost:16686/search
+dashboardUrl: http://localhost:8080/dashboard/servers
+
+learnMore: https://www.jobrunr.io/en/documentation/pro/server-tags/

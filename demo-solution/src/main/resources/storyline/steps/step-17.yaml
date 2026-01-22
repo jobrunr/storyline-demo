@@ -1,0 +1,47 @@
+title: "Credit Score API"
+icon: 📊
+estimatedTime: PT4M
+
+scenario: |
+  The mobile app needs to display credit scores. Credit score calculation 
+  takes 30 seconds — too slow for a synchronous API response.
+  <br><br>
+  The client wants to submit a request, poll for the result, and display it when ready.
+
+challenge: |
+  How do we return results from background jobs to API clients?
+
+solution: |
+  Use <strong>Job Results</strong> to store and retrieve job outputs:
+  <br><br>
+  <pre>
+  // The job returns a result
+  public CreditScore calculateCreditScore(String customerId) {
+      // Complex calculation...
+      return new CreditScore(750, "Excellent");
+  }
+  
+  // API endpoint to get the result
+  public CreditScore getCreditScore(UUID jobId) {
+      JobResultWithBackOffInfo result = jobScheduler.getJobResult(jobId);
+      if (result.isAvailable()) {
+          return result.getResult();
+      }
+      throw new RetryAfterException(result.backoffPeriod());
+  }
+  </pre>
+  <br>
+  JobRunr serializes the result and stores it in the database, 
+  preventing (D)DOS from polling clients!
+
+codeReferences:
+  - org/jobrunr/storylinedemo/creditcards/CreditScoreService.java?focus=L30-L50
+
+tryIt: |
+  Request a credit score calculation via the API. Poll for the result 
+  and watch it appear once the background job completes.
+
+tryItUrl: /credit-score/request
+dashboardUrl: http://localhost:8080/dashboard/jobs
+
+learnMore: https://www.jobrunr.io/en/documentation/pro/results/

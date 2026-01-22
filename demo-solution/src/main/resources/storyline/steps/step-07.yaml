@@ -1,18 +1,39 @@
-title: Job Labels - Organize and Filter Your Jobs
-icon: 🏷️
-estimatedTime: PT2M
+title: "Batch Processing"
+icon: 📦
+estimatedTime: PT4M
+
+scenario: |
+  At month-end, we need to generate individual statements for 10,000 cardholders.
+  Only after ALL statements are ready should we create the summary report.
+  <br><br>
+  If any statement fails, we shouldn't create a partial summary.
 
 challenge: |
-  With thousands of jobs running, finding specific credit card types (MASTERCARD vs AMEX) or
-  customer types is like finding a needle in a haystack.
+  How do we coordinate thousands of jobs and trigger a follow-up action only when they ALL succeed?
 
 solution: |
-  Add labels to jobs for easy filtering. Labels can represent card types, customer tiers,
-  regions, or any business dimension.
+  Use JobRunr's <strong>Batch</strong> feature with <code>continueWith()</code>:
+  <br><br>
+  <pre class="p-0 m-0">
+  <code class="language-java hljs" onload="hljs.highlightElement(this);">
+  jobScheduler
+      .startBatch(this::generateAllStatements)
+      .continueWith(this::createSummaryReport);
+  </code>
+  </pre>
+  <br>
+  All child jobs start in AWAITING state. If the parent fails, all children are 
+  rolled back atomically. The continuation only runs when ALL children succeed.
+
+codeReferences:
+  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L32-L38
+  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L40-L44
 
 tryIt: |
-  Register different card types and use dashboard filters to view jobs by label.
+  Trigger the monthly statement generation. Watch the batch create all individual 
+  jobs, and then observe the summary job execute only after all succeed.
 
-dashboardLink: http://localhost:8080/dashboard/jobs
+tryItUrl: /bulk-generate-expenses
+dashboardUrl: http://localhost:8080/dashboard/jobs?state=SUCCEEDED
 
-codeReference: creditcards/CreditCardService.java#processRegistration
+learnMore: https://www.jobrunr.io/en/documentation/pro/batches/

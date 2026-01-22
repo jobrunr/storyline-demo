@@ -44,3 +44,8 @@ dependencies {
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
+
+// Run from project root so codeRoot path resolves correctly
+tasks.named('bootRun') {
+    workingDir = rootProject.projectDir
+}

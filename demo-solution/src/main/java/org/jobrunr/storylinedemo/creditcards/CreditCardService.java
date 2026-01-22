@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class CreditCardService {
 
@@ -24,9 +26,19 @@ public class CreditCardService {
         this.applicationEventPublisher = applicationEventPublisher;
     }
 
+    // Step 1: Enqueue a background job for credit card creation
     public void processRegistration(CreditCard creditCard) {
-        // Enqueue creation of a card
+        // Use enqueue to process the application in the background
+        // The web request returns immediately while JobRunr handles the work
         jobScheduler.enqueue(() -> createNewCreditCard(creditCard));
+    }
+
+    // Step 20: Replace a pending job with updated customer info
+    public void processRegistrationOrReplace(CreditCard creditCard) {
+        // Create a unique job ID from the customer's email
+        // If a job already exists for this customer, it will be replaced
+        UUID jobId = UUID.nameUUIDFromBytes(("credit-card:" + creditCard.getEmail()).getBytes());
+        jobScheduler.enqueueOrReplace(jobId, () -> createNewCreditCard(creditCard));
     }
 
     public void processActivation(CreditCard creditCard) {
@@ -35,17 +47,17 @@ public class CreditCardService {
         creditCardFromRepo.activate();
         creditCardRepository.save(creditCardFromRepo);
 
-        // Publish event
+        // Publish event to cancel the scheduled reminder email
         applicationEventPublisher.publishEvent(new CreditCardActivatedEvent(creditCard));
     }
 
-    @Job(name = "Create %0") // nice name for the dashboard
+    @Job(name = "Create Credit Card for %0") // Nice name for the dashboard with customer info
     public void createNewCreditCard(CreditCard creditCard) {
         // Step 1: Save to repository
         creditCardRepository.save(creditCard);
         LOGGER.info("Created new credit card: {}", creditCard);
 
-        // Step 2: Publish event
+        // Step 2: Publish event to schedule the reminder email
         applicationEventPublisher.publishEvent(new CreditCardRegisteredEvent(creditCard));
     }
 

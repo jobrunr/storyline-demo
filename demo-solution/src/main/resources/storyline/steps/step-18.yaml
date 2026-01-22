@@ -1,0 +1,44 @@
+title: "Metrics That Matter"
+icon: 📉
+estimatedTime: PT4M
+
+scenario: |
+  DevOps needs to set up monitoring and alerting for background jobs:
+  How many jobs are we processing per minute? What's the failure rate? 
+  Are queues backing up?
+  <br><br>
+  They need metrics that feed into Prometheus and Grafana.
+
+challenge: |
+  How do we expose job metrics for monitoring and alerting systems?
+
+solution: |
+  JobRunr Pro integrates with <strong>Micrometer</strong> to expose metrics:
+  <br><br>
+  <pre>
+  # In application.properties
+  jobrunr.jobs.metrics.enabled=true
+  jobrunr.jobs.metrics.micrometer-timers.enabled=true
+  </pre>
+  <br>
+  Available metrics include:
+  <ul>
+    <li><code>jobrunr_jobs_by_state</code> — Jobs per state (ENQUEUED, PROCESSING, etc.)</li>
+    <li><code>jobrunr_jobs_processed_total</code> — Total jobs processed</li>
+    <li><code>jobrunr_jobs_failed_total</code> — Total failed jobs</li>
+    <li><code>jobrunr_background_job_server_*</code> — Server health metrics</li>
+  </ul>
+
+codeReferences:
+  - org/jobrunr/storylinedemo/StorylineDemoApplication.java
+
+tryIt: |
+  Open Prometheus and query JobRunr metrics:
+  <br><br>
+  <a href="http://localhost:9090/query?g0.expr=jobrunr_jobs_by_state" target="_blank">http://localhost:9090</a>
+  <br><br>
+  Try: <code>jobrunr_jobs_by_state</code> or <code>rate(jobrunr_jobs_processed_total[5m])</code>
+
+dashboardUrl: http://localhost:9090/query?g0.expr=jobrunr_jobs_by_state
+
+learnMore: https://www.jobrunr.io/en/documentation/pro/observability/

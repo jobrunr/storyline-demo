@@ -1,20 +1,34 @@
-title: Cancelling Existing Jobs and Naming Jobs
-icon: 📊
-estimatedTime: PT3M
+title: "Gentle Reminders"
+icon: ⏰
+estimatedTime: PT4M
+
+scenario: |
+  Customers often receive their cards but forget to activate them.
+  We want to send a friendly reminder email 7 days after registration —
+  but only if the card hasn't been activated yet.
+  <br><br>
+  Sending reminders for already-activated cards would annoy customers.
 
 challenge: |
-  As soon as the credit card is activated, the reminder email must not be sent anymore. 
-  And, to make things easier in the dashboard, we will name the job and add the customer's name and credit card number.
+  How do we schedule a future job that can be cancelled if circumstances change?
 
 solution: |
-  Using the JobScheduler, we can mark the existing job as not applicable. 
-  Thanks to the @Job Annotation, we can name the job with the customer's name and credit card number.
-
-tryIt: |
-  Activate the credit card and see the scheduled job change to state <code>NOT_APPLICABLE</code>. It will be deleted automatically after 3 days.
+  Use <code>scheduleAt()</code> to create a job that runs 7 days in the future.
+  When the customer activates their card, mark the reminder job as <code>notApplicable()</code>.
+  <br><br>
+  JobRunr will skip the job gracefully and show it in the dashboard with a clear reason.
+  The job will be automatically cleaned up after 3 days.
 
 codeReferences:
-  - org/jobrunr/storylinedemo/creditcards/CreditCardService.java?focus=L42-L50
-  - org/jobrunr/storylinedemo/creditcards/events/listeners/CancelScheduledEmailOnCreditCardActivated.java?focus=L21-L29
-tryItUrl: /credit-cards/activate
-dashboardUrl: http://localhost:8080/dashboard/jobs?state=NOT_APPLICABLE
+  - org/jobrunr/storylinedemo/creditcards/events/listeners/ScheduleEmailOnCreditCardRegistered.java?focus=L27-L33
+  - org/jobrunr/storylinedemo/creditcards/events/listeners/CancelScheduledEmailOnCreditCardActivated.java?focus=L21-L27
+
+tryIt: |
+  1. Register a new credit card — notice the scheduled reminder job
+  2. Activate the card — watch the reminder change to "NOT_APPLICABLE"
+  3. Check the dashboard to see the cancellation reason
+
+tryItUrl: /credit-cards/register
+dashboardUrl: http://localhost:8080/dashboard/jobs?state=SCHEDULED
+
+learnMore: https://www.jobrunr.io/en/documentation/background-methods/scheduling-jobs/

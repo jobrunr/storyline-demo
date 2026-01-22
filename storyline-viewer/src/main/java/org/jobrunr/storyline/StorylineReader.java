@@ -51,7 +51,8 @@ public class StorylineReader {
                                     stepYaml.codeReference != null ? List.of(stepYaml.codeReference) : List.of(),
                             stepYaml.tryItUrl,
                             stepYaml.dashboardUrl,
-                            stepYaml.videoUrl
+                            stepYaml.videoUrl,
+                            stepYaml.learnMore
                     );
                     steps.add(step);
                 }
@@ -116,5 +117,6 @@ public class StorylineReader {
         public String tryItUrl;
         public String dashboardUrl;
         public String videoUrl;
+        public String learnMore;
     }
 }

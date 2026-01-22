@@ -2,11 +2,14 @@ package org.jobrunr.storylinedemo.creditcards;
 
 import org.jobrunr.jobs.annotations.Job;
 import org.jobrunr.jobs.annotations.Recurring;
+import org.jobrunr.jobs.context.JobContext;
+import org.jobrunr.jobs.context.JobDashboardProgressBar;
 import org.jobrunr.scheduling.JobScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Random;
 
 @Service
@@ -21,15 +24,17 @@ public class CreditCardStatementService {
         this.jobScheduler = jobScheduler;
     }
 
-    // At 00:00 on day-of-month 1, create a recurring job to start processing monthly expenses
-    @Recurring(cron = "0 0 1 * *")
+    // Step 3: Advanced CRON - Run on the LAST BUSINESS DAY of each month (not just last day!)
+    // If the 31st is a Saturday, this runs on Friday the 29th instead
+    @Recurring(id = "monthly-statements", cron = "0 0 LW * *")
     @Job(name = "Generate Monthly Credit Card Statements for all cardholders")
     public void generateMonthlyCreditCardStatements() {
-        // Step 1: start a batch job to process monthly expenses for all cardholders
+        // Step 7: Start a batch to process all statements atomically
+        // Step 8: Add onFailure to notify the team if something goes wrong
         jobScheduler
                 .startBatch(this::generateMonthlyExpensesForAllCreditCardHolders)
-                // Step 2: continue with a summary report when the batch ended
-                .continueWith(this::generateSummaryReport);
+                .continueWith(this::generateSummaryReport)
+                .onFailure(this::notifyOpsTeam);  // Alert the team on failure!
     }
 
     public void generateMonthlyExpensesForAllCreditCardHolders() {
@@ -38,21 +43,49 @@ public class CreditCardStatementService {
         });
     }
 
+    // Step 12: Mutex ensures only one PDF generation at a time (one printer!)
+    @Job(name = "Generate Statement for %0", mutex = "pdf-printer")
     public void generateExpenseReportFor(CreditCard creditCard) {
         generatePDF();
         LOGGER.info("Monthly expenses generated for {}", creditCard);
     }
 
+    // Step 16: Progress bar and logging for long-running jobs
+    @Job(name = "Generate Bulk Statements with Progress")
+    public void generateStatementsWithProgress(JobContext context) {
+        List<CreditCard> cards = new java.util.ArrayList<>();
+        creditCardRepository.findAll().forEach(cards::add);
+        
+        JobDashboardProgressBar progressBar = context.progressBar(cards.size());
+        
+        int progress = 0;
+        for (CreditCard card : cards) {
+            generatePDF();
+            progress++;
+            progressBar.setProgress(progress);
+            context.logger().info("Generated statement for: " + card.getEmail());
+        }
+        
+        context.logger().info("All statements generated successfully!");
+    }
+
+    @Job(name = "Generate Summary Report")
     public void generateSummaryReport() {
         generatePDFThatSometimesFails();
         LOGGER.info("Summary Report generated");
+    }
+
+    // Step 8: Notification job that runs when the batch fails
+    @Job(name = "Notify Ops Team of Failure")
+    public void notifyOpsTeam() {
+        LOGGER.error("🚨 ALERT: Monthly statement generation failed! Notifying ops team via Slack...");
+        // In production, this would send to Slack, PagerDuty, email, etc.
     }
 
     private static void generatePDFThatSometimesFails() {
         if (new Random().nextBoolean()) {
             throw new RuntimeException("Something went wrong while generating pdf");
         }
-
         generatePDF();
     }
 

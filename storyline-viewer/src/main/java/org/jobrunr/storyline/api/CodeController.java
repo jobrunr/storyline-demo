@@ -3,6 +3,8 @@ package org.jobrunr.storyline.api;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.jobrunr.storyline.model.Storyline;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,8 @@ import static org.apache.commons.lang3.StringUtils.substringBefore;
 
 @Controller
 public class CodeController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CodeController.class);
 
     private final Storyline storyline;
 
@@ -80,6 +84,7 @@ public class CodeController {
     private Optional<String> loadFromLocalProject(String codeFile) {
         try {
             Path filePath = Paths.get(storyline.codeRoot(), codeFile);
+            LOGGER.info("Attempting to load code file from local project: {}", filePath);
             if (Files.exists(filePath)) {
                 return Optional.of(Files.readString(filePath));
             }

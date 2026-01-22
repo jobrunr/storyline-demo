@@ -1,18 +1,39 @@
-title: Idempotency and Reentrancy - Run methods only once
-icon: 🔄
-estimatedTime: PT4M
+title: "Don't Charge Twice!"
+icon: 💳
+estimatedTime: PT5M
+
+scenario: |
+  A payment job failed AFTER the payment was processed but BEFORE it was recorded.
+  When the job retried, it charged the customer again.
+  <br><br>
+  This is a classic idempotency problem — retrying a job must not repeat completed steps.
 
 challenge: |
-  Some jobs perform irreversible operations (like charging a credit card or sending an email).
-  When jobs fail and retry, we need to ensure these operations don't happen multiple times!
+  How do we make jobs safe to retry without duplicating irreversible operations like payments?
 
 solution: |
-  Use `JobContext.runStepOnce("step-name", () -> yourLogic)` to mark critical sections.
-  JobRunr remembers completed steps, so retries skip already-successful operations.
+  Use <code>JobContext.runStepOnce("step-name", () -> yourLogic)</code> to mark critical sections.
+  JobRunr remembers which steps completed, so retries skip already-successful operations.
+  <br><br>
+  <pre class="p-0 m-0">
+  <code class="language-java hljs" onload="hljs.highlightElement(this);">
+  public void processPayment(JobContext context, Payment payment) {
+      context.runStepOnce("charge-card", () -> paymentGateway.charge(payment));
+      context.runStepOnce("send-receipt", () -> emailService.sendReceipt(payment));
+      context.runStepOnce("update-ledger", () -> ledgerService.record(payment));
+  }
+  </code></pre>
+  <br>
+  If the job fails after "charge-card" but before "send-receipt", the retry will skip 
+  the charge and continue from the receipt.
+
+codeReferences:
+  - org/jobrunr/storylinedemo/payment/PaymentService.java?focus=L53-L71
 
 tryIt: |
-  Trigger expense reports and observe how failed jobs retry without duplicating completed steps.
+  Process a payment and watch the job context track completed steps. 
+  If you manually retry the job, it won't duplicate the payment!
 
-dashboardLink: http://localhost:8080/dashboard/jobs?state=FAILED
+dashboardUrl: http://localhost:8080/dashboard/jobs
 
-codeReference: expenses/ExpensesService.java#generateExpenseReportFor
+learnMore: https://www.jobrunr.io/en/documentation/background-methods/best-practices/

@@ -1,38 +1,52 @@
 title: JobRunr Finance Demo 🏦
-subtitle: Master Background Job Processing Through Banking
-slogan: An interactive guide to JobRunr Pro's powerful features using a real-world banking scenario
+subtitle: Learn Background Job Processing Step by Step
+slogan: Learn JobRunr Pro by building the backend for a neobank
 intro: |
-  Welcome to <strong>JobRunr Finance</strong>, a fictional bank where you'll discover how
-  JobRunr Pro powers mission-critical background job processing. Through 12 hands-on steps,
-  you'll solve real banking challenges like processing credit card applications, generating
-  expense reports, handling payments, and ensuring regulatory compliance.
+  Welcome to <strong>JobRunr Finance</strong> — a neobank where background jobs power everything 
+  from customer onboarding to international payments.
   <br><br>
-  Each step presents a business problem, demonstrates the solution using JobRunr Pro,
-  and lets you try it yourself with live code examples and interactive demos.
+  Through 20 hands-on steps, you'll implement real patterns you'd find in production:
+  processing applications, scheduling reminders, generating statements, and scaling globally.
+  Each step introduces a JobRunr Pro feature with working code you can explore.
+  <br><br>
+  <em>No toy examples — just real patterns.</em>
 
 codeRoot: demo-solution/src/main/java
 githubLink: https://github.com/jobrunr/storyline-demo
 
 flow:
-  - category: 🚀 Basics
+  - category: "📦 Getting Started"
+    description: "Your first background jobs: enqueue, schedule, and recurring tasks."
     steps:
       - ./steps/step-01.yaml
       - ./steps/step-02.yaml
       - ./steps/step-03.yaml
-  - category: ⚙️ Reliability
-    steps:
       - ./steps/step-04.yaml
+  - category: "🔧 Handling Failures"
+    description: "Retries, idempotency, batches, and error notifications."
+    steps:
       - ./steps/step-05.yaml
       - ./steps/step-06.yaml
       - ./steps/step-07.yaml
-  - category: 🎯 Performance
-    steps:
       - ./steps/step-08.yaml
       - ./steps/step-09.yaml
-      - ./steps/step-10.yaml
-  - category: 🔧 Production Ready
+  - category: "⚡ Priority & Concurrency"
+    description: "Queues, weighted scheduling, mutexes, and timeouts."
     steps:
+      - ./steps/step-10.yaml
       - ./steps/step-11.yaml
       - ./steps/step-12.yaml
       - ./steps/step-13.yaml
+  - category: "🌍 Scaling Out"
+    description: "Server tags, rate limiting, and progress tracking."
+    steps:
       - ./steps/step-14.yaml
+      - ./steps/step-15.yaml
+      - ./steps/step-16.yaml
+  - category: "📊 Production Ready"
+    description: "Job results, metrics, tracing, and job replacement."
+    steps:
+      - ./steps/step-17.yaml
+      - ./steps/step-18.yaml
+      - ./steps/step-19.yaml
+      - ./steps/step-20.yaml

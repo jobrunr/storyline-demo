@@ -1,18 +1,40 @@
-title: Job Batches - Coordinating Multiple Jobs
-icon: 🔗
-estimatedTime: PT3M
+title: "Dashboard First Look"
+icon: 📊
+estimatedTime: PT4M
+
+scenario: |
+  Once you have jobs running in production, you need visibility:
+  Which jobs are running? What failed? What's queued up?
+  <br><br>
+  You can't manage what you can't see.
 
 challenge: |
-  After generating individual expense reports, we need to create a summary report. But the summary
-  should only run AFTER all individual reports complete successfully.
+  How do we monitor thousands of background jobs without writing custom tooling?
 
 solution: |
-  Use JobRunr's batch feature to create job dependencies. The summary job waits for all parent
-  jobs to succeed before executing.
+  The JobRunr Pro Dashboard provides a real-time view of your entire job ecosystem:
+  <br><br>
+  <ul>
+    <li><strong>Jobs view</strong>: Filter by state (ENQUEUED, PROCESSING, SUCCEEDED, FAILED)</li>
+    <li><strong>Recurring Jobs</strong>: See all scheduled jobs and their next run times</li>
+    <li><strong>Servers</strong>: Monitor which servers are processing jobs</li>
+    <li><strong>Search</strong>: Find any job by name, method signature, or parameters</li>
+  </ul>
+  <br>
+  The embedded dashboard runs inside your Spring Boot app — no separate deployment needed!
+
+codeReferences:
+  - org/jobrunr/storylinedemo/StorylineDemoApplication.java
 
 tryIt: |
-  Generate expense reports for multiple cards and watch the summary job execute only when all are done.
+  Explore the dashboard! Try these actions:
+  <ol>
+    <li>View succeeded jobs from your credit card registrations</li>
+    <li>Check the recurring jobs and their schedules</li>
+    <li>Look at the Servers tab to see your background job server</li>
+    <li>Use the search to find a specific customer's job</li>
+  </ol>
 
-dashboardLink: http://localhost:8080/dashboard/jobs?state=SUCCEEDED
+dashboardUrl: http://localhost:8080/dashboard
 
-codeReference: expenses/ExpensesService.java#generateExpenseReportFor
+learnMore: https://www.jobrunr.io/en/documentation/pro/jobrunr-pro-dashboard/

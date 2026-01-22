@@ -1,0 +1,42 @@
+title: "Track Every Transaction"
+icon: 📈
+estimatedTime: PT4M
+
+scenario: |
+  When generating 50,000 statements, stakeholders want to know:
+  How long until they're done? Can we watch the progress live?
+  <br><br>
+  For long-running batch processes, visibility is essential.
+
+challenge: |
+  How do we track and display progress for long-running jobs?
+
+solution: |
+  Use <strong>JobContext</strong> for logging and progress bars:
+  <br><br>
+  <pre>
+  public void generateStatements(JobContext context) {
+      List&lt;Card&gt; cards = cardRepository.findAll();
+      JobDashboardProgressBar progress = context.progressBar(cards.size());
+      
+      for (Card card : cards) {
+          generateStatement(card);
+          progress.increaseByOne();
+          context.logger().info("Generated statement for {}", card.getNumber());
+      }
+  }
+  </pre>
+  <br>
+  The progress bar and logs appear in real-time in the dashboard!
+
+codeReferences:
+  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L53-L68
+
+tryIt: |
+  Trigger a bulk statement generation and watch the progress bar 
+  advance in real-time in the dashboard job details.
+
+tryItUrl: /bulk-generate-expenses
+dashboardUrl: http://localhost:8080/dashboard/jobs?state=PROCESSING
+
+learnMore: https://www.jobrunr.io/en/documentation/background-methods/logging-progress/

@@ -1,18 +1,35 @@
-title: Automatic Retries - Handling Failures Gracefully
+title: "Automatic Retries"
 icon: 🔄
 estimatedTime: PT4M
 
+scenario: |
+  PDF generation occasionally fails due to network timeouts, memory pressure, 
+  or temporary service unavailability. These transient failures are a fact of life 
+  in distributed systems.
+  <br><br>
+  Without automatic retries, you'd need to track failures and manually requeue them.
+
 challenge: |
-  PDF generation sometimes fails due to network issues, memory pressure, or external API timeouts.
-  We can't lose these jobs!
+  How do we handle transient failures without losing jobs or requiring manual intervention?
 
 solution: |
-  JobRunr automatically retries failed jobs with exponential backoff. View failed jobs in the
-  dashboard and watch them retry.
+  JobRunr automatically retries failed jobs with <strong>exponential backoff</strong>!
+  <br><br>
+  By default, a failed job is retried up to 10 times with increasing delays:
+  <code>10s → 20s → 40s → 1m20s → 2m40s → ...</code>
+  <br><br>
+  This gives transient issues time to resolve while not overwhelming the system.
+  You can customize the retry policy with <code>@Job(retries = 5)</code>.
+
+codeReferences:
+  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L40-L44
+  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L47-L50
 
 tryIt: |
-  Trigger multiple expense reports and see how JobRunr handles failures automatically.
+  Trigger the bulk expense report generation. Watch some jobs fail (the code randomly 
+  throws exceptions!) and then automatically retry until they succeed.
 
-dashboardLink: http://localhost:8080/dashboard/jobs?state=FAILED
+tryItUrl: /bulk-generate-expenses
+dashboardUrl: http://localhost:8080/dashboard/jobs?state=FAILED
 
-codeReference: expenses/ExpensesService.java#generateExpenseReportFor
+learnMore: https://www.jobrunr.io/en/documentation/background-methods/dealing-with-exceptions/

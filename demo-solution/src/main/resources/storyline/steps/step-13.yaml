@@ -1,16 +1,36 @@
-title: Metrics & Monitoring - Prometheus Integration
-icon: 📊
+title: "The Hung Job"
+icon: ⏱️
 estimatedTime: PT3M
 
+scenario: |
+  A job has been "processing" for 2 hours. The external fraud detection API 
+  is unresponsive, and the job is stuck waiting for a response that may never come.
+  <br><br>
+  The worker thread is blocked and can't process other jobs.
+
 challenge: |
-  We need to track job throughput, success rates, and queue depths over time for capacity planning
-  and alerting.
+  How do we prevent jobs from running forever when external dependencies hang?
 
 solution: |
-  JobRunr exposes Micrometer metrics that feed into Prometheus. Create alerts, dashboards, and
-  track SLAs.
+  Use <strong>Job Timeouts</strong> to automatically fail jobs that take too long:
+  <br><br>
+  <pre>
+  @Job(processTimeOut = "PT5M")  // Fail after 5 minutes
+  public void callExternalAPI() {
+      externalService.callSlowAPI();
+  }
+  </pre>
+  <br>
+  If the job exceeds the timeout, JobRunr marks it as FAILED and frees the worker.
+  The job can then retry with exponential backoff (when the API might be responsive again).
+
+codeReferences:
+  - org/jobrunr/storylinedemo/payment/PaymentService.java?focus=L83-L88
 
 tryIt: |
-  View JobRunr metrics in Prometheus and see real-time graphs of job execution.
+  The export job has a timeout configured. If the government API is slow, 
+  watch the job fail after the timeout and retry automatically.
 
-dashboardLink: http://localhost:9090/query?g0.expr=jobrunr_jobs_by_state
+dashboardUrl: http://localhost:8080/dashboard/jobs?state=FAILED
+
+learnMore: https://www.jobrunr.io/en/documentation/pro/job-timeout/

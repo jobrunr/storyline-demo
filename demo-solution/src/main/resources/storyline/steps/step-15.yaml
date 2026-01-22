@@ -1,0 +1,39 @@
+title: "Don't DDoS the Government"
+icon: 🚦
+estimatedTime: PT4M
+
+scenario: |
+  International payments must be exported to a government compliance API.
+  The API can only handle 3 concurrent requests — if we send more, we get rate-limited.
+  <br><br>
+  We need to throttle our job execution to respect external API limits.
+
+challenge: |
+  How do we throttle job execution to respect external API limits?
+
+solution: |
+  Use a <strong>Rate Limiter</strong> to control concurrent executions:
+  <br><br>
+  <pre>
+  // In application.properties
+  jobrunr.jobs.rate-limiter.concurrent-job-rate-limiter.government-api=3
+  
+  // In your code
+  jobScheduler.create(aJob()
+      .withRateLimiter("government-api")
+      .withDetails(() -> exportToGovernment(payment)));
+  </pre>
+  <br>
+  JobRunr ensures only 3 jobs call the government API simultaneously, 
+  even if you have 100 workers!
+
+codeReferences:
+  - org/jobrunr/storylinedemo/payment/PaymentService.java?focus=L44-L49
+
+tryIt: |
+  Trigger 100 international payments. Watch them export to the government 
+  API exactly 3 at a time — never overwhelming the external system.
+
+dashboardUrl: http://localhost:8080/dashboard/jobs
+
+learnMore: https://www.jobrunr.io/en/documentation/pro/rate-limiters/

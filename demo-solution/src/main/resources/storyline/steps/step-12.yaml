@@ -1,16 +1,40 @@
-title: Dashboard Deep Dive - Monitor Everything
-icon: 📈
-estimatedTime: PT5M
+title: "One Printer, Many Jobs"
+icon: 🔒
+estimatedTime: PT4M
+
+scenario: |
+  The PDF generation service can only handle one document at a time.
+  When multiple jobs print simultaneously, we get corrupted documents.
+  <br><br>
+  We need exclusive access to shared resources.
 
 challenge: |
-  How do we know our background job system is healthy? How many jobs succeeded? Failed? Which
-  queues are backed up?
+  How do we ensure only one job can use a shared resource at a time?
 
 solution: |
-  Explore the JobRunr Pro Dashboard: real-time job monitoring, filtering, searching, and manual
-  job management.
+  Use a <strong>Mutex</strong> (mutually exclusive lock) to protect shared resources:
+  <br><br>
+  <pre>
+  @Job(mutex = "pdf-printer")
+  public void generatePDF(Statement statement) {
+      pdfService.print(statement); // Only one job runs at a time
+  }
+  </pre>
+  <br>
+  Jobs with the same mutex are processed one at a time. Others wait in 
+  <code>AWAITING</code> state until the mutex is released.
+  <br><br>
+  You can also use dynamic mutexes: <code>@Job(mutex = "printer/%0")</code> creates 
+  one mutex per printer ID!
+
+codeReferences:
+  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L47-L51
 
 tryIt: |
-  Navigate through the dashboard sections: jobs, recurring jobs, servers, and explore the various filters.
+  Generate multiple statements and watch them process one at a time, 
+  even though multiple workers are available.
 
-dashboardLink: http://localhost:8080/dashboard
+tryItUrl: /bulk-generate-expenses
+dashboardUrl: http://localhost:8080/dashboard/jobs
+
+learnMore: https://www.jobrunr.io/en/documentation/pro/mutexes/

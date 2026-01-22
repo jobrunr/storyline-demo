@@ -1,19 +1,36 @@
-title: Rate Limiting - Play Nice with External APIs
-icon: 🚦
+title: "Fair Play"
+icon: 👑
 estimatedTime: PT4M
 
+scenario: |
+  Enterprise customers pay 10x more than Pro customers, but their jobs 
+  are processed at the same rate. They expect premium service.
+  <br><br>
+  We need to process more jobs for paying customers while still being fair to everyone.
+
 challenge: |
-  We export payments to a government API that can only handle 10 requests/second. Exceeding this
-  DDoS's their system and gets us blocked!
+  How do we process more jobs for paying customers while still being fair to everyone?
 
 solution: |
-  Use JobRunr's rate limiter to throttle job execution. Guarantee we never exceed the external
-  API's limits.
+  Use <strong>Dynamic Queues with Weighted Round-Robin</strong>:
+  <br><br>
+  <pre>
+  # In application.properties
+  jobrunr.jobs.dynamic-queue.weighted-round-robin.label-prefix=customer:
+  jobrunr.jobs.dynamic-queue.weighted-round-robin.queues.ENTERPRISE=5
+  jobrunr.jobs.dynamic-queue.weighted-round-robin.queues.PRO=1
+  </pre>
+  <br>
+  Enterprise customers get 5 jobs processed for every 1 Pro customer job.
+  No one gets starved, but VIPs get VIP treatment!
+
+codeReferences:
+  - org/jobrunr/storylinedemo/payment/PaymentService.java?focus=L36-L41
 
 tryIt: |
-  Export 1000 payments and watch them process at exactly 10/second without overwhelming the
-  government API.
+  Trigger payments for both ENTERPRISE and PRO customers.
+  Watch Enterprise jobs complete 5x faster on average!
 
-dashboardLink: http://localhost:8080/dashboard/jobs
+dashboardUrl: http://localhost:8080/dashboard/jobs
 
-codeReference: payment/PaymentService.java#exportToGovernment
+learnMore: https://www.jobrunr.io/en/documentation/pro/dynamic-queues/
