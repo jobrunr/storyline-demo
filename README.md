@@ -76,15 +76,11 @@ The project contains three subprojects:
 **Private Maven Repository** — Create `gradle.properties` in the project root:
 
 ```properties
-PRIVATE_MAVEN_REPO_URL=https://repo.jobrunr.io
-org.gradle.jvmargs=-Xmx2048M -Dfile.encoding=UTF-8 --add-opens=java.base/java.io=ALL-UNNAMED
-org.gradle.caching=true
-
-mavenUser=yourUserName
-mavenPass=yourPassword
+jobRunrRepoUser=yourUserName
+jobRunrRepoPassword=yourPassword
 ```
 
-**License Key** — Create `jobrunr-pro.license` in `src/main/resources` of each subproject.
+**License Key** — Create `jobrunr-pro.license` in `src/main/resources` of each subproject or make it available via the environment variable `JOBRUNR_PRO_LICENSE`.
 
 ### 2. Start the Infrastructure
 
