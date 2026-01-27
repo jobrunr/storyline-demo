@@ -71,6 +71,7 @@
         <div class="column content-area">
             <div class="p-5" id="content-container">
                 <!-- Welcome screen -->
+                {% if step is null %}
                 <div id="welcome-screen" class="content-screen active">
                     <div class="hero is-medium">
                         <div class="hero-body has-text-centered">
@@ -90,9 +91,12 @@
                         </div>
                     </div>
                 </div>
+                {% else %}
+                <div id="welcome-screen" class="content-screen"></div>
+                {% endif %}
 
                 <!-- Step content loaded via HTMX -->
-                <div id="step-content"></div>
+                <div id="step-content">{% if step is not null %}{% include "step" %}{% endif %}</div>
             </div>
         </div>
     </div>
