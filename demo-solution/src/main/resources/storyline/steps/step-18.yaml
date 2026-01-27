@@ -15,10 +15,12 @@ challenge: |
 solution: |
   JobRunr Pro integrates with <strong>Micrometer</strong> to expose metrics:
   <br><br>
-  <pre>
+  <pre class="p-0 m-0">
+  <code class="language-properties hljs">
   # In application.properties
   jobrunr.jobs.metrics.enabled=true
   jobrunr.jobs.metrics.micrometer-timers.enabled=true
+  </code>
   </pre>
   <br>
   Available metrics include:

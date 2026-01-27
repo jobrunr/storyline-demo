@@ -14,12 +14,14 @@ challenge: |
 solution: |
   Use <strong>Priority Queues</strong> to define job importance:
   <br><br>
-  <pre>
+  <pre class="p-0 m-0">
+  <code class="language-java hljs">
   @Job(queue = "high-prio")
   public void processPayment(Payment payment) { ... }
-  
+
   @Job(queue = "low-prio")
   public void generateReport() { ... }
+  </code>
   </pre>
   <br>
   Configure the queues in order of priority. JobRunr always processes higher-priority 

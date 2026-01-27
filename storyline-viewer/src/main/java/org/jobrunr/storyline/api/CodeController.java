@@ -70,7 +70,7 @@ public class CodeController {
         String toShow = "focus".equals(show) ? "all" : "focus";
         String label = "all".equals(toShow) ? "view complete file" : "view change";
         return System.lineSeparator() + String.format("""
-                <a id="%s-view-switch" hx-swap-oob="true" class="is-inline-block mr-2" hx-get="/code%s" hx-target="next pre code" hx-on::after-settle="highlightCode(this.parentElement.querySelector('pre code'));">(%s)</a>
+                <a id="%s-view-switch" hx-swap-oob="true" class="is-inline-block mr-2" hx-get="/code%s" hx-target="next pre code">(%s)</a>
                 """, fileName, codeFile + "?focus=" + focus + "&show=" + toShow, label);
     }
 

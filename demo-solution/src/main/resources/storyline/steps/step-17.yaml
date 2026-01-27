@@ -14,13 +14,14 @@ challenge: |
 solution: |
   Use <strong>Job Results</strong> to store and retrieve job outputs:
   <br><br>
-  <pre>
+  <pre class="p-0 m-0">
+  <code class="language-java hljs">
   // The job returns a result
   public CreditScore calculateCreditScore(String customerId) {
       // Complex calculation...
       return new CreditScore(750, "Excellent");
   }
-  
+
   // API endpoint to get the result
   public CreditScore getCreditScore(UUID jobId) {
       JobResultWithBackOffInfo result = jobScheduler.getJobResult(jobId);
@@ -29,6 +30,7 @@ solution: |
       }
       throw new RetryAfterException(result.backoffPeriod());
   }
+  </code>
   </pre>
   <br>
   JobRunr serializes the result and stores it in the database, 

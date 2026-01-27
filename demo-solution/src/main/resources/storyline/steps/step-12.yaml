@@ -14,11 +14,13 @@ challenge: |
 solution: |
   Use a <strong>Mutex</strong> (mutually exclusive lock) to protect shared resources:
   <br><br>
-  <pre>
+  <pre class="p-0 m-0">
+  <code class="language-java hljs">
   @Job(mutex = "pdf-printer")
   public void generatePDF(Statement statement) {
       pdfService.print(statement); // Only one job runs at a time
   }
+  </code>
   </pre>
   <br>
   Jobs with the same mutex are processed one at a time. Others wait in 

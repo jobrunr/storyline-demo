@@ -14,14 +14,16 @@ challenge: |
 solution: |
   Use a <strong>Rate Limiter</strong> to control concurrent executions:
   <br><br>
-  <pre>
+  <pre class="p-0 m-0">
+  <code class="language-java hljs">
   // In application.properties
   jobrunr.jobs.rate-limiter.concurrent-job-rate-limiter.government-api=3
-  
+
   // In your code
   jobScheduler.create(aJob()
       .withRateLimiter("government-api")
       .withDetails(() -> exportToGovernment(payment)));
+  </code>
   </pre>
   <br>
   JobRunr ensures only 3 jobs call the government API simultaneously, 

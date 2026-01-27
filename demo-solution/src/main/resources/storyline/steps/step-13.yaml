@@ -14,11 +14,13 @@ challenge: |
 solution: |
   Use <strong>Job Timeouts</strong> to automatically fail jobs that take too long:
   <br><br>
-  <pre>
+  <pre class="p-0 m-0">
+  <code class="language-java hljs">
   @Job(processTimeOut = "PT5M")  // Fail after 5 minutes
   public void callExternalAPI() {
       externalService.callSlowAPI();
   }
+  </code>
   </pre>
   <br>
   If the job exceeds the timeout, JobRunr marks it as FAILED and frees the worker.

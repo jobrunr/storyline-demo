@@ -14,10 +14,12 @@ challenge: |
 solution: |
   Add <strong>labels</strong> to your jobs for powerful filtering:
   <br><br>
-  <pre>
+  <pre class="p-0 m-0">
+  <code class="language-java hljs">
   jobScheduler.create(aJob()
       .withLabels("customer: john.smith@email.com", "card: AMEX")
       .withDetails(() -> createCreditCard(card)));
+  </code>
   </pre>
   <br>
   Labels appear in the dashboard and can be used for:

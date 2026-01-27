@@ -14,16 +14,18 @@ challenge: |
 solution: |
   Use <strong>enqueueOrReplace()</strong> to update existing jobs:
   <br><br>
-  <pre>
+  <pre class="p-0 m-0">
+  <code class="language-java hljs">
   // Create job with a unique ID
   UUID jobId = JobProId.fromIdentifier(customer.getEmail());
   jobScheduler.enqueue(jobId, () -> processApplication(customer));
-  
+
   // Later, customer updates their info...
   customer.setAddress(newAddress);
-  
+
   // Replace the job with updated data
   jobScheduler.enqueueOrReplace(jobId, () -> processApplication(customer));
+  </code>
   </pre>
   <br>
   If the job is already processing, it will be interrupted and restarted with 

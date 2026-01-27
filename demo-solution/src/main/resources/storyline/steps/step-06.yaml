@@ -16,7 +16,7 @@ solution: |
   JobRunr remembers which steps completed, so retries skip already-successful operations.
   <br><br>
   <pre class="p-0 m-0">
-  <code class="language-java hljs" onload="hljs.highlightElement(this);">
+  <code class="language-java hljs">
   public void processPayment(JobContext context, Payment payment) {
       context.runStepOnce("charge-card", () -> paymentGateway.charge(payment));
       context.runStepOnce("send-receipt", () -> emailService.sendReceipt(payment));

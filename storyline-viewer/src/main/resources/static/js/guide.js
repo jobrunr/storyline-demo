@@ -11,15 +11,16 @@ if (document.readyState === "loading") {
 function init() {
     loadProgress();
     updateProgressDisplay();
+    hljs.highlightAll();
 
     // Re-initialize tabs after HTMX loads new content
     document.body.addEventListener('htmx:afterSettle', function(event) {
         if (event.detail.target.id === 'step-content') {
             initializeTabSwitching();
             updateTimelineState();
+            hljs.highlightAll();
         }
     });
-
 }
 
 // Load progress from localStorage
@@ -175,11 +176,6 @@ function showNotification(message) {
     notification.querySelector('.delete').addEventListener('click', () => {
         notification.remove();
     });
-}
-
-function highlightCode(el) {
-    delete el.dataset.highlighted;
-    hljs.highlightElement(el);
 }
 
 // Make markStepComplete globally available

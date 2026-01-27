@@ -15,7 +15,7 @@ solution: |
   Use JobRunr's <strong>Batch</strong> feature with <code>continueWith()</code>:
   <br><br>
   <pre class="p-0 m-0">
-  <code class="language-java hljs" onload="hljs.highlightElement(this);">
+  <code class="language-java hljs">
   jobScheduler
       .startBatch(this::generateAllStatements)
       .continueWith(this::createSummaryReport);

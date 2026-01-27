@@ -14,17 +14,19 @@ challenge: |
 solution: |
   Use <strong>JobContext</strong> for logging and progress bars:
   <br><br>
-  <pre>
+  <pre class="p-0 m-0">
+  <code class="language-java hljs">
   public void generateStatements(JobContext context) {
       List&lt;Card&gt; cards = cardRepository.findAll();
       JobDashboardProgressBar progress = context.progressBar(cards.size());
-      
+
       for (Card card : cards) {
           generateStatement(card);
           progress.increaseByOne();
           context.logger().info("Generated statement for {}", card.getNumber());
       }
   }
+  </code>
   </pre>
   <br>
   The progress bar and logs appear in real-time in the dashboard!

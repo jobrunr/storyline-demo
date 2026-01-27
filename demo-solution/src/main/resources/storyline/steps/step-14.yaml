@@ -15,14 +15,16 @@ challenge: |
 solution: |
   Use <strong>Server Tags</strong> to match jobs with capable servers:
   <br><br>
-  <pre>
+  <pre class="p-0 m-0">
+  <code class="language-java hljs">
   // Tag the job
   jobScheduler.create(aJob()
       .withServerTag(payment.getRegion())  // "international" or "national"
       .withDetails(() -> processPayment(payment)));
-  
+
   // In application.properties
   jobrunr.background-job-server.tags=national  // This server handles national only
+  </code>
   </pre>
   <br>
   Start a second server with <code>tags=international</code> to handle cross-border payments!

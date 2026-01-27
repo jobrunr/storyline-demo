@@ -14,11 +14,13 @@ challenge: |
 solution: |
   Use <strong>Dynamic Queues with Weighted Round-Robin</strong>:
   <br><br>
-  <pre>
+  <pre class="p-0 m-0">
+  <code class="language-properties hljs">
   # In application.properties
   jobrunr.jobs.dynamic-queue.weighted-round-robin.label-prefix=customer:
   jobrunr.jobs.dynamic-queue.weighted-round-robin.queues.ENTERPRISE=5
   jobrunr.jobs.dynamic-queue.weighted-round-robin.queues.PRO=1
+  </code>
   </pre>
   <br>
   Enterprise customers get 5 jobs processed for every 1 Pro customer job.
