@@ -14,7 +14,7 @@ It's Monday morning at JobRunr Finance. Thousands of customers are waiting for t
 | Step | Title | Feature |
 |------|-------|---------|
 | 1 | Customer Onboarding | `enqueue()` — Background job basics |
-| 2 | Gentle Reminders | `schedule()` + `notApplicable()` — Cancel when circumstances change |
+| 2 | Gentle Reminders | `schedule()` + `delete()` — Cancel when circumstances change |
 | 3 | Month-End Reports | `@Recurring` + Advanced CRON — Business day support |
 | 4 | Dashboard First Look | Pro Dashboard — Real-time monitoring |
 

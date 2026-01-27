@@ -11,13 +11,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.StreamSupport;
 
 @Service
 public class CreditCardStatementService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(CreditCardStatementService.class);
+
     private final JobScheduler jobScheduler;
     private final CreditCardRepository creditCardRepository;
-    private static final Logger LOGGER = LoggerFactory.getLogger(CreditCardStatementService.class);
 
     public CreditCardStatementService(CreditCardRepository creditCardRepository, JobScheduler jobScheduler) {
         this.creditCardRepository = creditCardRepository;
@@ -38,9 +40,10 @@ public class CreditCardStatementService {
     }
 
     public void generateMonthlyExpensesForAllCreditCardHolders() {
-        creditCardRepository.findAll().forEach(creditCard -> {
-            jobScheduler.enqueue(() -> generateExpenseReportFor(creditCard));
-        });
+        jobScheduler.enqueue(
+            StreamSupport.stream(creditCardRepository.findAll().spliterator(), false),
+            creditCard -> generateExpenseReportFor(creditCard)
+        );
     }
 
     // Step 12: Mutex ensures only one PDF generation at a time (one printer!)

@@ -1,5 +1,6 @@
 package org.jobrunr.storylinedemo.creditcards;
 
+import org.jobrunr.jobs.JobId;
 import org.jobrunr.jobs.annotations.Job;
 import org.jobrunr.scheduling.JobScheduler;
 import org.slf4j.Logger;
@@ -31,7 +32,7 @@ public class CreditScoreService {
      */
     public UUID requestCreditScoreCalculation(String customerId) {
         // Create a unique job ID from the customer ID
-        UUID jobId = UUID.nameUUIDFromBytes(("credit-score:" + customerId).getBytes());
+        UUID jobId = JobId.fromIdentifier("credit-score:" + customerId);
         
         // Enqueue the calculation - it returns a CreditScore result
         jobScheduler.enqueue(jobId, () -> calculateCreditScore(customerId));
@@ -48,10 +49,8 @@ public class CreditScoreService {
         LOGGER.info("🔄 Calculating credit score for customer: {}", customerId);
         
         // Simulate complex calculation (credit bureau calls, data analysis, etc.)
-        simulateComplexCalculation();
-        
-        // Generate a realistic-looking score
-        int score = 300 + new Random().nextInt(550); // 300-850 range
+        int score = simulateCreditCardScoreCalculation();
+                
         String rating = getRating(score);
         
         CreditScore result = new CreditScore(score, rating, customerId);
@@ -69,10 +68,13 @@ public class CreditScoreService {
         return "Poor";
     }
 
-    private void simulateComplexCalculation() {
+    private int simulateCreditCardScoreCalculation() {
         try {
             // Simulate calling credit bureaus, analyzing history, etc.
-            Thread.sleep(5000 + new Random().nextInt(5000)); // 5-10 seconds
+            Thread.sleep(new Random().nextInt(5000, 10000)); // 5-10 seconds
+
+            // Generate a realistic-looking score
+            return new Random().nextInt(300, 850); // 300-850 range
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

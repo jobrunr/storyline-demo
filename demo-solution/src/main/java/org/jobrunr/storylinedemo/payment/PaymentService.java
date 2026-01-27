@@ -54,7 +54,7 @@ public class PaymentService {
     // Step 6: Idempotent payment processing - safe to retry!
     @Job(name = "Process Payment #%0")
     public void processPayment(Payment payment, JobContext context) {
-        // Each step is executed ONLY ONCE, even on retry
+        // Each step is executed ONLY ONCE, even on retry (unless step fails)
         // If the job fails after "charge-card", retry will skip it!
         
         context.runStepOnce("charge-card", () -> {

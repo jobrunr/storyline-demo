@@ -2,7 +2,13 @@
 const STORAGE_KEY = 'jobrunr-guide-progress';
 
 // Initialize on page load
-document.addEventListener('DOMContentLoaded', function () {
+if (document.readyState === "loading") {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}
+
+function init() {
     loadProgress();
     updateProgressDisplay();
     initializeNavigation();
@@ -14,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
         showScreen('welcome-screen');
     }
-});
+}
 
 // Load progress from localStorage
 function loadProgress() {
@@ -225,6 +231,11 @@ function showNotification(message) {
     notification.querySelector('.delete').addEventListener('click', () => {
         notification.remove();
     });
+}
+
+function highlightCode(el) {
+    delete el.dataset.highlighted;
+    hljs.highlightElement(el);
 }
 
 // Make markStepComplete globally available

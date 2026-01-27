@@ -4,8 +4,15 @@ import java.time.Duration;
 import java.util.List;
 import java.util.SequencedMap;
 
-public record Storyline(String title, String subTitle, String slogan, String intro, String codeRoot, String githubLink,
-                        SequencedMap<String, List<StorylineStep>> stepsByCategory) {
+public record Storyline(
+    String title,
+    String subTitle,
+    String slogan,
+    String intro,
+    String codeRoot,
+    String githubLink,
+    SequencedMap<String, List<StorylineStep>> stepsByCategory
+) {
 
     public StorylineMetadata getStorylineMetadata() {
         int totalSteps = 0;

@@ -21,10 +21,7 @@ public class CancelScheduledEmailOnCreditCardActivated implements ApplicationLis
     @Override
     public void onApplicationEvent(CreditCardActivatedEvent event) {
         Job job = storageProvider.getJob(aJobSearchRequest().withLabel("customer: " + event.getCreditCard().getEmail()).build());
-        job.notApplicable("Credit Card was activated by customer");
+        job.delete("Credit Card was activated by customer");
         storageProvider.save(job);
-
-        // or
-        // jobScheduler.delete(job.getId(), "Credit Card was activated by customer");
     }
 }

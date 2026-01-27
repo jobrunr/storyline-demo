@@ -25,6 +25,8 @@ body {
     background-attachment: fixed;
     overflow-y: auto;
     overflow-x: hidden;
+    height: calc(100vh - 52px);
+    overscroll-behavior: contain;
 }
 
 .timeline-sidebar::-webkit-scrollbar {

@@ -42,6 +42,9 @@ dependencies {
     implementation 'com.zaxxer:HikariCP'
     implementation 'org.postgresql:postgresql'
 
+    // Fake data generation
+    implementation 'net.datafaker:datafaker:2.5.3'
+
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 

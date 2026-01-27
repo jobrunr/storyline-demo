@@ -25,9 +25,13 @@ public class StorylineReader {
         this.storyline = loadStoryline();
     }
 
+    public Storyline getStoryline() {
+        return storyline;
+    }
+
     private Storyline loadStoryline() {
-        try (InputStream is = new ClassPathResource("storyline/index.yaml").getInputStream()) {
-            IndexYaml index = yamlMapper.readValue(is, IndexYaml.class);
+        try (InputStream inputStream = new ClassPathResource("storyline/index.yaml").getInputStream()) {
+            IndexYaml index = yamlMapper.readValue(inputStream, IndexYaml.class);
 
             SequencedMap<String, List<StorylineStep>> stepsByCategory = new LinkedHashMap<>();
             int stepNumber = 1;
@@ -36,24 +40,7 @@ public class StorylineReader {
                 List<StorylineStep> steps = new ArrayList<>();
 
                 for (String stepPath : categoryFlow.steps) {
-                    StepYaml stepYaml = loadStepYaml(stepPath);
-                    StorylineStep step = new StorylineStep(
-                            stepNumber++,
-                            stepYaml.title,
-                            stepYaml.icon,
-                            stepYaml.estimatedTime,
-                            categoryFlow.category,
-                            stepYaml.challenge,
-                            stepYaml.solution,
-                            stepYaml.tryIt,
-                            stepYaml.codeReferences != null ?
-                                    stepYaml.codeReferences :
-                                    stepYaml.codeReference != null ? List.of(stepYaml.codeReference) : List.of(),
-                            stepYaml.tryItUrl,
-                            stepYaml.dashboardUrl,
-                            stepYaml.videoUrl,
-                            stepYaml.learnMore
-                    );
+                    var step = loadStorylineStep(stepPath, categoryFlow.category, stepNumber++);
                     steps.add(step);
                 }
 
@@ -78,15 +65,36 @@ public class StorylineReader {
         String cleanPath = stepPath.startsWith("./") ? stepPath.substring(2) : stepPath;
         String fullPath = "storyline/" + cleanPath;
 
-        try (InputStream is = new ClassPathResource(fullPath).getInputStream()) {
-            return yamlMapper.readValue(is, StepYaml.class);
+        try (InputStream inputStream = new ClassPathResource(fullPath).getInputStream()) {
+            return yamlMapper.readValue(inputStream, StepYaml.class);
         } catch (IOException e) {
             throw new RuntimeException("Failed to load step file: " + fullPath, e);
         }
     }
 
-    public Storyline getStoryline() {
-        return storyline;
+    private StorylineStep loadStorylineStep(String stepPath, String category, int stepNumber) {
+        StepYaml stepYaml = loadStepYaml(stepPath);
+        return new StorylineStep(
+            stepNumber,
+            stepYaml.title,
+            stepYaml.icon,
+            stepYaml.estimatedTime,
+            category,
+            stepYaml.challenge,
+            stepYaml.solution,
+            stepYaml.tryIt,
+            codeReferences(stepYaml),
+            stepYaml.tryItUrl,
+            stepYaml.dashboardUrl,
+            stepYaml.videoUrl,
+            stepYaml.learnMore
+        );
+    }
+
+    private List<String> codeReferences(StepYaml stepYaml) {
+        if(stepYaml.codeReferences != null) return stepYaml.codeReferences;
+        if(stepYaml.codeReference != null) return List.of(stepYaml.codeReference);
+        return List.of();
     }
 
     // DTOs for YAML deserialization

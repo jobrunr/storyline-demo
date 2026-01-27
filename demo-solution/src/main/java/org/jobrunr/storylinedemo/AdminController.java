@@ -42,7 +42,7 @@ public class AdminController {
     @GetMapping({"/bulk-add-cards"})
     public String bulkAddCreditCards() {
         for (int i = 1; i <= 100; i++) {
-            var creditCard = CreditCard.randomCreditCard(i);
+            var creditCard = CreditCard.randomCreditCard();
             this.creditCardService.processRegistration(creditCard);
         }
         return "redirect:/";
@@ -51,7 +51,7 @@ public class AdminController {
     @GetMapping({"/bulk-generate-expenses"})
     public String triggerMonthlyExpenses() {
         for (int i = 1; i <= 100; i++) {
-            var creditCard = CreditCard.randomCreditCard(i);
+            var creditCard = CreditCard.randomCreditCard();
             jobScheduler.enqueue(() -> creditCardStatementService.generateExpenseReportFor(creditCard));
         }
         return "redirect:/";

@@ -14,7 +14,7 @@ challenge: |
 
 solution: |
   Use <code>scheduleAt()</code> to create a job that runs 7 days in the future.
-  When the customer activates their card, mark the reminder job as <code>notApplicable()</code>.
+  When the customer activates their card, mark the reminder job as <code>DELETED</code>.
   <br><br>
   JobRunr will skip the job gracefully and show it in the dashboard with a clear reason.
   The job will be automatically cleaned up after 3 days.
