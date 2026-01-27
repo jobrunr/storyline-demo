@@ -1,0 +1,153 @@
+<!-- Hide welcome screen via OOB swap -->
+<div id="welcome-screen" hx-swap-oob="true" class="content-screen"></div>
+
+<div id="step-{{ step.number }}" class="content-screen active" data-step="{{ step.number }}">
+    <div class="level mb-5">
+        <div class="level-left">
+            <div class="level-item">
+                <div>
+                    <div class="mb-3">
+                        <span class="heading mr-2">Step {{ step.number }} of {{ storyline.storylineMetadata.totalAmountOfSteps }}</span>
+                        ·
+                        <span class="is-size-6 has-text-grey ml-2">
+                            ⏱️ {{ step.estimatedTime.toMinutes }} minutes
+                        </span>
+                    </div>
+
+                    <h1 class="title is-2">
+                        {{ step.icon }} {{ step.title }}
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <div class="level-right">
+            <div class="level-item">
+                <button class="button is-success" onclick="markStepComplete({{ step.number }})">
+                    <span class="icon"><i class="fas fa-check"></i></span>
+                    <span>Mark Complete</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- The Challenge -->
+    <div class="box has-background-warning-light">
+        <h3 class="title is-4">🎯 The Challenge</h3>
+        <p class="is-size-5">{{ step.challenge }}</p>
+    </div>
+
+    <!-- The Solution -->
+    <div class="box has-background-success-light">
+        <h3 class="title is-4">💡 The Solution</h3>
+        <p class="is-size-5">{{ step.solution | raw}}</p>
+        {% if step.learnMore %}
+        <p class="mt-4">
+            <a href="{{ step.learnMore }}" target="_blank" class="has-text-primary">
+                <span class="icon"><i class="fas fa-book"></i></span>
+                <span>Read the documentation →</span>
+            </a>
+        </p>
+        {% endif %}
+    </div>
+
+    <!-- Try It / Dashboard Link -->
+    <div class="box has-background-info-light">
+        <h3 class="title is-4">👉 Try It Yourself</h3>
+        <p class="is-size-5 mb-4">{{ step.tryIt | raw}}</p>
+    </div>
+
+    <!-- Toggle between Code and Demo -->
+    <div class="tabs is-boxed is-large">
+        <ul>
+            <li class="tab-link {% if step.codeReferences|length > 0 %}is-active{% endif %}" data-tab="code-{{ step.number }}">
+                <a>
+                    <span class="icon"><i class="fas fa-code"></i></span>
+                    <span>View Code</span>
+                </a>
+            </li>
+            {% if step.tryItUrl %}
+            <li class="tab-link" data-tab="demo-{{ step.number }}">
+                <a>
+                    <span class="icon"><i class="fas fa-play-circle"></i></span>
+                    <span>Try Demo</span>
+                </a>
+            </li>
+            {% endif %}
+            {% if step.dashboardUrl %}
+            <li class="tab-link" data-tab="dashboard-{{ step.number }}">
+                <a>
+                    <span class="icon"><i class="fas fa-dashboard"></i></span>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <!-- Code view -->
+    <div id="code-{{ step.number }}" class="tab-content {% if step.codeReferences|length > 0 %}is-active{% endif %}">
+        {% if step.codeReferences|length > 0 %}
+        <div>
+            {% for codeReference in step.codeReferences %}
+            {% set fileName = (codeReference | split('/') | last) | split ('\?') | first %}
+            <span class="has-text-weight-bold is-inline-block mb-3 is-clickable" hx-get="/code/{{ codeReference }}" hx-target="next pre code" hx-on::after-settle="highlightCode(this.parentElement.querySelector('pre code'))">
+                <i class="fas fa-file-code"></i> {{ fileName }}
+            </span>
+            <a id="{{ fileName }}-view-switch" class="is-inline-block mr-2" hx-get="/code/{{ codeReference }}" hx-target="next pre code" hx-on::after-settle="highlightCode(this.parentElement.querySelector('pre code'));">(view complete file)</a>
+            {% endfor %}
+            <pre class="p-0"><code class="language-java" hx-trigger="load" hx-get="/code/{{ step.codeReferences[0] }}" hx-on::after-request="hljs.highlightElement(this)">Loading code...</code></pre>
+        </div>
+        {% else %}
+        <div class="notification is-info">
+            <p>This step focuses on dashboard exploration. No specific code to display.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    {% if step.tryItUrl %}
+    <div id="demo-{{ step.number }}" class="tab-content">
+        <div id="demo-container-{{ step.number }}">
+            <iframe src="{{ step.tryItUrl }}"
+                scrolling="no"
+                style="height: 700px; width:100%; border:none; overflow:hidden;">
+            </iframe>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if step.dashboardUrl %}
+    <div id="dashboard-{{ step.number }}" class="tab-content" style="padding: 0">
+        <div id="dashboard-container-{{ step.number }}">
+            <iframe src="{{ step.dashboardUrl }}"
+                loading="lazy"
+                style="height: 700px; width:100%; border:none; ">
+            </iframe>
+        </div>
+    </div>
+    {% endif %}
+
+
+    <!-- Navigation -->
+    <div class="buttons is-centered mt-6">
+        {% if step.number > 1 %}
+        <a href="/storyline/step/{{ step.number - 1 }}" class="button is-light is-medium"
+           hx-get="/storyline/step/{{ step.number - 1 }}" hx-target="#step-content" hx-push-url="true" hx-swap="innerHTML show:window:top">
+            <span class="icon"><i class="fas fa-arrow-left"></i></span>
+            <span>Previous</span>
+        </a>
+        {% endif %}
+
+        {% if step.number < storyline.storylineMetadata.totalAmountOfSteps %}
+        <a href="/storyline/step/{{ step.number + 1 }}" class="button is-primary is-medium"
+           hx-get="/storyline/step/{{ step.number + 1 }}" hx-target="#step-content" hx-push-url="true" hx-swap="innerHTML show:window:top">
+            <span>Next</span>
+            <span class="icon"><i class="fas fa-arrow-right"></i></span>
+        </a>
+        {% else %}
+        <a href="/" class="button is-success is-medium">
+            <span class="icon"><i class="fas fa-trophy"></i></span>
+            <span>Complete!</span>
+        </a>
+        {% endif %}
+    </div>
+</div>

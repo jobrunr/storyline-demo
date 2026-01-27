@@ -4,6 +4,7 @@ import org.jobrunr.storyline.model.Storyline;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class StorylineController {
@@ -24,5 +25,12 @@ public class StorylineController {
     public String guide(Model model) {
         model.addAttribute("storyline", storyline);
         return "guide";
+    }
+
+    @GetMapping("/storyline/step/{stepNumber}")
+    public String step(@PathVariable int stepNumber, Model model) {
+        model.addAttribute("storyline", storyline);
+        model.addAttribute("step", storyline.getStep(stepNumber));
+        return "step";
     }
 }

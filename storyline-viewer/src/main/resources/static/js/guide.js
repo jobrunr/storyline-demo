@@ -11,15 +11,15 @@ if (document.readyState === "loading") {
 function init() {
     loadProgress();
     updateProgressDisplay();
-    initializeNavigation();
-    initializeTabSwitching();
 
-    // Handle initial hash or show welcome screen
-    if (window.location.hash) {
-        navigateToHash(window.location.hash);
-    } else {
-        showScreen('welcome-screen');
-    }
+    // Re-initialize tabs after HTMX loads new content
+    document.body.addEventListener('htmx:afterSettle', function(event) {
+        if (event.detail.target.id === 'step-content') {
+            initializeTabSwitching();
+            updateTimelineState();
+        }
+    });
+
 }
 
 // Load progress from localStorage
@@ -99,58 +99,17 @@ function updateProgressDisplay() {
     }
 }
 
-// Navigation handling
-function initializeNavigation() {
-    window.addEventListener('hashchange', function () {
-        navigateToHash(window.location.hash);
-    });
+// Update timeline visual state based on current step
+function updateTimelineState() {
+    const stepContent = document.getElementById('step-content');
+    const currentStep = stepContent.querySelector('.content-screen');
+    if (!currentStep) return;
 
-    // Step links
-    document.querySelectorAll('.step-link').forEach(link => {
-        link.addEventListener('click', function (e) {
-            e.preventDefault();
-            const hash = this.getAttribute('href');
-            window.location.hash = hash;
-        });
-    });
-}
+    const stepNumber = parseInt(currentStep.dataset.step);
+    const completed = getCompletedSteps();
 
-// Navigate to a specific hash
-function navigateToHash(hash) {
-    if (!hash) return;
-
-    const stepId = hash.substring(1); // Remove #
-    const stepNumber = parseInt(stepId.split('-')[1]);
-
-    if (stepNumber) {
-        showStep(stepNumber);
-
-        // Scroll timeline to active step
-        const timelineItem = document.querySelector(`.timeline-item[data-step="${stepNumber}"]`);
-        if (timelineItem) {
-            timelineItem.scrollIntoView({behavior: 'smooth', block: 'center'});
-        }
-    }
-}
-
-// Show specific step
-function showStep(stepNumber) {
-    // Hide all screens
-    document.querySelectorAll('.content-screen').forEach(screen => {
-        screen.classList.remove('active');
-    });
-
-    // Show target screen
-    const targetScreen = document.getElementById(`step-${stepNumber}`);
-    if (targetScreen) {
-        targetScreen.classList.add('active');
-    }
-
-    // Update timeline visual state
     document.querySelectorAll('.timeline-item').forEach(item => {
         const itemStep = parseInt(item.dataset.step);
-        const completed = getCompletedSteps();
-
         item.classList.remove('active');
         if (itemStep === stepNumber) {
             item.classList.add('active');
@@ -158,21 +117,6 @@ function showStep(stepNumber) {
             item.classList.add('completed');
         }
     });
-
-    // Scroll to top of content area
-    document.querySelector('.content-area').scrollTop = 0;
-}
-
-// Show screen (for welcome)
-function showScreen(screenId) {
-    document.querySelectorAll('.content-screen').forEach(screen => {
-        screen.classList.remove('active');
-    });
-
-    const screen = document.getElementById(screenId);
-    if (screen) {
-        screen.classList.add('active');
-    }
 }
 
 // Tab switching

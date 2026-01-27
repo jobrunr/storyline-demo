@@ -14,6 +14,17 @@ public record Storyline(
     SequencedMap<String, List<StorylineStep>> stepsByCategory
 ) {
 
+    public StorylineStep getStep(int stepNumber) {
+        for (var storyLineSteps : stepsByCategory.values()) {
+            for (var step : storyLineSteps) {
+                if (step.number() == stepNumber) {
+                    return step;
+                }
+            }
+        }
+        return null;
+    }
+
     public StorylineMetadata getStorylineMetadata() {
         int totalSteps = 0;
         Duration estimatedTime = Duration.ZERO;
