@@ -131,7 +131,7 @@
     <div class="buttons is-centered mt-6">
         {% if step.number > 1 %}
         <a href="/storyline/step/{{ step.number - 1 }}" class="button is-light is-medium"
-           hx-get="/storyline/step/{{ step.number - 1 }}" hx-target="#step-content" hx-push-url="true" hx-swap="innerHTML show:window:top">
+           hx-get="/storyline/step/{{ step.number - 1 }}" hx-target="#step-content" hx-push-url="true" hx-swap="innerHTML show:window:top" preload>
             <span class="icon"><i class="fas fa-arrow-left"></i></span>
             <span>Previous</span>
         </a>
@@ -139,7 +139,7 @@
 
         {% if step.number < storyline.storylineMetadata.totalAmountOfSteps %}
         <a href="/storyline/step/{{ step.number + 1 }}" class="button is-primary is-medium"
-           hx-get="/storyline/step/{{ step.number + 1 }}" hx-target="#step-content" hx-push-url="true" hx-swap="innerHTML show:window:top">
+           hx-get="/storyline/step/{{ step.number + 1 }}" hx-target="#step-content" hx-push-url="true" hx-swap="innerHTML show:window:top" preload>
             <span>Next</span>
             <span class="icon"><i class="fas fa-arrow-right"></i></span>
         </a>
