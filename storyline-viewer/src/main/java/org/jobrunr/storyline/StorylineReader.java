@@ -1,5 +1,6 @@
 package org.jobrunr.storyline;
 
+import org.jobrunr.storyline.model.Category;
 import org.jobrunr.storyline.model.Storyline;
 import org.jobrunr.storyline.model.StorylineStep;
 import org.springframework.core.io.ClassPathResource;
@@ -33,18 +34,19 @@ public class StorylineReader {
         try (InputStream inputStream = new ClassPathResource("storyline/index.yaml").getInputStream()) {
             IndexYaml index = yamlMapper.readValue(inputStream, IndexYaml.class);
 
-            SequencedMap<String, List<StorylineStep>> stepsByCategory = new LinkedHashMap<>();
+            SequencedMap<Category, List<StorylineStep>> stepsByCategory = new LinkedHashMap<>();
             int stepNumber = 1;
 
             for (CategoryFlow categoryFlow : index.flow) {
                 List<StorylineStep> steps = new ArrayList<>();
+                Category category = new Category(categoryFlow.category, categoryFlow.icon);
 
                 for (String stepPath : categoryFlow.steps) {
                     var step = loadStorylineStep(stepPath, categoryFlow.category, stepNumber++);
                     steps.add(step);
                 }
 
-                stepsByCategory.put(categoryFlow.category, steps);
+                stepsByCategory.put(category, steps);
             }
 
             return new Storyline(
@@ -110,6 +112,7 @@ public class StorylineReader {
 
     private static class CategoryFlow {
         public String category;
+        public String icon;
         public List<String> steps;
     }
 

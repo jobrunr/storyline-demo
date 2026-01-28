@@ -10,12 +10,12 @@
                         <span class="heading mr-2">Step {{ step.number }} of {{ storyline.storylineMetadata.totalAmountOfSteps }}</span>
                         ·
                         <span class="is-size-6 has-text-grey ml-2">
-                            ⏱️ {{ step.estimatedTime.toMinutes }} minutes
+                            <i class="fas fa-clock"></i> {{ step.estimatedTime.toMinutes }} minutes
                         </span>
                     </div>
 
                     <h1 class="title is-2">
-                        {{ step.icon }} {{ step.title }}
+                        {{ step.title }}
                     </h1>
                 </div>
             </div>
@@ -32,13 +32,13 @@
 
     <!-- The Challenge -->
     <div class="box has-background-warning-light">
-        <h3 class="title is-4">🎯 The Challenge</h3>
+        <h3 class="title is-4">The Challenge</h3>
         <p class="is-size-5">{{ step.challenge }}</p>
     </div>
 
     <!-- The Solution -->
     <div class="box has-background-success-light">
-        <h3 class="title is-4">💡 The Solution</h3>
+        <h3 class="title is-4">The Solution</h3>
         <p class="is-size-5">{{ step.solution | raw}}</p>
         {% if step.learnMore %}
         <p class="mt-4">
@@ -52,7 +52,7 @@
 
     <!-- Try It / Dashboard Link -->
     <div class="box has-background-info-light">
-        <h3 class="title is-4">👉 Try It Yourself</h3>
+        <h3 class="title is-4">Try It Yourself</h3>
         <p class="is-size-5 mb-4">{{ step.tryIt | raw}}</p>
     </div>
 

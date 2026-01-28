@@ -46,11 +46,8 @@
             <div class="column is-6">
                 <div class="card">
                     <header class="card-header">
-                        <span class="card-header-icon">
-                            {% if loop.index == 1 %}☀️{% elseif loop.index == 2 %}⚠️{% elseif loop.index == 3 %}🔥{% elseif loop.index == 4 %}🌍{% else %}🛡️{% endif %}
-                        </span>
                         <p class="card-header-title is-size-5">
-                            {{ entry.key }}
+                            {{ entry.key.icon | raw }} {{ entry.key.name }}
                         </p>
                     </header>
                     <div class="card-content">
@@ -59,10 +56,10 @@
                             <div class="mb-4">
                                 <div class="is-justify-content-space-between mb-3">
                                     <span class="is-pulled-right is-size-7 has-text-grey">
-                                        ⏱️ {{ step.estimatedTime.toMinutes }} minutes
+                                        <i class="fas fa-clock"></i> {{ step.estimatedTime.toMinutes }} minutes
                                     </span>
                                     <span class="has-text-weight-bold">
-                                        {{ step.icon }} Step {{ step.number }}: {{ step.title }}
+                                        Step {{ step.number }}: {{ step.title }}
                                     </span>
                                 </div>
                                 <p class="is-size-6 has-text-grey">

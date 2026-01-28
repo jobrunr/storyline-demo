@@ -11,7 +11,7 @@ public record Storyline(
     String intro,
     String codeRoot,
     String githubLink,
-    SequencedMap<String, List<StorylineStep>> stepsByCategory
+    SequencedMap<Category, List<StorylineStep>> stepsByCategory
 ) {
 
     public StorylineStep getStep(int stepNumber) {

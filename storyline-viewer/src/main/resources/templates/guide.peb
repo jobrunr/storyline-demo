@@ -42,7 +42,7 @@
                 <div class="timeline">
                     {% for entry in storyline.stepsByCategory %}
                         <header class="timeline-header">
-                            <span class="tag is-primary">{{ entry.key }}</span>
+                            <span class="tag is-primary">{{ entry.key.icon | raw }} {{ entry.key.name }}</span>
                         </header>
                         {% for step in entry.value %}
                             <div class="timeline-item" data-step="{{ step.number }}">
@@ -53,8 +53,8 @@
                                     <a href="/storyline/step/{{ step.number }}" class="step-link" data-step="{{ step.number }}"
                                        hx-get="/storyline/step/{{ step.number }}" hx-target="#step-content" hx-push-url="true" hx-swap="innerHTML show:window:top" preload>
                                         <div class="box step-box">
-                                            <p class="heading mb-1">Step {{ step.number }} · ⏱️ {{ step.estimatedTime.toMinutes }} minutes</p>
-                                            <p class="title is-6">{{ step.icon }} {{ step.title }}</p>
+                                            <p class="heading mb-1">Step {{ step.number }} · <i class="fas fa-clock"></i> {{ step.estimatedTime.toMinutes }} minutes</p>
+                                            <p class="title is-6">{{ step.title }}</p>
                                         </div>
                                     </a>
                                 </div>
@@ -62,7 +62,7 @@
                         {% endfor %}
                     {% endfor %}
                     <div class="timeline-header">
-                        <span class="tag is-medium is-success">Complete!</span>
+                        <span class="tag is-medium is-success"><i class="fas fa-trophy mr-2"></i> Complete!</span>
                     </div>
                 </div>
             </div>
