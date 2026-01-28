@@ -17,14 +17,15 @@ function init() {
     document.body.addEventListener('htmx:afterSettle', function(event) {
         if (event.detail.target.id === 'step-content') {
             initializeTabSwitching();
-            updateTimelineState();
+            updateTimeline();
             initializeCompleteButtons();
             hljs.highlightAll();
         }
     });
 
-    // Initialize buttons on first load
+    // Initialize on first load
     initializeCompleteButtons();
+    updateTimeline();
 }
 
 // Load progress from localStorage
@@ -145,20 +146,26 @@ function updateProgressDisplay() {
     }
 }
 
-// Update timeline visual state based on current step
-function updateTimelineState() {
-    const stepContent = document.getElementById('step-content');
-    const currentStep = stepContent.querySelector('.content-screen');
-    if (!currentStep) return;
+// Update timeline: mark active step and scroll to it
+function updateTimeline() {
+    const match = window.location.pathname.match(/\/storyline\/step\/(\d+)/);
+    if (!match) return;
 
-    const stepNumber = parseInt(currentStep.dataset.step);
+    const stepNumber = parseInt(match[1]);
     const completed = getCompletedSteps();
+    const sidebar = document.querySelector('.timeline-sidebar');
 
     document.querySelectorAll('.timeline-item').forEach(item => {
         const itemStep = parseInt(item.dataset.step);
         item.classList.remove('active');
         if (itemStep === stepNumber) {
             item.classList.add('active');
+            if (sidebar) {
+                sidebar.scrollTo({
+                    top: item.offsetTop - sidebar.offsetTop,
+                    behavior: 'smooth'
+                });
+            }
         } else if (completed.includes(itemStep)) {
             item.classList.add('completed');
         }
