@@ -47,13 +47,15 @@
                         {% for step in entry.value %}
                             <div class="timeline-item" data-step="{{ step.number }}">
                                 <div class="timeline-marker is-icon" data-step-marker="{{ step.number }}">
-                                    <i class="fas fa-circle"></i>
+                                    <i class="fa-regular fa-circle marker-pending"></i>
+                                    <i class="fas fa-circle marker-active"></i>
+                                    <i class="fas fa-check marker-completed"></i>
                                 </div>
                                 <div class="timeline-content">
                                     <a href="/storyline/step/{{ step.number }}" class="step-link" data-step="{{ step.number }}"
                                        hx-get="/storyline/step/{{ step.number }}" hx-target="#step-content" hx-push-url="true" hx-swap="innerHTML show:window:top" preload>
                                         <div class="box step-box">
-                                            <p class="heading mb-1">Step {{ step.number }} · <i class="fas fa-clock"></i> {{ step.estimatedTime.toMinutes }} minutes</p>
+                                            <p class="heading mb-1">Step {{ step.number }} · <i class="fas fa-clock"></i> {{ step.estimatedTime.toMinutes }} min</p>
                                             <p class="title is-6">{{ step.title }}</p>
                                         </div>
                                     </a>

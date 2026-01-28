@@ -14,7 +14,6 @@
 body {
     margin: 0;
     padding: 0;
-    overflow: hidden;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
@@ -27,6 +26,9 @@ body {
     overflow-x: hidden;
     height: calc(100vh - 52px);
     overscroll-behavior: contain;
+    position: sticky;
+    top: 52px;
+    align-self: flex-start;
 }
 
 .timeline-sidebar::-webkit-scrollbar {
@@ -120,23 +122,67 @@ body {
     margin-right: 0.25rem;
 }
 
+/* Timeline marker base styles */
 .timeline .timeline-marker.is-icon {
-    width: 2.5rem;
-    height: 2.5rem;
-    background: var(--jobrunr-gray);
-    border: 3px solid var(--color-primary);
+    width: 2rem;
+    height: 2rem;
+    background: white;
+    border: 2px solid var(--jobrunr-light-gray);
     transition: all 0.3s ease;
 }
 
+.timeline .timeline-marker.is-icon i {
+    font-size: 0.75rem;
+    color: var(--jobrunr-light-gray);
+}
+
+/* Icon visibility - show only pending by default */
+.timeline .timeline-marker .marker-active,
+.timeline .timeline-marker .marker-completed {
+    display: none;
+}
+
+.timeline .timeline-marker .marker-pending {
+    display: inline;
+}
+
+/* Completed state - show checkmark */
 .timeline .timeline-item.completed .timeline-marker.is-icon {
     background: var(--jobrunr-success);
     border-color: var(--jobrunr-success);
 }
 
+.timeline .timeline-item.completed .timeline-marker.is-icon i {
+    color: white;
+}
+
+.timeline .timeline-item.completed .marker-pending,
+.timeline .timeline-item.completed .marker-active {
+    display: none;
+}
+
+.timeline .timeline-item.completed .marker-completed {
+    display: inline;
+}
+
+/* Active state - filled dot with ring */
 .timeline .timeline-item.active .timeline-marker.is-icon {
-    background: var(--color-primary);
+    background: white;
     border-color: var(--color-primary);
-    box-shadow: 0 0 20px rgba(116, 76, 191, 0.6);
+    box-shadow: 0 0 0 4px rgba(116, 76, 191, 0.2);
+}
+
+.timeline .timeline-item.active .timeline-marker.is-icon i {
+    color: var(--color-primary);
+}
+
+.timeline .timeline-item.active .marker-pending,
+.timeline .timeline-item.active .marker-completed {
+    display: none;
+}
+
+.timeline .timeline-item.active .marker-active {
+    display: inline;
 }
 
 .step-box {
@@ -144,8 +190,14 @@ body {
     border: 2px solid transparent;
     transition: all 0.3s ease;
     cursor: pointer;
-    border-radius: 12px;
+    border-radius: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    padding: 0.75rem 1rem;
+}
+
+.step-box .title.is-6 {
+    font-size: 0.875rem;
+    margin-bottom: 0;
 }
 
 .step-box:hover {
@@ -315,6 +367,9 @@ pre code {
 /* Navbar */
 .navbar.is-dark {
     background: var(--jobrunr-dark);
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .navbar .button.is-light {
