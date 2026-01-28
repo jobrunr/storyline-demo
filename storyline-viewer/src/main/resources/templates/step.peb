@@ -22,9 +22,13 @@
         </div>
         <div class="level-right">
             <div class="level-item">
-                <button class="button is-success" onclick="markStepComplete({{ step.number }})">
+                <button id="btn-complete-{{ step.number }}" class="button is-success" onclick="markStepComplete({{ step.number }})">
                     <span class="icon"><i class="fas fa-check"></i></span>
                     <span>Mark Complete</span>
+                </button>
+                <button id="btn-incomplete-{{ step.number }}" class="button is-warning" onclick="markStepIncomplete({{ step.number }})" style="display: none;">
+                    <span class="icon"><i class="fas fa-undo"></i></span>
+                    <span>Mark Incomplete</span>
                 </button>
             </div>
         </div>
