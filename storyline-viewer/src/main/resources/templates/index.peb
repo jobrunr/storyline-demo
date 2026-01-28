@@ -4,14 +4,11 @@
 <section class="hero is-primary is-medium">
     <div class="hero-body">
         <div class="container has-text-centered">
-            <img src="/logo.svg" alt="JobRunr" style="max-width: 200px; margin-bottom: 1rem;">
-            <h1 class="title is-1">
+            <img src="/logo.svg" alt="JobRunr" style="max-width: 180px; margin-bottom: 1.5rem;">
+            <h1 class="title is-1 mb-4">
                 {{ storyline.title }}
             </h1>
-            <h2 class="subtitle is-3">
-                {{ storyline.subTitle }}
-            </h2>
-            <p class="is-size-5 mt-4 mb-4">
+            <p class="hero-description">
                 {{ storyline.slogan }}
             </p>
             <a class="btn-primary-light btn mt-5" href="/storyline">Start the Interactive Guide
@@ -27,47 +24,32 @@
 
 <section class="section">
     <div class="container">
-        <div class="content">
-            <p class="has-text-centered has-text-primary is-size-6 has-text-weight-semibold mb-2">Go from fragile scripts to resilient workflows</p>
-            <h2 class="title is-2 has-text-centered mb-6">What You'll Learn</h2>
-            <div class="columns is-centered">
-                <div class="column is-8">
-                    <div class="box" style="background: #f8f9fa; border: none;">
-                        <p class="is-size-5 has-text-grey-dark">
-                            {{ storyline.intro | raw }}
-                        </p>
-                    </div>
-                </div>
-            </div>
+        <div class="intro-section">
+            <p class="intro-text">
+                {{ storyline.intro | raw }}
+            </p>
         </div>
 
-        <div class="columns is-multiline mt-6">
+        <div class="timeline-container">
+            <div class="timeline-line"></div>
             {% for entry in storyline.stepsByCategory %}
-            <div class="column is-6">
-                <div class="card">
-                    <header class="card-header">
-                        <p class="card-header-title is-size-5">
-                            {{ entry.key.icon | raw }} {{ entry.key.name }}
-                        </p>
-                    </header>
-                    <div class="card-content">
-                        <div class="content">
-                            {% for step in entry.value %}
-                            <div class="mb-4">
-                                <div class="is-justify-content-space-between mb-3">
-                                    <span class="is-pulled-right is-size-7 has-text-grey">
-                                        <i class="fas fa-clock"></i> {{ step.estimatedTime.toMinutes }} minutes
-                                    </span>
-                                    <span class="has-text-weight-bold">
-                                        Step {{ step.number }}: {{ step.title }}
-                                    </span>
-                                </div>
-                                <p class="is-size-6 has-text-grey">
-                                    {{ step.challenge }}
-                                </p>
+            <div class="timeline-act {% if loop.index is odd %}act-right{% else %}act-left{% endif %}">
+                <div class="timeline-marker-act">
+                    <span class="act-icon">{{ entry.key.icon | raw }}</span>
+                </div>
+                <div class="act-card">
+                    <h3 class="act-title">{{ entry.key.name }}</h3>
+                    <div class="act-steps">
+                        {% for step in entry.value %}
+                        <div class="step-item">
+                            <div class="step-header">
+                                <span class="step-number">{{ step.number }}</span>
+                                <span class="step-title">{{ step.title }}</span>
+                                <span class="step-time">{{ step.estimatedTime.toMinutes }} min</span>
                             </div>
-                            {% endfor %}
+                            <p class="step-challenge">{{ step.challenge }}</p>
                         </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>

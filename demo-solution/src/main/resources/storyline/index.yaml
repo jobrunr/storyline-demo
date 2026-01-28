@@ -16,7 +16,7 @@ githubLink: https://github.com/jobrunr/storyline-demo
 
 flow:
   - category: "Getting Started"
-    icon: '<i class="fas fa-rocket has-text-primary mr-2"></i>'
+    icon: '<i class="fas fa-rocket has-text-primary"></i>'
     description: "Your first background jobs: enqueue, schedule, and recurring tasks."
     steps:
       - ./steps/step-01.yaml
@@ -24,7 +24,7 @@ flow:
       - ./steps/step-03.yaml
       - ./steps/step-04.yaml
   - category: "Handling Failures"
-    icon: '<i class="fas fa-wrench has-text-warning mr-2"></i>'
+    icon: '<i class="fas fa-wrench has-text-warning"></i>'
     description: "Retries, idempotency, batches, and error notifications."
     steps:
       - ./steps/step-05.yaml
@@ -33,7 +33,7 @@ flow:
       - ./steps/step-08.yaml
       - ./steps/step-09.yaml
   - category: "Priority & Concurrency"
-    icon: '<i class="fas fa-bolt has-text-danger mr-2"></i>'
+    icon: '<i class="fas fa-bolt has-text-danger"></i>'
     description: "Queues, weighted scheduling, mutexes, and timeouts."
     steps:
       - ./steps/step-10.yaml
@@ -41,14 +41,14 @@ flow:
       - ./steps/step-12.yaml
       - ./steps/step-13.yaml
   - category: "Scaling Out"
-    icon: '<i class="fas fa-globe has-text-info mr-2"></i>'
+    icon: '<i class="fas fa-globe has-text-info"></i>'
     description: "Server tags, rate limiting, and progress tracking."
     steps:
       - ./steps/step-14.yaml
       - ./steps/step-15.yaml
       - ./steps/step-16.yaml
   - category: "Production Ready"
-    icon: '<i class="fas fa-chart-line has-text-success mr-2"></i>'
+    icon: '<i class="fas fa-chart-line has-text-success"></i>'
     description: "Job results, metrics, tracing, and job replacement."
     steps:
       - ./steps/step-17.yaml

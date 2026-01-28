@@ -116,6 +116,10 @@ body {
     white-space: nowrap;
 }
 
+.timeline-header .tag i {
+    margin-right: 0.25rem;
+}
+
 .timeline .timeline-marker.is-icon {
     width: 2.5rem;
     height: 2.5rem;

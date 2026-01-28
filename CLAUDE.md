@@ -35,7 +35,7 @@ docker compose up
 - **demo-solution** - Complete implementation with all 20 JobRunr Pro steps
 - **demo-start** - Skeleton for implementing features yourself
 - **government-app** - Mock external API for rate limiting and tracing demos (Spring Boot 3.5.6)
-- **storyline-viewer** - Interactive web guide with HTMX/Pebble templates (included as dependency in demo apps)
+- **storyline-viewer** - Interactive web guide with HTMX/Pebble templates (included as dependency in demo apps) and bulma for CSS
 
 **Domain structure in demo-solution:**
 - `creditcards/` - Credit card registration, activation, statements, credit score services
