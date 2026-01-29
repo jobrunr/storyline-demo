@@ -6,7 +6,7 @@
         <div class="container has-text-centered">
             <img src="/logo.svg" alt="JobRunr" style="max-width: 180px; margin-bottom: 1.5rem;">
             <h1 class="title is-1 mb-4">
-                {{ storyline.title }}
+                {{ storyline.title }} 🏦
             </h1>
             <p class="hero-description">
                 {{ storyline.slogan }}

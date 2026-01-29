@@ -14,8 +14,11 @@
 {% block content %}
     <nav class="navbar is-dark" role="navigation">
         <div class="navbar-brand">
-            <a class="navbar-item" href="/">
-                <img src="/jobrunr-logo-white.webp" alt="JobRunr" style="max-height: 32px; margin-right: 0.5rem;">
+            <a class="navbar-item navbar-logo" href="/">
+                <div class="logo-animated-nav">
+                    <img src="/swirl.svg" class="swirl-spin" alt="">
+                    <span class="bank-icon">🏦</span>
+                </div>
                 <strong>{{ storyline.title }}</strong>
             </a>
         </div>

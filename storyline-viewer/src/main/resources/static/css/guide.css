@@ -376,6 +376,36 @@ pre code {
     font-weight: 500;
 }
 
+/* Navbar animated logo */
+.navbar-logo {
+    gap: 0.5rem;
+}
+
+.logo-animated-nav {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-animated-nav .swirl-spin {
+    width: 36px;
+    height: 36px;
+    transition: transform 0.8s ease;
+}
+
+.navbar-logo:hover .swirl-spin {
+    transform: rotate(360deg);
+}
+
+.logo-animated-nav .bank-icon {
+    position: absolute;
+    font-size: 1rem;
+    z-index: 1;
+}
+
 /* Responsive */
 @media screen and (max-width: 768px) {
     .columns.is-gapless {
