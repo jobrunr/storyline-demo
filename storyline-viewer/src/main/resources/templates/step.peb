@@ -46,7 +46,7 @@
         <p class="is-size-5">{{ step.solution | raw}}</p>
         {% if step.learnMore %}
         <p class="mt-4">
-            <a href="{{ step.learnMore }}" target="_blank" class="has-text-primary">
+            <a href="{{ step.learnMore }}" target="_blank" class="has-text-link">
                 <span class="icon"><i class="fas fa-book"></i></span>
                 <span>Read the documentation →</span>
             </a>

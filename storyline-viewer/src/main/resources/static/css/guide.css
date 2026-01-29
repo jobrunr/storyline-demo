@@ -400,9 +400,14 @@ pre code {
     transform: rotate(360deg);
 }
 
+.navbar-title {
+    font-weight: bold;
+}
+
 .logo-animated-nav .bank-icon {
     position: absolute;
-    font-size: 1rem;
+    font-size: 0.875rem;
+    opacity: 0.9;
     z-index: 1;
 }
 
