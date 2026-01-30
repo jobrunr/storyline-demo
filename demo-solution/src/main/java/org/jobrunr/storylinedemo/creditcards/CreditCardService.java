@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -51,6 +52,7 @@ public class CreditCardService {
         applicationEventPublisher.publishEvent(new CreditCardActivatedEvent(creditCard));
     }
 
+    @Transactional
     @Job(name = "Create Credit Card for %0") // Nice name for the dashboard with customer info
     public void createNewCreditCard(CreditCard creditCard) {
         // Step 1: Save to repository

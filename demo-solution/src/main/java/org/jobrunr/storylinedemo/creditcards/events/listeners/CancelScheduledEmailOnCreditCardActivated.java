@@ -20,8 +20,15 @@ public class CancelScheduledEmailOnCreditCardActivated implements ApplicationLis
 
     @Override
     public void onApplicationEvent(CreditCardActivatedEvent event) {
+        // We use the reminder job's label to retrieve and cancel it
         Job job = storageProvider.getJob(aJobSearchRequest().withLabel("customer: " + event.getCreditCard().getEmail()).build());
         job.delete("Credit Card was activated by customer");
         storageProvider.save(job);
+
+        // If we used the alternative deterministic approach we'd do the following
+        /*
+        var reminderJobId = "credit-card-"+event.getCreditCard.getId()+"-activation-reminder";
+        jobScheduler.delete(reminderJobId);
+        */
     }
 }

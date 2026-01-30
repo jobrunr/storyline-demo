@@ -26,11 +26,21 @@ public class ScheduleEmailOnCreditCardRegistered implements ApplicationListener<
 
     @Override
     public void onApplicationEvent(CreditCardRegisteredEvent event) {
+        // We give the job a label that we can reuse to retrieve when we need to cancel it
         CreditCard creditCard = event.getCreditCard();
         jobScheduler.create(aJob()
                 .scheduleAt(LocalDateTime.now().plusDays(7))
                 .withLabels("customer: " + event.getCreditCard().getEmail())
                 .withDetails(() -> sendActivationReminderEmail(creditCard)));
+
+        // Alternatively we can give the job a deterministic identifier
+        /*
+        jobScheduler.create(aJob()
+                .withId(JobId.fromIdentifier("credit-card-"+creditCard.getId()+"-activation-reminder"))
+                .scheduleAt(LocalDateTime.now().plusDays(7))
+                .withLabels("customer: " + event.getCreditCard().getEmail())
+                .withDetails(() -> sendActivationReminderEmail(creditCard)));
+        */
     }
 
     public void sendActivationReminderEmail(CreditCard creditCard) {
