@@ -1,0 +1,4 @@
+<code class="language-java">{{ code }}</code>
+{%- if viewSwitch -%}
+<a id="{{ fileName }}-view-switch" hx-swap-oob="true" class="is-inline-block mr-2" hx-get="/code{{ codeFile }}?focus={{ focus }}&show={{ toShow }}" hx-target="next pre">({{ label }})</a>
+{%- endif -%}

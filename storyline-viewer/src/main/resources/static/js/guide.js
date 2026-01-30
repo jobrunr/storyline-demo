@@ -15,11 +15,16 @@ function init() {
 
     // Re-initialize after HTMX loads new content
     document.body.addEventListener('htmx:afterSettle', function(event) {
-        if (event.detail.target.id === 'step-content') {
+        const target = event.detail.target;
+        const codeElement = target.querySelector('code:not([data-highlighted])');
+        if (codeElement) {
+            hljs.highlightElement(codeElement);
+        }
+
+        if (target.id === 'step-content') {
             initializeTabSwitching();
             updateTimeline();
             initializeCompleteButtons();
-            hljs.highlightAll();
         }
     });
 

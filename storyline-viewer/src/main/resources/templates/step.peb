@@ -94,12 +94,12 @@
         <div>
             {% for codeReference in step.codeReferences %}
             {% set fileName = (codeReference | split('/') | last) | split ('\?') | first %}
-            <span class="has-text-weight-bold is-inline-block mb-3 is-clickable" hx-get="/code/{{ codeReference }}" hx-target="next pre code">
+            <span class="has-text-weight-bold is-inline-block mb-3 is-clickable" hx-get="/code/{{ codeReference }}" hx-target="next pre">
                 <i class="fas fa-file-code"></i> {{ fileName }}
             </span>
-            <a id="{{ fileName }}-view-switch" class="is-inline-block mr-2" hx-get="/code/{{ codeReference }}" hx-target="next pre code">(view complete file)</a>
+            <a id="{{ fileName }}-view-switch" class="is-inline-block mr-2" hx-get="/code/{{ codeReference }}" hx-target="next pre">(view complete file)</a>
             {% endfor %}
-            <pre class="p-0"><code class="language-java" hx-trigger="load" hx-get="/code/{{ step.codeReferences[0] }}" hx-on::after-request="hljs.highlightElement(this)">Loading code...</code></pre>
+            <pre class="p-0" hx-trigger="load" hx-get="/code/{{ step.codeReferences[0] }}"><code class="language-java">Loading code...</code></pre>
         </div>
         {% else %}
         <div class="notification is-info">
