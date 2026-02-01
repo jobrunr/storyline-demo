@@ -18,21 +18,20 @@ solution: |
   jobScheduler
       .startBatch(this::generateAllStatements)
       .continueWith(this::createSummaryReport);
-  </code>
-  </pre>
+  </code></pre>
   <br>
-  All child jobs start in AWAITING state. If the parent fails, all children are 
-  rolled back atomically. The continuation only runs when ALL children succeed.
+  All child jobs start in <code>AWAITING</code> state. The child jobs start processing only after all of them are created.
+  If the parent fails to create the child jobs, all children are rolled back atomically.
+  The continuation only runs when ALL children succeed.
 
 codeReferences:
-  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L32-L38
-  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L40-L44
+  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L32-L37
+  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L42-L48
 
 tryIt: |
-  Trigger the monthly statement generation. Watch the batch create all individual 
+  Trigger the monthly statement generation recurring job on the Dashboard. Watch the batch create all individual 
   jobs, and then observe the summary job execute only after all succeed.
 
-tryItUrl: /bulk-generate-expenses
-dashboardUrl: http://localhost:8080/dashboard/jobs?state=SUCCEEDED
+dashboardUrl: http://localhost:8080/dashboard/jobs
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/batches/

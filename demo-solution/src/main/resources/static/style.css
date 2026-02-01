@@ -52,6 +52,7 @@ header a:hover {
     width: 100%;
     max-width: 448px;
     box-sizing: border-box;
+    margin-top: 4rem;
 }
 
 .header {
@@ -142,8 +143,50 @@ header a:hover {
     text-align: center;
 }
 
+.page-nav {
+    position: absolute;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+    background-color: #fff;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.page-nav a {
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    text-decoration: none;
+    color: #374151;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.page-nav a:hover {
+    background-color: #f3f4f6;
+}
+
+.page-nav a.active {
+    background-color: #3b82f6;
+    color: #fff;
+}
+
 @media (max-width: 640px) {
     .card-container {
         padding: 1.5rem;
+    }
+
+    .page-nav {
+        flex-direction: column;
+        width: calc(100% - 2rem);
+        top: 0.5rem;
+    }
+
+    .page-nav a {
+        text-align: center;
     }
 }

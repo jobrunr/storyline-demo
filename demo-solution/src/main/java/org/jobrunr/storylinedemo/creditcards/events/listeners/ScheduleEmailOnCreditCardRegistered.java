@@ -24,19 +24,23 @@ public class ScheduleEmailOnCreditCardRegistered implements ApplicationListener<
         this.jobScheduler = jobScheduler;
     }
 
+    // Step 2A: Schedule card activation reminder job
     @Override
     public void onApplicationEvent(CreditCardRegisteredEvent event) {
         // We give the job a label that we can reuse to retrieve when we need to cancel it
         CreditCard creditCard = event.getCreditCard();
         jobScheduler.create(aJob()
+                .withName("Send Card Activation Reminder to " + event.getCreditCard().getEmail())
                 .scheduleAt(LocalDateTime.now().plusDays(7))
+                // Step 9: add a job label for filtering
                 .withLabels("customer: " + event.getCreditCard().getEmail())
                 .withDetails(() -> sendActivationReminderEmail(creditCard)));
 
         // Alternatively we can give the job a deterministic identifier
         /*
         jobScheduler.create(aJob()
-                .withId(JobId.fromIdentifier("credit-card-"+creditCard.getId()+"-activation-reminder"))
+                .withName("Send Card Activation Reminder to " + event.getCreditCard().getEmail())
+                .withId(JobId.fromIdentifier("activation-reminder:" + creditCard.getId()))
                 .scheduleAt(LocalDateTime.now().plusDays(7))
                 .withLabels("customer: " + event.getCreditCard().getEmail())
                 .withDetails(() -> sendActivationReminderEmail(creditCard)));

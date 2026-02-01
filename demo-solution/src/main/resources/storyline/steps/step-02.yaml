@@ -19,13 +19,15 @@ solution: |
   The job will be automatically cleaned up after 3 days.
 
 codeReferences:
-  - org/jobrunr/storylinedemo/creditcards/events/listeners/ScheduleEmailOnCreditCardRegistered.java?focus=L27-L33
-  - org/jobrunr/storylinedemo/creditcards/events/listeners/CancelScheduledEmailOnCreditCardActivated.java?focus=L21-L27
+  - org/jobrunr/storylinedemo/creditcards/events/listeners/ScheduleEmailOnCreditCardRegistered.java?focus=L27-L49
+  - org/jobrunr/storylinedemo/creditcards/events/listeners/CancelScheduledEmailOnCreditCardActivated.java?focus=L21-L34
 
 tryIt: |
-  1. Register a new credit card — notice the scheduled reminder job
-  2. Activate the card — watch the reminder change to "NOT_APPLICABLE"
-  3. Check the dashboard to see the cancellation reason
+  <ol>
+  <li>Register a new credit card — notice the scheduled reminder job</li>
+  <li>Activate the card — watch the scheduled reminder job change to <code>DELETED</code></li>
+  <li>Check the dashboard to see the cancellation reason</li>
+  </ol>
 
 tryItUrl: /credit-cards/register
 dashboardUrl: http://localhost:8080/dashboard/jobs?state=SCHEDULED

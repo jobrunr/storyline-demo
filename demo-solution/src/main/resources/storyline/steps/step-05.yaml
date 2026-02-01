@@ -15,20 +15,20 @@ solution: |
   JobRunr automatically retries failed jobs with <strong>exponential backoff</strong>!
   <br><br>
   By default, a failed job is retried up to 10 times with increasing delays:
-  <code>10s → 20s → 40s → 1m20s → 2m40s → ...</code>
+  <code>3s → 9s → 27s → 1m21s → 4m3s → ...</code>
   <br><br>
   This gives transient issues time to resolve while not overwhelming the system.
-  You can customize the retry policy with <code>@Job(retries = 5)</code>.
+  You can customize the amount of retries per Job with <code>@Job(retries = 5)</code>.
+  More configuration options are available in the docs!
 
 codeReferences:
-  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L40-L44
-  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L47-L50
+  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L76-L80
 
 tryIt: |
-  Trigger the bulk expense report generation. Watch some jobs fail (the code randomly 
+  Trigger the bulk expense summary report generation. Watch some jobs fail (the code randomly 
   throws exceptions!) and then automatically retry until they succeed.
 
-tryItUrl: /bulk-generate-expenses
-dashboardUrl: http://localhost:8080/dashboard/jobs?state=FAILED
+tryItUrl: /bulk-generate-summary-reports
+dashboardUrl: http://localhost:8080/dashboard/jobs?state=SCHEDULED&jobExceptionType!=java.lang.RuntimeException
 
 learnMore: https://www.jobrunr.io/en/documentation/background-methods/dealing-with-exceptions/

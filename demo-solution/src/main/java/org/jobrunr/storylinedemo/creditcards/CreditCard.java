@@ -10,6 +10,7 @@ import net.datafaker.providers.base.Finance.CreditCardType;
 
 import org.springframework.data.annotation.Id;
 
+import java.math.BigDecimal;
 import java.util.Random;
 
 public class CreditCard {
@@ -29,7 +30,7 @@ public class CreditCard {
     private Long id;
 
     @NotBlank(message = "CreditCard Number is required")
-    @Size(min = 16, max = 16, message = "Number must be exactly 16 numbers")
+    @Size(min = 15, max = 16, message = "Number must be 15-16 digits")
     private String number;
 
     @NotBlank(message = "Name is required")
@@ -44,6 +45,8 @@ public class CreditCard {
     private CreditCard.Type type;
 
     private CreditCard.State state = State.REQUESTED;
+
+    private BigDecimal balance = BigDecimal.ZERO;
 
     public CreditCard() {
         this(randomCreditCardNumber(), null, null, null);
@@ -63,7 +66,7 @@ public class CreditCard {
     public static CreditCard randomCreditCard() {
         var faker = new Faker();
         var cardType = randomCreditCardType();
-        var creditCardNumber = faker.finance().creditCard(CreditCardType.valueOf(randomCreditCardType().name()));
+        var creditCardNumber = randomCreditCardNumber();
         var name = faker.name().fullName();
         var email = faker.internet().safeEmailAddress(name);
         return new CreditCard(creditCardNumber, name, email, cardType);
@@ -113,6 +116,26 @@ public class CreditCard {
         this.state = State.ACTIVE;
     }
 
+    public String getNumber() {
+        return number;
+    }
+
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
+    public void deductBalance(BigDecimal amount) {
+        this.balance = this.balance.subtract(amount);
+    }
+
+    public void addBalance(BigDecimal amount) {
+        this.balance = this.balance.add(amount);
+    }
+
     @Override
     public String toString() {
         return "CreditCard{" +
@@ -126,6 +149,6 @@ public class CreditCard {
     }
 
     private static String randomCreditCardNumber() {
-        return new Faker().finance().creditCard(CreditCardType.valueOf(randomCreditCardType().name()));   
+        return new Faker().finance().creditCard(CreditCardType.valueOf(randomCreditCardType().name())).replace("-", "");   
     }
 }

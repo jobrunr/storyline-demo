@@ -18,8 +18,10 @@ solution: |
   jobScheduler.create(aJob()
       .withLabels("customer: john.smith@email.com", "card: AMEX")
       .withDetails(() -> createCreditCard(card)));
-  </code>
-  </pre>
+
+  // or via the @Job annotation
+  @Job(labels = "{"customer: %0", "card: %1"}")
+  </code></pre>
   <br>
   Labels appear in the dashboard and can be used for:
   <ul>
@@ -29,7 +31,7 @@ solution: |
   </ul>
 
 codeReferences:
-  - org/jobrunr/storylinedemo/creditcards/events/listeners/ScheduleEmailOnCreditCardRegistered.java?focus=L29-L33
+  - org/jobrunr/storylinedemo/creditcards/events/listeners/ScheduleEmailOnCreditCardRegistered.java?focus=L32-L37
 
 tryIt: |
   Register several credit cards with different emails and card types.

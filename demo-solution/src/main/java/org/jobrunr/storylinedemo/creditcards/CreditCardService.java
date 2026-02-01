@@ -1,5 +1,6 @@
 package org.jobrunr.storylinedemo.creditcards;
 
+import org.jobrunr.jobs.JobId;
 import org.jobrunr.jobs.annotations.Job;
 import org.jobrunr.scheduling.JobScheduler;
 import org.jobrunr.storylinedemo.creditcards.events.CreditCardActivatedEvent;
@@ -16,10 +17,10 @@ import java.util.UUID;
 public class CreditCardService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CreditCardService.class);
+
     private final JobScheduler jobScheduler;
     private final CreditCardRepository creditCardRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
-
 
     public CreditCardService(JobScheduler jobScheduler, CreditCardRepository creditCardRepository, ApplicationEventPublisher applicationEventPublisher) {
         this.jobScheduler = jobScheduler;
@@ -38,7 +39,7 @@ public class CreditCardService {
     public void processRegistrationOrReplace(CreditCard creditCard) {
         // Create a unique job ID from the customer's email
         // If a job already exists for this customer, it will be replaced
-        UUID jobId = UUID.nameUUIDFromBytes(("credit-card:" + creditCard.getEmail()).getBytes());
+        UUID jobId = JobId.fromIdentifier("credit-card:" + creditCard.getEmail());
         jobScheduler.enqueueOrReplace(jobId, () -> createNewCreditCard(creditCard));
     }
 
@@ -49,18 +50,18 @@ public class CreditCardService {
         creditCardRepository.save(creditCardFromRepo);
 
         // Publish event to cancel the scheduled reminder email
-        applicationEventPublisher.publishEvent(new CreditCardActivatedEvent(creditCard));
+        applicationEventPublisher.publishEvent(new CreditCardActivatedEvent(creditCardFromRepo));
     }
 
     @Transactional
-    @Job(name = "Create Credit Card for %0") // Nice name for the dashboard with customer info
+    @Job(name = "Create %0") // Nice name for the dashboard with customer info
     public void createNewCreditCard(CreditCard creditCard) {
         // Step 1: Save to repository
-        creditCardRepository.save(creditCard);
-        LOGGER.info("Created new credit card: {}", creditCard);
+        var creditCardFromRepo = creditCardRepository.save(creditCard);
+        LOGGER.info("Created new credit card: {}", creditCardFromRepo);
 
         // Step 2: Publish event to schedule the reminder email
-        applicationEventPublisher.publishEvent(new CreditCardRegisteredEvent(creditCard));
+        applicationEventPublisher.publishEvent(new CreditCardRegisteredEvent(creditCardFromRepo));
     }
 
 }

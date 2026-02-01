@@ -8,7 +8,7 @@ scenario: |
   If the 31st falls on a Saturday, the reports should run on Friday the 29th instead.
 
 challenge: |
-  Standard CRON expressions can't handle business day logic. How do we schedule jobs 
+  Standard cron expressions can't handle business day logic. How do we schedule jobs 
   for complex calendar-based scenarios?
 
 solution: |
@@ -19,7 +19,7 @@ solution: |
   like <code>"0 0 LW-3 * *"</code> for 3 days before the last business day.
 
 codeReferences:
-  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L28-L31
+  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L29-L34
 
 tryIt: |
   Check the Recurring Jobs dashboard to see the monthly statement job scheduled 

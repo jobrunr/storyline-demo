@@ -8,7 +8,7 @@ It's Monday morning at JobRunr Finance. Thousands of customers are waiting for t
 
 ## The 20 Steps
 
-### ☀️ Act 1: The Morning Rush (8 AM)
+### 🚀 Act 1: Getting Started
 *Customers are flooding the website. Time to process applications at scale.*
 
 | Step | Title | Feature |
@@ -18,7 +18,7 @@ It's Monday morning at JobRunr Finance. Thousands of customers are waiting for t
 | 3 | Month-End Reports | `@Recurring` + Advanced CRON — Business day support |
 | 4 | Dashboard First Look | Pro Dashboard — Real-time monitoring |
 
-### ⚠️ Act 2: When Things Go Wrong (10 AM)
+### 🔧 Act 2: Handling Failures
 *The first problems start appearing. How do we handle failures gracefully?*
 
 | Step | Title | Feature |

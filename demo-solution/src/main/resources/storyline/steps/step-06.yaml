@@ -27,12 +27,14 @@ solution: |
   the charge and continue from the receipt.
 
 codeReferences:
-  - org/jobrunr/storylinedemo/payment/PaymentService.java?focus=L53-L71
+  - org/jobrunr/storylinedemo/payment/PaymentService.java?focus=L72-L85
 
 tryIt: |
-  Process a payment and watch the job context track completed steps. 
+  Make a payment using the credit card you've created earlier and watch the job context track completed steps. 
   If you manually retry the job, it won't duplicate the payment!
 
-dashboardUrl: http://localhost:8080/dashboard/jobs
+tryItUrl: /payments/new
+
+dashboardUrl: http://localhost:8080/dashboard/jobs?jobSignature=org.jobrunr.storylinedemo.payment.PaymentService.processPayment%28java.lang.Long%2C+org.jobrunr.jobs.context.JobContext%29
 
 learnMore: https://www.jobrunr.io/en/documentation/background-methods/best-practices/

@@ -1,98 +1,145 @@
 package org.jobrunr.storylinedemo.payment;
 
-import org.jobrunr.jobs.annotations.Job;
-import org.jobrunr.jobs.annotations.Recurring;
 import org.jobrunr.jobs.context.JobContext;
+import org.jobrunr.jobs.context.JobRunrDashboardLogger;
 import org.jobrunr.scheduling.JobScheduler;
+import org.jobrunr.storylinedemo.creditcards.CreditCard;
+import org.jobrunr.storylinedemo.creditcards.CreditCardRepository;
+import org.jobrunr.storylinedemo.exceptions.NonRetryableException;
+import org.jobrunr.storylinedemo.payment.events.ProcessJobRunrFinancePaymentEvent;
+import org.jobrunr.storylinedemo.payment.events.ProcessPayPalPaymentEvent;
+import org.jobrunr.storylinedemo.payment.events.ProcessStripePaymentEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClient;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.jobrunr.scheduling.JobBuilder.aJob;
 
 @Service
 public class PaymentService {
 
+    private static final Logger LOGGER = new JobRunrDashboardLogger(LoggerFactory.getLogger(PaymentService.class));
+
     private final JobScheduler jobScheduler;
-    private final RestClient restClient;
+    private final PaymentRepository paymentRepository;
+    private final CreditCardRepository creditCardRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
+    private final String serverTags;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PaymentService.class);
-
-    public PaymentService(JobScheduler jobScheduler, RestClient.Builder restClientBuilder) {
+    public PaymentService(JobScheduler jobScheduler,
+                          PaymentRepository paymentRepository,
+                          CreditCardRepository creditCardRepository,
+                          ApplicationEventPublisher applicationEventPublisher,
+                          @Value("${jobrunr.background-job-server.tags:}") String serverTags) {
         this.jobScheduler = jobScheduler;
-        this.restClient = restClientBuilder.baseUrl("http://localhost:8089").build();
+        this.paymentRepository = paymentRepository;
+        this.creditCardRepository = creditCardRepository;
+        this.applicationEventPublisher = applicationEventPublisher;
+        this.serverTags = serverTags;
     }
 
-    // Step 10: Payment jobs have higher priority than reports
-    @Recurring(id = "nightly-payments", cron = "0 3 * * *")
-    @Job(name = "Process All Nightly Payments", queue = "high-prio")
-    public void processAllPaymentsNightly() {
-        LOGGER.info("Processing all nightly payments");
+    @Transactional
+    public void submitPayment(Payment payment) {
+        var savedPayment = paymentRepository.save(payment);
+        createPaymentProcessingJob(savedPayment);
+    }
 
-        for (int i = 1; i <= 100; i++) {
-            var customerType = CustomerType.random();
-            var randomPayment = Payment.randomPayment(i);
+    private void createPaymentProcessingJob(Payment payment) {
+        CreditCard creditCard = creditCardRepository.findById(payment.getCreditCardId())
+                .orElseThrow(() -> new IllegalArgumentException("Credit card not found: " + payment.getCreditCardId()));
 
-            // Step 11: Dynamic queues by customer type (Enterprise vs Pro)
-            // Step 14: Server tags for international vs national payments
-            var job = jobScheduler.create(aJob()
-                    .withLabels("customer:" + customerType.name())
-                    .withServerTag(randomPayment.getRegion())
-                    .withDetails(() -> processPayment(randomPayment)));
+        var processPaymentJob = jobScheduler.create(aJob()
+                .withQueue("high-prio")
+                .withName("Process payment #" + payment.getId())
+                .withLabels("cardType:" + creditCard.getType().name())
+                .withServerTag(payment.getPlatform().getServerTag())
+                .withRateLimiter(payment.getPlatform().isExternal() ? payment.getPlatform().name() : null)
+                .withDetails(() -> processPayment(payment.getId(), JobContext.Null)));
 
-            // Step 15: Rate limit exports to government API (max 3 concurrent)
-            if (randomPayment.international()) {
-                jobScheduler.create(aJob()
-                        .withRateLimiter("government-api")
-                        .runAfterSuccessOf(job.asUUID())
-                        .withDetails(() -> exportPaymentToExternalSystem(randomPayment)));
+        // Chain government reporting for large payments (> $10k)
+        if (payment.requiresGovernmentReporting()) {
+            jobScheduler.create(aJob()
+                    .withName("Reporting big money transfer")
+                    .withRateLimiter("REPORTING")
+                    .runAfterSuccessOf(processPaymentJob.asUUID())
+                    .withDetails(() -> reportToGovernment(payment.getId())));
+        }
+    }
+
+    public void processPayment(Long paymentId, JobContext context) {
+        Payment payment = paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new IllegalArgumentException("Payment not found: " + paymentId));
+
+        context.runStepOnce("payment-processing", () -> markPaymentAsProcessing(payment));
+
+        context.runStepOnce("charge-card", () -> chargeCard(payment));
+
+        context.runStepOnce("transfer-money", () -> processPlatformTransfer(payment));
+
+        context.runStepOnce("payment-completed", () -> markPaymentAsCompleted(payment));
+
+        LOGGER.info("Payment processed successfully: {}", payment);
+    }
+
+    public void markPaymentAsProcessing(Payment payment) {
+        LOGGER.info("Updating payment status to PROCESSING: {}", payment);
+        payment.setStatus(Payment.Status.PROCESSING);
+        paymentRepository.save(payment);
+    }
+
+    public void chargeCard(Payment payment) {
+        LOGGER.info("Charging card for payment: {}", payment);
+        CreditCard creditCard = creditCardRepository.findById(payment.getCreditCardId())
+                .orElseThrow(() -> new NonRetryableException("Credit card not found"));
+        creditCard.deductBalance(payment.getAmount());
+        creditCardRepository.save(creditCard);
+    }
+
+    private void processPlatformTransfer(Payment payment) {
+        switch (payment.getPlatform()) {
+            case JOBRUNR_FINANCE -> applicationEventPublisher.publishEvent(
+                new ProcessJobRunrFinancePaymentEvent(payment));
+            case PAYPAL -> {
+                requireServerTag("external");
+                applicationEventPublisher.publishEvent(new ProcessPayPalPaymentEvent(payment));
+            }
+            case STRIPE -> {
+                requireServerTag("external");
+                applicationEventPublisher.publishEvent(new ProcessStripePaymentEvent(payment));
             }
         }
     }
 
-    // Step 6: Idempotent payment processing - safe to retry!
-    @Job(name = "Process Payment #%0")
-    public void processPayment(Payment payment, JobContext context) {
-        // Each step is executed ONLY ONCE, even on retry (unless step fails)
-        // If the job fails after "charge-card", retry will skip it!
-        
-        context.runStepOnce("charge-card", () -> {
-            LOGGER.info("💳 Charging card for payment: {}", payment);
-            simulateWork(500);
-        });
-        
-        context.runStepOnce("send-receipt", () -> {
-            LOGGER.info("📧 Sending receipt for payment: {}", payment);
-            simulateWork(300);
-        });
-        
-        context.runStepOnce("update-ledger", () -> {
-            LOGGER.info("📊 Updating ledger for payment: {}", payment);
-            simulateWork(200);
-        });
-        
-        LOGGER.info("✅ Payment processed successfully: {}", payment);
+    private void requireServerTag(String required) {
+        if (!serverTags.contains(required)) {
+            throw new NonRetryableException(
+                "Server missing required tag '" + required + "' (has: '" + serverTags + "')");
+        }
     }
 
-    // Overload for backward compatibility (without JobContext)
-    public void processPayment(Payment payment) {
-        LOGGER.info("Processing payment: {}", payment);
-        simulateWork(1000);
+    private void markPaymentAsCompleted(Payment payment) {
+        LOGGER.info("Sending confirmation for payment: {}", payment);
+        payment.setStatus(Payment.Status.COMPLETED);
+        paymentRepository.save(payment);
     }
 
-    // Step 13: Job timeout - fail if external API takes too long
-    @Job(name = "Export Payment to Government", processTimeOut = "PT30S")
-    public void exportPaymentToExternalSystem(Payment payment) {
-        LOGGER.info("🌍 Exporting payment to government API: {}", payment);
-        var verified = this.restClient.get().uri("/verify").retrieve().body(String.class);
-        LOGGER.info("✅ Export verified: {} - response: {}", payment, verified);
+    public void reportToGovernment(Long paymentId) {
+        Payment payment = paymentRepository.findById(paymentId)
+                .orElseThrow(() -> new NonRetryableException("Payment not found: " + paymentId));
+
+        LOGGER.info("Reporting payment > $10k to government: {}", payment);
+        simulateWork(500);
+        LOGGER.info("Government reporting verified: {} - response: {}", payment);
     }
 
     private void simulateWork(long millis) {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             throw new RuntimeException(e);
         }
     }

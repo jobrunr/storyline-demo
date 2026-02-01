@@ -7,6 +7,12 @@
 </head>
 <body class="flex-center">
 
+<nav class="page-nav">
+    <a href="/credit-cards/register" class="active">Register Card</a>
+    <a href="/credit-cards/activate">Activate Card</a>
+    <a href="/payments/new">Make Payment</a>
+</nav>
+
 <div class="card-container" hx-boost="true">
     <div class="header">
         <h1>Apply for a Credit Card</h1>

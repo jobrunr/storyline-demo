@@ -19,18 +19,17 @@ solution: |
       .startBatch(this::generateAllStatements)
       .continueWith(this::createSummaryReport)
       .onFailure(this::notifyOpsTeam);
-  </code>
-  </pre>
+  </code></pre>
   <br>
   The ops team gets a Slack/email notification immediately when the job fails.
   You can combine <code>continueWith()</code> and <code>onFailure()</code> for complete workflows!
 
 codeReferences:
-  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L32-L38
+  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L32-L40
 
 tryIt: |
-  Watch the summary job fail (it has a 50% failure rate!) and see the 
-  notification job trigger automatically.
+  Watch the summary job fail (it has a 50% failure rate!) and see the notification job trigger automatically. 
+  It did not fail? Then no worries, JobRunr moved the `onFailure` Job to `NOT_APPLICABLE` state.
 
 dashboardUrl: http://localhost:8080/dashboard/jobs?state=FAILED
 

@@ -15,12 +15,12 @@ solution: |
   <br><br>
   <ul>
     <li><strong>Jobs view</strong>: Filter by state (ENQUEUED, PROCESSING, SUCCEEDED, FAILED)</li>
-    <li><strong>Recurring Jobs</strong>: See all scheduled jobs and their next run times</li>
+    <li><strong>Recurring Jobs</strong>: See all recurring jobs and their next run times</li>
     <li><strong>Servers</strong>: Monitor which servers are processing jobs</li>
-    <li><strong>Search</strong>: Find any job by name, method signature, or parameters</li>
+    <li><strong>Search</strong>: Find any job by name, method signature, or parameters, etc.</li>
   </ul>
   <br>
-  The embedded dashboard runs inside your Spring Boot app — no separate deployment needed!
+  The embedded dashboard, a JobRunr Pro Enterprise feature, runs inside your Spring Boot app — no separate deployment needed! 
 
 codeReferences:
   - org/jobrunr/storylinedemo/StorylineDemoApplication.java

@@ -26,19 +26,20 @@ public class CreditCardStatementService {
         this.jobScheduler = jobScheduler;
     }
 
-    // Step 3: Advanced CRON - Run on the LAST BUSINESS DAY of each month (not just last day!)
+    // Step 3: Advanced cron - Run on the LAST BUSINESS DAY of each month (not just last day!)
     // If the 31st is a Saturday, this runs on Friday the 29th instead
     @Recurring(id = "monthly-statements", cron = "0 0 LW * *")
-    @Job(name = "Generate Monthly Credit Card Statements for all cardholders")
+    @Job(name = "Crate BatchJob to Generate Monthly Credit Card Statements")
     public void generateMonthlyCreditCardStatements() {
         // Step 7: Start a batch to process all statements atomically
-        // Step 8: Add onFailure to notify the team if something goes wrong
         jobScheduler
                 .startBatch(this::generateMonthlyExpensesForAllCreditCardHolders)
                 .continueWith(this::generateSummaryReport)
-                .onFailure(this::notifyOpsTeam);  // Alert the team on failure!
+                // Step 8: Add onFailure to notify the team if something goes wrong
+                .onFailure(this::notifyOpsTeam);
     }
 
+    @Job(name = "Generate Monthly Credit Card Statements for all Cardholders")
     public void generateMonthlyExpensesForAllCreditCardHolders() {
         jobScheduler.enqueue(
             StreamSupport.stream(creditCardRepository.findAll().spliterator(), false),
@@ -72,7 +73,7 @@ public class CreditCardStatementService {
         context.logger().info("All statements generated successfully!");
     }
 
-    @Job(name = "Generate Summary Report")
+    @Job(name = "Generate Summary Report", retries = 3)
     public void generateSummaryReport() {
         generatePDFThatSometimesFails();
         LOGGER.info("Summary Report generated");
