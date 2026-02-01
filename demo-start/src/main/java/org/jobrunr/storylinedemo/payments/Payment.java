@@ -1,4 +1,4 @@
-package org.jobrunr.storylinedemo.payment;
+package org.jobrunr.storylinedemo.payments;
 
 import java.util.Random;
 

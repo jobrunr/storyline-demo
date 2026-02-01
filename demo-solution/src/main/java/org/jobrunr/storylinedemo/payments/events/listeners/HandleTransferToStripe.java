@@ -1,8 +1,8 @@
-package org.jobrunr.storylinedemo.payment.events.listeners;
+package org.jobrunr.storylinedemo.payments.events.listeners;
 
 import org.jobrunr.jobs.context.JobRunrDashboardLogger;
-import org.jobrunr.storylinedemo.payment.Payment;
-import org.jobrunr.storylinedemo.payment.events.ProcessStripePaymentEvent;
+import org.jobrunr.storylinedemo.payments.Payment;
+import org.jobrunr.storylinedemo.payments.events.ProcessStripePaymentEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;

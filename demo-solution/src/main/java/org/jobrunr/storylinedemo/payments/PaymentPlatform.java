@@ -1,4 +1,4 @@
-package org.jobrunr.storylinedemo.payment;
+package org.jobrunr.storylinedemo.payments;
 
 public enum PaymentPlatform {
     JOBRUNR_FINANCE(null),

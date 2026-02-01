@@ -1,4 +1,4 @@
-package org.jobrunr.storylinedemo.payment;
+package org.jobrunr.storylinedemo.payments;
 
 import org.jobrunr.jobs.annotations.Job;
 import org.jobrunr.jobs.annotations.Recurring;

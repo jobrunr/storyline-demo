@@ -1,6 +1,6 @@
-package org.jobrunr.storylinedemo.payment.events;
+package org.jobrunr.storylinedemo.payments.events;
 
-import org.jobrunr.storylinedemo.payment.Payment;
+import org.jobrunr.storylinedemo.payments.Payment;
 import org.springframework.context.ApplicationEvent;
 
 public sealed abstract class ProcessPaymentEvent extends ApplicationEvent

@@ -1,6 +1,6 @@
-package org.jobrunr.storylinedemo.payment.events;
+package org.jobrunr.storylinedemo.payments.events;
 
-import org.jobrunr.storylinedemo.payment.Payment;
+import org.jobrunr.storylinedemo.payments.Payment;
 
 public final class ProcessJobRunrFinancePaymentEvent extends ProcessPaymentEvent {
 

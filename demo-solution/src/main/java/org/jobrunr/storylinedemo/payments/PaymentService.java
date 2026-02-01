@@ -1,4 +1,4 @@
-package org.jobrunr.storylinedemo.payment;
+package org.jobrunr.storylinedemo.payments;
 
 import org.jobrunr.jobs.context.JobContext;
 import org.jobrunr.jobs.context.JobRunrDashboardLogger;
@@ -6,9 +6,9 @@ import org.jobrunr.scheduling.JobScheduler;
 import org.jobrunr.storylinedemo.creditcards.CreditCard;
 import org.jobrunr.storylinedemo.creditcards.CreditCardRepository;
 import org.jobrunr.storylinedemo.exceptions.NonRetryableException;
-import org.jobrunr.storylinedemo.payment.events.ProcessJobRunrFinancePaymentEvent;
-import org.jobrunr.storylinedemo.payment.events.ProcessPayPalPaymentEvent;
-import org.jobrunr.storylinedemo.payment.events.ProcessStripePaymentEvent;
+import org.jobrunr.storylinedemo.payments.events.ProcessJobRunrFinancePaymentEvent;
+import org.jobrunr.storylinedemo.payments.events.ProcessPayPalPaymentEvent;
+import org.jobrunr.storylinedemo.payments.events.ProcessStripePaymentEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
