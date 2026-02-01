@@ -1,7 +1,5 @@
 package org.jobrunr.storylinedemo.creditcards;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,20 +23,30 @@ public class CreditCardController {
     public String showRegistrationForm(Model model) {
         model.addAttribute("creditCard", new CreditCard());
         model.addAttribute("cardTypes", CreditCard.Type.values());
-        return "credit-cards/index";
+        return "credit-cards/register";
     }
 
     @PostMapping("/register")
-    public String processRegistration(@Valid @ModelAttribute("creditCard") CreditCard creditCard, BindingResult bindingResult, Model model, HttpServletRequest request, HttpServletResponse response) {
+    public String processRegistrationForm(@Valid @ModelAttribute("creditCard") CreditCard creditCard, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            return "credit-cards/index";
+            return "credit-cards/register";
         }
 
         creditCardService.processRegistration(creditCard);
         model.addAttribute("creditCard", creditCard);
         model.addAttribute("success", true);
         model.addAttribute("cardTypes", CreditCard.Type.values());
-        return "credit-cards/index";
+        return "credit-cards/register";
+    }
+
+    @GetMapping("/activate")
+    public String showActivationForm(Model model) {
+        return "credit-cards/activate";
+    }
+
+    @PostMapping("/activate")
+    public String processActivationForm(@Valid @ModelAttribute("creditCard") CreditCard creditCard, BindingResult bindingResult, Model model) {
+        creditCardService.processActivation(creditCard);
+        return "credit-cards/activate";
     }
 }
-

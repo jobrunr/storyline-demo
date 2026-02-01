@@ -43,6 +43,7 @@ public class CreditCardService {
         jobScheduler.enqueueOrReplace(jobId, () -> createNewCreditCard(creditCard));
     }
 
+    @Transactional
     public void processActivation(CreditCard creditCard) {
         // Activate the credit card
         CreditCard creditCardFromRepo = creditCardRepository.findByEmail(creditCard.getEmail());

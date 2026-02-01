@@ -1,6 +1,20 @@
 CREATE TABLE IF NOT EXISTS credit_card (
     id BIGSERIAL PRIMARY KEY,
+    number VARCHAR(16) NOT NULL,
     name VARCHAR(200) NOT NULL,
+    balance NUMERIC DEFAULT 0,
     email VARCHAR(255) NOT NULL,
-    type VARCHAR(50) NOT NULL
+    type VARCHAR(50) NOT NULL,
+    state VARCHAR(50) NOT NULL
+);
+
+
+CREATE TABLE IF NOT EXISTS payment (
+    id BIGSERIAL PRIMARY KEY,
+    credit_card_id BIGINT NOT NULL REFERENCES credit_card(id),
+    amount DECIMAL(15,2) NOT NULL,
+    platform VARCHAR(50) NOT NULL,
+    recipient VARCHAR(255) NOT NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'PENDING',
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
