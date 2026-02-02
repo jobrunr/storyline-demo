@@ -11,6 +11,7 @@ description = 'storyline-demo'
 dependencies {
     // Spring dependencies + hot reload, templating, validation, data source autoconfig, metrics actuator
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'io.pebbletemplates:pebble-spring-boot-starter:4.0.0'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
