@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activate Credit Card</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body class="flex-center">
+
+<nav class="page-nav">
+    <a href="/credit-cards/register">Register Card</a>
+    <a href="/credit-cards/activate" class="active">Activate Card</a>
+    <a href="/payments/new">Make Payment</a>
+</nav>
+
+<div class="card-container">
+    <div class="header">
+        <h1>Activate Your Credit Card</h1>
+        <p>Enter your card details below to activate your card.</p>
+    </div>
+
+    <img class="card-image" src="/mastercard.png" alt="Credit card">
+
+    <form action="/credit-cards/activate" method="post">
+        <div class="form-field">
+            <label for="cardNumber">Card Number</label>
+            <input type="text" id="cardNumber" name="cardNumber" placeholder="Enter your 16-digit card number" maxlength="16" value="{{ cardNumber }}">
+            {% if errors.cardNumber %}
+            <p class="error-message">{{ errors.cardNumber }}</p>
+            {% endif %}
+        </div>
+        <div class="form-field">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email address" value="{{ email }}">
+            {% if errors.email %}
+            <p class="error-message">{{ errors.email }}</p>
+            {% endif %}
+        </div>
+        <button type="submit" class="submit-btn">
+            Activate Card
+        </button>
+    </form>
+
+    {% if success %}
+    <div class="success-message">
+        Card activated successfully! You can now start using your card.
+    </div>
+    {% endif %}
+</div>
+
+</body>
+</html>

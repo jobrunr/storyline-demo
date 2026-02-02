@@ -1,9 +1,20 @@
 services:
 
-  postgres:
+  postgres-demo-solution:
     image: postgres:17.5
     ports:
       - "5432:5432"
+    environment:
+      - POSTGRES_DB=demo
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    restart: unless-stopped
+    command: postgres -c 'max_connections=315' -c 'shared_buffers=256MB'
+  
+  postgres-demo-solution:
+    image: postgres:17.5
+    ports:
+      - "5433:5432"
     environment:
       - POSTGRES_DB=demo
       - POSTGRES_USER=postgres

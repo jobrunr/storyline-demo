@@ -29,13 +29,13 @@ It's Monday morning at JobRunr Finance. Thousands of customers are waiting for t
 | 8 | Alert the Team | `onFailure()` chains — Error notifications |
 | 9 | Finding the Needle | Labels — Filter 100K jobs instantly |
 
-### 🔥 Act 3: Under Pressure (2 PM)
+### ⚡️ Act 3: Priority & Concurrency
 *Volume is spiking. Some jobs are more important than others.*
 
 | Step | Title | Feature |
 |------|-------|---------|
 | 10 | VIP Treatment | Priority Queues — Critical jobs first |
-| 11 | Fair Play | Weighted Round-Robin — Enterprise vs Pro customers |
+| 11 | Fair Play | Weighted Round-Robin — AMEX vs MASTERCARD customers |
 | 12 | One Printer, Many Jobs | Mutexes — Exclusive resource access |
 | 13 | The Hung Job | Job Timeouts — Fail stuck jobs automatically |
 

@@ -36,7 +36,7 @@ public class CreditCardService {
         creditCardFromRepo.activate();
         creditCardRepository.save(creditCardFromRepo);
 
-        // Step 2B: Cancel card activation reminder job
+        // TODO Step 2B: Cancel card activation reminder job
     }
 
     // TODO Nice name for the dashboard with customer info
