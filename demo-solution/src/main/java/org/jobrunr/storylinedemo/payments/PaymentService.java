@@ -60,7 +60,9 @@ public class PaymentService {
                 .withQueue(Priority.HIGH)
                 // Step 11: Process more payments on average for premium cards
                 .withLabels("cardType:" + creditCard.getType().name())
+                // Step 14: Payments to Stripe or Paypal can only be processed on dedicated servers
                 .withServerTag(payment.getPlatform().getServerTag())
+                // Step 15A: Payments to Stripe or Paypal are risky if the number of requests are not limited
                 .withRateLimiter(payment.getPlatform().isExternal() ? payment.getPlatform().name() : null)
                 .withDetails(() -> processPayment(payment.getId(), JobContext.Null)));
 
@@ -70,6 +72,7 @@ public class PaymentService {
                     .withName("Reporting big money transfer")
                     // Step 13: Timeout if when HTTP request are taking too long!
                     .withProcessTimeOut(Duration.ofSeconds(30))
+                    // Step 15B: The government app is easily DDoSable, rate-limiting to the rescue!
                     .withRateLimiter("REPORTING")
                     .runAfterSuccessOf(processPaymentJob.asUUID())
                     .withDetails(() -> reportToGovernment(payment.getId())));

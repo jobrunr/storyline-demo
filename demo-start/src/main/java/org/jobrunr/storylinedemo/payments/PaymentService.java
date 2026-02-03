@@ -46,7 +46,10 @@ public class PaymentService {
 
         // TODO Step 10: Payments are high priority!
         // TODO Step 11: Process more payments on average for premium cards
-        // Step 13: Report high transfer to the government and Timeout if when HTTP request are taking too long!
+        // TODO Step 13: Report high transfer to the government and Timeout if when HTTP request are taking too long!
+        // TODO Step 14: Payments to Stripe or Paypal can only be processed on dedicated servers
+        // TODO Step 15A: Payments to Stripe or Paypal are risky if the number of requests are not limited
+        // TODO Step 15B: The government app is easily DDoSable, rate-limiting to the rescue!
     }
 
     public void processPayment(Long paymentId, JobContext context) {

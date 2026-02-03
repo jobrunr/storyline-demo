@@ -25,7 +25,7 @@ solution: |
   The job can then retry with exponential backoff (when the API might be responsive again).
 
 codeReferences:
-  - org/jobrunr/storylinedemo/payments/PaymentService.java?focus=L69-L72
+  - org/jobrunr/storylinedemo/payments/PaymentService.java?focus=L71-L74
 
 tryIt: |
   The export job has a timeout configured. If the government API is slow, 

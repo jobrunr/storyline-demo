@@ -57,10 +57,15 @@ public class CreditCard {
     }
 
     public CreditCard(String number, String name, String email, Type type) {
+        this(number, name, email, type, State.REQUESTED);
+    }
+
+    public CreditCard(String number, String name, String email, Type type, State state) {
         this.number = number;
         this.name = name;
         this.email = email;
         this.type = type;
+        this.state = state;
     }
 
     public static CreditCard randomCreditCard() {
@@ -69,7 +74,8 @@ public class CreditCard {
         var creditCardNumber = randomCreditCardNumber();
         var name = faker.name().fullName();
         var email = faker.internet().safeEmailAddress(name);
-        return new CreditCard(creditCardNumber, name, email, cardType);
+        var state = randomCreditCardState();
+        return new CreditCard(creditCardNumber, name, email, cardType, state);
     }
 
     public Long getId() {
@@ -150,5 +156,10 @@ public class CreditCard {
 
     private static String randomCreditCardNumber() {
         return new Faker().finance().creditCard(CreditCardType.valueOf(randomCreditCardType().name())).replace("-", "");   
+    }
+
+    private static State randomCreditCardState() {
+        int r = new Random().nextInt(State.values().length);
+        return State.values()[r];
     }
 }

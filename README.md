@@ -39,13 +39,13 @@ It's Monday morning at JobRunr Finance. Thousands of customers are waiting for t
 | 12 | One Printer, Many Jobs | Mutexes — Exclusive resource access |
 | 13 | The Hung Job | Job Timeouts — Fail stuck jobs automatically |
 
-### 🌍 Act 4: Global Operations (5 PM)
+### 🌍 Act 4: Scaling Out (5 PM)
 *International markets are opening. Time to scale across borders.*
 
 | Step | Title | Feature |
 |------|-------|---------|
-| 14 | Cross-Border Payments | Server Tags — Route to certified servers |
-| 15 | Don't DDoS the Government | Rate Limiters — Throttle external API calls |
+| 14 | Different Tracks | Server Tags — Route to servers with credentials |
+| 15 | Go Easy on Your Partners | Rate Limiters — Throttle external API calls |
 | 16 | Track Every Transaction | Progress Bars + Logging — Real-time visibility |
 
 ### 🛡️ Act 5: Production Ready (8 PM)
@@ -106,10 +106,10 @@ This starts PostgreSQL, Prometheus, and Jaeger.
 | Jaeger | http://localhost:16686/ |
 | Government API | http://localhost:8089/ |
 
-### 5. Start the International Server (Step 14)
+### 5. Start the External Server (Step 14)
 
 ```bash
-./gradlew :demo-solution:bootRun --args='--server.port=8081 --jobrunr.dashboard.enabled=false --jobrunr.background-job-server.tags=international'
+./gradlew :demo-solution:bootRun --args='--server.port=8081 --jobrunr.dashboard.enabled=false --jobrunr.background-job-server.tags=external'
 ```
 
 ---

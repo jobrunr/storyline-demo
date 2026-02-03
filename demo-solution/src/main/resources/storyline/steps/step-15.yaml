@@ -1,39 +1,40 @@
-title: "Don't DDoS the Government"
+title: "Go Easy on Your Partners"
 estimatedTime: PT4M
 
 scenario: |
-  International payments must be exported to a government compliance API.
-  The API can only handle 3 concurrent requests — if we send more, we get rate-limited.
+  External APIs don't appreciate being hammered. PayPal blocks you after too many
+  concurrent requests. Stripe charges overage fees if you exceed per-minute limits.
+  And the government compliance API? You might just DDoS them...
   <br><br>
-  We need to throttle our job execution to respect external API limits.
+  We need to throttle our requests to stay within each provider's limits.
 
 challenge: |
-  How do we throttle job execution to respect external API limits?
+  How do we throttle requests to stay within each provider's limits?
 
 solution: |
-  Use a <strong>Rate Limiter</strong> to control concurrent executions:
+  Use <strong>Rate Limiters</strong> — JobRunr Pro offers two types:
   <br><br>
   <pre class="p-0 m-0">
-  <code class="language-java hljs">
-  // In application.properties
-  jobrunr.jobs.rate-limiter.concurrent-job-rate-limiter.government-api=3
+  <code class="language-properties hljs">
+  # Concurrent Rate Limiter — max simultaneous jobs
+  jobrunr.jobs.rate-limiter.concurrent-job-rate-limiter.PAYPAL=5
+  jobrunr.jobs.rate-limiter.concurrent-job-rate-limiter.REPORTING=3
 
-  // In your code
-  jobScheduler.create(aJob()
-      .withRateLimiter("government-api")
-      .withDetails(() -> exportToGovernment(payment)));
-  </code>
-  </pre>
+  # Sliding Time Window Rate Limiter — max jobs per time window
+  jobrunr.jobs.rate-limiter.sliding-time-window-rate-limiter.STRIPE=10/PT1M
+  </code></pre>
   <br>
-  JobRunr ensures only 3 jobs call the government API simultaneously, 
-  even if you have 100 workers!
+  PayPal: max 5 concurrent. Stripe: max 10 per minute. Government: max 3 concurrent.
+  <br>
+  No more angry API providers or surprise bills!
 
 codeReferences:
-  - org/jobrunr/storylinedemo/payment/PaymentService.java?focus=L44-L49
+  - org/jobrunr/storylinedemo/payments/PaymentService.java?focus=L53-L80
 
 tryIt: |
-  Trigger 100 international payments. Watch them export to the government 
-  API exactly 3 at a time — never overwhelming the external system.
+  Create bulk payments across all platforms. Watch the dashboard — PayPal and
+  government jobs process 5 and 3 at a time, while Stripe jobs spread evenly
+  across each minute.
 
 dashboardUrl: http://localhost:8080/dashboard/jobs
 

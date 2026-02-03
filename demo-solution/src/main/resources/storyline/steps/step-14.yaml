@@ -1,42 +1,42 @@
-title: "Cross-Border Payments"
+title: "Different Tracks"
 estimatedTime: PT5M
 
 scenario: |
-  Cross-border payments require special compliance certifications that 
-  only certain servers have. Domestic servers cannot process international 
-  payments — it's a regulatory requirement.
+  PayPal and Stripe require API credentials that the security team mandates
+  must only exist on dedicated, hardened servers. Internal JobRunr Finance
+  transfers don't need these keys and can run anywhere.
   <br><br>
-  We need to route specific jobs to specific servers based on their capabilities.
+  We need to ensure external payments only run on servers with the right credentials.
 
 challenge: |
-  How do we route specific jobs to specific servers based on their capabilities?
+  How do we ensure external payments only run on servers with the right credentials?
 
 solution: |
   Use <strong>Server Tags</strong> to match jobs with capable servers:
   <br><br>
   <pre class="p-0 m-0">
   <code class="language-java hljs">
-  // Tag the job
+  // Tag the job based on platform
   jobScheduler.create(aJob()
-      .withServerTag(payment.getRegion())  // "international" or "national"
+      .withServerTag(payment.getPlatform().getServerTag())
       .withDetails(() -> processPayment(payment)));
 
-  // In application.properties
-  jobrunr.background-job-server.tags=national  // This server handles national only
-  </code>
-  </pre>
+  // In application.properties (on dedicated servers only)
+  jobrunr.background-job-server.tags=external
+  </code></pre>
   <br>
-  Start a second server with <code>tags=international</code> to handle cross-border payments!
+  Start a dedicated server with <code>jobrunr.background-job-server.tags=external</code> to process PayPal and Stripe payments securely!
 
 codeReferences:
-  - org/jobrunr/storylinedemo/payment/PaymentService.java?focus=L36-L42
+  - org/jobrunr/storylinedemo/payments/PaymentService.java?focus=L57-L64
 
 tryIt: |
-  1. Process payments (some are international, some national)
-  2. Watch national payments process immediately
-  3. International payments wait in SCHEDULED until you start the international server:
-  <br><br>
-  <code>./gradlew :demo-solution:bootRun --args='--server.port=8081 --jobrunr.dashboard.enabled=false --jobrunr.background-job-server.tags=international'</code>
+  <ol>
+    <li>Create payments for all three platforms</li>
+    <li>JobRunr Finance payments process immediately on any server</li>
+    <li>PayPal/Stripe payments wait until you start the external server:<br><br>
+    <code>./gradlew :demo-solution:bootRun --args='--server.port=8081 --jobrunr.dashboard.enabled=false --jobrunr.background-job-server.tags=external'</code></li>
+  </ol>
 
 dashboardUrl: http://localhost:8080/dashboard/servers
 
