@@ -25,11 +25,11 @@ solution: |
   You can combine <code>continueWith()</code> and <code>onFailure()</code> for complete workflows!
 
 codeReferences:
-  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L32-L40
+  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L32-L41
 
 tryIt: |
   Watch the summary job fail (it has a 50% failure rate!) and see the notification job trigger automatically. 
-  It did not fail? Then no worries, JobRunr moved the `onFailure` Job to `NOT_APPLICABLE` state.
+  It did not fail? Then no worries, JobRunr moved the `onFailure` Job to <code>NOT_APPLICABLE</code> state.
 
 dashboardUrl: http://localhost:8080/dashboard/jobs?state=FAILED
 

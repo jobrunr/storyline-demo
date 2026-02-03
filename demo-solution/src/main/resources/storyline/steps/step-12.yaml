@@ -19,8 +19,7 @@ solution: |
   public void generatePDF(Statement statement) {
       pdfService.print(statement); // Only one job runs at a time
   }
-  </code>
-  </pre>
+  </code></pre>
   <br>
   Jobs with the same mutex are processed one at a time. Others wait in 
   <code>AWAITING</code> state until the mutex is released.
@@ -29,7 +28,7 @@ solution: |
   one mutex per printer ID!
 
 codeReferences:
-  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L47-L51
+  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L51-L56
 
 tryIt: |
   Generate multiple statements and watch them process one at a time, 

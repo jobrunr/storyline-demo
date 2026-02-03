@@ -39,7 +39,7 @@ public class CreditCardService {
         // TODO Step 2B: Cancel card activation reminder job
     }
 
-    // TODO Nice name for the dashboard with customer info
+    // TODO Give a nice name for the dashboard with customer info
     public void createNewCreditCard(CreditCard creditCard) {
         // Step 1: Save to repository
         var creditCardFromRepo = creditCardRepository.save(creditCard);

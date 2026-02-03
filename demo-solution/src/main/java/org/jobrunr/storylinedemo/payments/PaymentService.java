@@ -9,6 +9,7 @@ import org.jobrunr.storylinedemo.exceptions.NonRetryableException;
 import org.jobrunr.storylinedemo.payments.events.ProcessJobRunrFinancePaymentEvent;
 import org.jobrunr.storylinedemo.payments.events.ProcessPayPalPaymentEvent;
 import org.jobrunr.storylinedemo.payments.events.ProcessStripePaymentEvent;
+import org.jobrunr.storylinedemo.queues.Priority;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.jobrunr.scheduling.JobBuilder.aJob;
+
+import java.time.Duration;
 
 @Service
 public class PaymentService {
@@ -52,8 +55,10 @@ public class PaymentService {
                 .orElseThrow(() -> new IllegalArgumentException("Credit card not found: " + payment.getCreditCardId()));
 
         var processPaymentJob = jobScheduler.create(aJob()
-                .withQueue("high-prio")
                 .withName("Process payment #" + payment.getId())
+                // Step 10: Payments are high priority!
+                .withQueue(Priority.HIGH)
+                // Step 11: Process more payments on average for premium cards
                 .withLabels("cardType:" + creditCard.getType().name())
                 .withServerTag(payment.getPlatform().getServerTag())
                 .withRateLimiter(payment.getPlatform().isExternal() ? payment.getPlatform().name() : null)
@@ -63,6 +68,8 @@ public class PaymentService {
         if (payment.requiresGovernmentReporting()) {
             jobScheduler.create(aJob()
                     .withName("Reporting big money transfer")
+                    // Step 13: Timeout if when HTTP request are taking too long!
+                    .withProcessTimeOut(Duration.ofSeconds(30))
                     .withRateLimiter("REPORTING")
                     .runAfterSuccessOf(processPaymentJob.asUUID())
                     .withDetails(() -> reportToGovernment(payment.getId())));

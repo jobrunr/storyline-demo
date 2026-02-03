@@ -27,7 +27,7 @@ solution: |
   the charge and continue from the receipt.
 
 codeReferences:
-  - org/jobrunr/storylinedemo/payment/PaymentService.java?focus=L72-L85
+  - org/jobrunr/storylinedemo/payments/PaymentService.java?focus=L79-L92
 
 tryIt: |
   Make a payment using the credit card you've created earlier and watch the job context track completed steps. 

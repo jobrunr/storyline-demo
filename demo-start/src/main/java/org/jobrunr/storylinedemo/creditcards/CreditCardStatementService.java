@@ -44,6 +44,7 @@ public class CreditCardStatementService {
     public void generateStatementsWithProgress(JobContext context) {
     }
 
+    // TODO Step 10 (bonus): Summary reports are lowest priority
     @Job(name = "Generate Summary Report", retries = 3)
     public void generateSummaryReport() {
         generatePDFThatSometimesFails();

@@ -19,14 +19,13 @@ solution: |
   public void callExternalAPI() {
       externalService.callSlowAPI();
   }
-  </code>
-  </pre>
+  </code></pre>
   <br>
-  If the job exceeds the timeout, JobRunr marks it as FAILED and frees the worker.
+  If the job exceeds the timeout, JobRunr marks it as <code>FAILED</code> and frees the worker.
   The job can then retry with exponential backoff (when the API might be responsive again).
 
 codeReferences:
-  - org/jobrunr/storylinedemo/payment/PaymentService.java?focus=L83-L88
+  - org/jobrunr/storylinedemo/payments/PaymentService.java?focus=L69-L72
 
 tryIt: |
   The export job has a timeout configured. If the government API is slow, 

@@ -5,6 +5,7 @@ import org.jobrunr.jobs.annotations.Recurring;
 import org.jobrunr.jobs.context.JobContext;
 import org.jobrunr.jobs.context.JobDashboardProgressBar;
 import org.jobrunr.scheduling.JobScheduler;
+import org.jobrunr.storylinedemo.queues.Priority;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -73,7 +74,7 @@ public class CreditCardStatementService {
         context.logger().info("All statements generated successfully!");
     }
 
-    @Job(name = "Generate Summary Report", retries = 3)
+    @Job(name = "Generate Summary Report", queue = Priority.LOW, retries = 3)
     public void generateSummaryReport() {
         generatePDFThatSometimesFails();
         LOGGER.info("Summary Report generated");

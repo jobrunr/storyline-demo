@@ -43,13 +43,17 @@ public class PaymentService {
     private void createPaymentProcessingJob(Payment payment) {
         jobScheduler.create(aJob()
                 .withDetails(() -> processPayment(payment.getId(), JobContext.Null)));
+
+        // TODO Step 10: Payments are high priority!
+        // TODO Step 11: Process more payments on average for premium cards
+        // Step 13: Report high transfer to the government and Timeout if when HTTP request are taking too long!
     }
 
     public void processPayment(Long paymentId, JobContext context) {
         Payment payment = paymentRepository.findById(paymentId)
                 .orElseThrow(() -> new IllegalArgumentException("Payment not found: " + paymentId));
 
-        // TODO Step 6 - use context.runStepOnce to avoid double charging and double paying in case of a retry
+        // TODO Step 6: use context.runStepOnce to avoid double charging and double paying in case of a retry
     }
 
     public void markPaymentAsProcessing(Payment payment) {
