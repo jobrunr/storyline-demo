@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Controller
 @RequestMapping("/credit-cards")
 public class CreditCardController {
@@ -28,14 +31,15 @@ public class CreditCardController {
 
     @PostMapping("/register")
     public String processRegistrationForm(@Valid @ModelAttribute("creditCard") CreditCard creditCard, BindingResult bindingResult, Model model) {
+        model.addAttribute("cardTypes", CreditCard.Type.values());
         if (bindingResult.hasErrors()) {
+            model.addAttribute("errors", fieldErrors(bindingResult));
             return "credit-cards/register";
         }
 
         creditCardService.processRegistration(creditCard);
         model.addAttribute("creditCard", creditCard);
         model.addAttribute("success", true);
-        model.addAttribute("cardTypes", CreditCard.Type.values());
         return "credit-cards/register";
     }
 
@@ -46,7 +50,19 @@ public class CreditCardController {
 
     @PostMapping("/activate")
     public String processActivationForm(@Valid @ModelAttribute("creditCard") CreditCard creditCard, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("errors", fieldErrors(bindingResult));
+            return "credit-cards/activate";
+        }
         creditCardService.processActivation(creditCard);
         return "credit-cards/activate";
+    }
+
+    private Map<String, String> fieldErrors(BindingResult bindingResult) {
+        return bindingResult.getFieldErrors().stream()
+                .collect(Collectors.toMap(
+                        e -> e.getField(),
+                        e -> e.getDefaultMessage(),
+                        (a, b) -> a));
     }
 }

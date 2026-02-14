@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/payments")
@@ -36,6 +38,7 @@ public class PaymentController {
     public String processPaymentForm(@Valid @ModelAttribute("payment") Payment payment,
                                      BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("errors", fieldErrors(bindingResult));
             populateFormData(model);
             return "payments/new";
         }
@@ -45,6 +48,14 @@ public class PaymentController {
         model.addAttribute("success", true);
         populateFormData(model);
         return "payments/new";
+    }
+
+    private Map<String, String> fieldErrors(BindingResult bindingResult) {
+        return bindingResult.getFieldErrors().stream()
+                .collect(Collectors.toMap(
+                        e -> e.getField(),
+                        e -> e.getDefaultMessage(),
+                        (a, b) -> a));
     }
 
     private void populateFormData(Model model) {
