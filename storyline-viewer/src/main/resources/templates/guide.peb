@@ -26,8 +26,8 @@
             <div class="navbar-end">
                 <div class="navbar-item navbar-progress">
                     <span style="margin-right: 0.5rem;">Progress:</span>
-                    <span id="progress-text">0/12</span>
-                    <progress class="progress is-primary" value="0" max="12" id="progress-bar">0%</progress>
+                    <span id="progress-text">0/{{ storyline.storylineMetadata.totalAmountOfSteps }}</span>
+                    <progress class="progress is-primary" value="0" max="{{ storyline.storylineMetadata.totalAmountOfSteps }}" id="progress-bar">0%</progress>
                 </div>
             </div>
         </div>

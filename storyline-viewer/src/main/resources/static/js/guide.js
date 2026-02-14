@@ -140,7 +140,7 @@ function markStepVisually(stepNumber, state) {
 // Update progress bar and text
 function updateProgressDisplay() {
     const completed = getCompletedSteps();
-    const total = 12;
+    const total = document.querySelectorAll('.timeline-item[data-step]').length;
     const progressBar = document.getElementById('progress-bar');
     const progressText = document.getElementById('progress-text');
 
