@@ -16,7 +16,7 @@ function init() {
     // Re-initialize after HTMX loads new content
     document.body.addEventListener('htmx:afterSettle', function(event) {
         const target = event.detail.target;
-        const codeElement = target.querySelector('code:not([data-highlighted])');
+        const codeElement = target.querySelector('pre code:not([data-highlighted])');
         if (codeElement) {
             hljs.highlightElement(codeElement);
         }
@@ -29,6 +29,7 @@ function init() {
     });
 
     // Initialize on first load
+    initializeTabSwitching();
     initializeCompleteButtons();
     updateTimeline();
 }

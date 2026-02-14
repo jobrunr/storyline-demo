@@ -302,6 +302,11 @@ pre code {
     margin-left: 1.75rem;
 }
 
+.box.has-background-light {
+    background: #f0f9ff !important;
+    border-left: 4px solid var(--jobrunr-cyan);
+}
+
 .box.has-background-warning-light {
     background: #fffbeb !important;
     border-left: 4px solid #f59e0b;

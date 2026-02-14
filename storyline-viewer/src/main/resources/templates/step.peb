@@ -34,10 +34,18 @@
         </div>
     </div>
 
+    <!-- The Scenario -->
+    {% if step.scenario %}
+    <div class="box has-background-light">
+        <h3 class="title is-4">The Scenario</h3>
+        <p class="is-size-5">{{ step.scenario | raw }}</p>
+    </div>
+    {% endif %}
+
     <!-- The Challenge -->
     <div class="box has-background-warning-light">
         <h3 class="title is-4">The Challenge</h3>
-        <p class="is-size-5">{{ step.challenge }}</p>
+        <p class="is-size-5">{{ step.challenge | raw }}</p>
     </div>
 
     <!-- The Solution -->

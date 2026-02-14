@@ -82,6 +82,7 @@ public class StorylineReader {
             stepYaml.icon,
             stepYaml.estimatedTime,
             category,
+            stepYaml.scenario,
             stepYaml.challenge,
             stepYaml.solution,
             stepYaml.tryIt,
@@ -120,6 +121,7 @@ public class StorylineReader {
         public String title;
         public String icon;
         public Duration estimatedTime;
+        public String scenario;
         public String challenge;
         public String solution;
         public String tryIt;
