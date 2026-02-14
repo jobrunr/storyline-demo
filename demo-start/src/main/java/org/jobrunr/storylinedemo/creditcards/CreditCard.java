@@ -69,12 +69,15 @@ public class CreditCard {
     }
 
     public static CreditCard randomCreditCard() {
+        return randomCreditCard(randomCreditCardState());
+    }
+
+    public static CreditCard randomCreditCard(State state) {
         var faker = new Faker();
         var cardType = randomCreditCardType();
         var creditCardNumber = randomCreditCardNumber();
         var name = faker.name().fullName();
         var email = faker.internet().safeEmailAddress(name);
-        var state = randomCreditCardState();
         return new CreditCard(creditCardNumber, name, email, cardType, state);
     }
 

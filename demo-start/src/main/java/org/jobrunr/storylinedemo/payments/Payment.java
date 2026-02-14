@@ -8,7 +8,7 @@ import org.springframework.data.annotation.Id;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Random;
+import java.util.List;
 
 public class Payment {
 
@@ -49,14 +49,14 @@ public class Payment {
         this.recipient = recipient;
     }
 
-    public static Payment randomPayment(Long creditCardId) {
+    public static Payment randomPayment(Long creditCardId, List<String> activeCardNumbers) {
         var faker = new Faker();
-        var platform = PaymentPlatform.values()[new Random().nextInt(PaymentPlatform.values().length)];
-        var amount = BigDecimal.valueOf(new Random().nextDouble(1, 15000));
+        var platform = PaymentPlatform.values()[faker.random().nextInt(PaymentPlatform.values().length)];
+        var amount = BigDecimal.valueOf(faker.random().nextDouble(1, 15000));
         String recipient = switch (platform) {
             case PAYPAL -> faker.internet().emailAddress();
             case STRIPE -> "acct_" + faker.expression("#{letterify '????????????????'}");
-            case JOBRUNR_FINANCE -> faker.finance().creditCard().replace("-", "");
+            case JOBRUNR_FINANCE -> activeCardNumbers.get(faker.random().nextInt(activeCardNumbers.size()));
         };
         return new Payment(creditCardId, amount, platform, recipient);
     }

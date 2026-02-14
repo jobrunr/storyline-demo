@@ -9,6 +9,7 @@ import org.jobrunr.storylinedemo.creditcards.CreditCardStatementService;
 import org.jobrunr.storylinedemo.payments.PaymentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import org.jobrunr.storylinedemo.payments.Payment;
 
@@ -36,8 +37,8 @@ public class AdminController {
     // ----- Bulk Operations for Demo -----
     
     @GetMapping({"/bulk-add-cards"})
-    public String bulkAddCreditCards() {
-        for (int i = 1; i <= 100; i++) {
+    public String bulkAddCreditCards(@RequestParam(defaultValue = "100") int count) {
+        for (int i = 0; i < Math.min(count, 1000); i++) {
             var creditCard = CreditCard.randomCreditCard();
             this.creditCardService.processRegistration(creditCard);
         }
@@ -45,8 +46,8 @@ public class AdminController {
     }
 
     @GetMapping({"/bulk-generate-expenses"})
-    public String bulkGenerateExpenses() {
-        for (int i = 1; i <= 100; i++) {
+    public String bulkGenerateExpenses(@RequestParam(defaultValue = "100") int count) {
+        for (int i = 0; i < Math.min(count, 1000); i++) {
             var creditCard = CreditCard.randomCreditCard();
             jobScheduler.enqueue(() -> creditCardStatementService.generateExpenseReportFor(creditCard));
         }
@@ -54,8 +55,8 @@ public class AdminController {
     }
 
     @GetMapping({"/bulk-generate-summary-reports"})
-    public String bulkGenerateSummaryReports() {
-        for (int i = 1; i <= 100; i++) {
+    public String bulkGenerateSummaryReports(@RequestParam(defaultValue = "100") int count) {
+        for (int i = 0; i < Math.min(count, 1000); i++) {
             jobScheduler.enqueue(() -> creditCardStatementService.generateSummaryReport());
         }
         return "redirect:/";
@@ -73,17 +74,17 @@ public class AdminController {
     // ----- Bulk Create Payments (Rate Limiters & Server Tags Demo) -----
 
     @GetMapping({"/bulk-create-payments"})
-    public String bulkCreatePayments() {
+    public String bulkCreatePayments(@RequestParam(defaultValue = "100") int count) {
         var activeCards = creditCardRepository.findRandomActiveCards(50);
-
         if (activeCards.isEmpty()) {
-            bulkAddCreditCards();
-            activeCards = creditCardRepository.findRandomActiveCards(50);
+            throw new IllegalStateException("No active credit cards found. Please create some cards first via /bulk-add-cards.");
         }
 
-        for (int i = 0; i < 100; i++) {
+        var activeCardNumbers = activeCards.stream().map(CreditCard::getNumber).toList();
+
+        for (int i = 0; i < Math.min(count, 1000); i++) {
             var randomCard = activeCards.get(i % activeCards.size());
-            var payment = Payment.randomPayment(randomCard.getId());
+            var payment = Payment.randomPayment(randomCard.getId(), activeCardNumbers);
             paymentService.submitPayment(payment);
         }
 
