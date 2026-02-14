@@ -1,6 +1,7 @@
 package org.jobrunr.storylinedemo.creditcards;
 
 import org.jobrunr.jobs.annotations.Job;
+import org.jobrunr.scheduling.JobProId;
 import org.jobrunr.scheduling.JobScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,12 +26,12 @@ public class CreditScoreService {
         this.jobScheduler = jobScheduler;
     }
 
-    // Step 17A: It takes time to compute credit scores, the job id can be used for polling the result
+    // TODO Step 17A: It takes time to compute credit scores, the job id can be used for polling the result
     public UUID requestCreditScoreCalculation(String customerId) {        
         // Enqueue the calculation - it returns a CreditScore result
-        var id = jobScheduler.enqueue(() -> calculateCreditScore(customerId));
-        
-        return id.asUUID();
+
+        // Return the job's id
+        return null;
     }
 
     /**

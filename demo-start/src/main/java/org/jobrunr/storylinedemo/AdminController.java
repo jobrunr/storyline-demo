@@ -10,22 +10,7 @@ import org.jobrunr.storylinedemo.payments.PaymentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import org.jobrunr.jobs.context.JobContext;
-import org.jobrunr.scheduling.JobScheduler;
-import org.jobrunr.storylinedemo.creditcards.CreditCard;
-import org.jobrunr.storylinedemo.creditcards.CreditCardRepository;
-import org.jobrunr.storylinedemo.creditcards.CreditCardService;
-import org.jobrunr.storylinedemo.creditcards.CreditCardStatementService;
 import org.jobrunr.storylinedemo.payments.Payment;
-import org.jobrunr.storylinedemo.payments.PaymentService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.Map;
-import java.util.UUID;
 
 @Controller
 public class AdminController {

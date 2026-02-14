@@ -2,39 +2,35 @@ title: "Debug Like a Detective"
 estimatedTime: PT5M
 
 scenario: |
-  A payment failed. The customer says they submitted it, the job says it ran,
-  but the government API says they never received it.
+  After a routine redeploy, credit card creation jobs are taking 10x longer
+  than usual. Users are complaining, but the code hasn't changed.
   <br><br>
-  We need to trace the entire journey: web request → job → external API.
+  We need to identify which step or resource is causing the slowdown.
 
 challenge: |
-  How do we debug issues that span multiple services and background jobs?
+  How do we identify which step or resource is slowing down our jobs?
 
 solution: |
-  JobRunr Pro integrates with <strong>distributed tracing</strong> via OpenTelemetry:
+  JobRunr Pro integrates with <strong>OpenTelemetry</strong> to provide detailed job traces:
   <br><br>
   <pre class="p-0 m-0">
   <code class="language-properties hljs">
   # In application.properties
   management.tracing.sampling.probability=1.0
-  management.otlp.tracing.endpoint=http://localhost:4318/v1/traces
+  management.opentelemetry.tracing.export.otlp.endpoint=http://localhost:4318/v1/traces
   jobrunr.jobs.metrics.otel-observability.enabled=true
-  </code>
-  </pre>
+  </code></pre>
   <br>
-  Each job carries the trace context, so you can follow a request from 
-  the web endpoint through job processing to external API calls.
-  <br><br>
-  View traces in Jaeger to see the complete picture!
-
-codeReferences:
-  - org/jobrunr/storylinedemo/payment/PaymentService.java?focus=L83-L88
+  JobRunr automatically creates spans for job execution, so you can pinpoint
+  exactly where time is being spent — whether it's the database, an external API,
+  or your own code.
 
 tryIt: |
-  1. Make a payment that calls the government API
-  2. Open Jaeger: <a href="http://localhost:16686" target="_blank">http://localhost:16686</a>
-  3. Search for traces with service "storyline-demo"
-  4. Follow the trace through all services!
+  <ol>
+    <li>Register a credit card and watch the job complete</li>
+    <li>Open <a href="http://localhost:16686" target="_blank">Jaeger</a> and search for service "storyline-demo"</li>
+    <li>Analyze the different spans of the job's trace to find the bottleneck</li>
+  </ol>
 
 dashboardUrl: http://localhost:16686
 

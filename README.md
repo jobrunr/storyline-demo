@@ -39,7 +39,7 @@ It's Monday morning at JobRunr Finance. Thousands of customers are waiting for t
 | 12 | One Printer, Many Jobs | Mutexes — Exclusive resource access |
 | 13 | The Hung Job | Job Timeouts — Fail stuck jobs automatically |
 
-### 🌍 Act 4: Scaling Out (5 PM)
+### 🌍 Act 4: Scaling Out
 *International markets are opening. Time to scale across borders.*
 
 | Step | Title | Feature |
@@ -48,7 +48,7 @@ It's Monday morning at JobRunr Finance. Thousands of customers are waiting for t
 | 15 | Go Easy on Your Partners | Rate Limiters — Throttle external API calls |
 | 16 | Track Every Transaction | Progress Bars + Logging — Real-time visibility |
 
-### 🛡️ Act 5: Production Ready (8 PM)
+### 📈 Act 5: Production Ready
 *Preparing for tomorrow. Monitoring, debugging, and continuous improvement.*
 
 | Step | Title | Feature |

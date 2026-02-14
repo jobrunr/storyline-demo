@@ -24,19 +24,20 @@ solution: |
 
   // Replace the job with updated data
   jobScheduler.enqueueOrReplace(jobId, () -> processApplication(customer));
-  </code>
-  </pre>
+  </code></pre>
   <br>
   If the job is already processing, it will be interrupted and restarted with 
   the new data!
 
 codeReferences:
-  - org/jobrunr/storylinedemo/creditcards/CreditCardService.java?focus=L35-L40
+  - org/jobrunr/storylinedemo/creditcards/CreditCardService.java?focus=L38-L44
 
 tryIt: |
-  1. Register a credit card
-  2. Immediately update the registration with new details
-  3. Watch the job get replaced in the dashboard!
+  <ul>
+  <ol>Register a credit card</ol>
+  <ol>Immediately update the registration with new details</ol>
+  <ol>Watch the job get replaced in the dashboard!</ol>
+  </ul>
 
 tryItUrl: /credit-cards/register
 dashboardUrl: http://localhost:8080/dashboard/jobs

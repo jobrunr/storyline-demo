@@ -29,20 +29,19 @@ solution: |
       }
       throw new RetryAfterException(result.backoffPeriod());
   }
-  </code>
-  </pre>
+  </code></pre>
   <br>
   JobRunr serializes the result and stores it in the database, 
   preventing (D)DOS from polling clients!
 
 codeReferences:
-  - org/jobrunr/storylinedemo/creditcards/CreditScoreService.java?focus=L30-L50
+  - org/jobrunr/storylinedemo/creditcards/CreditScoreService.java?focus=L28-L34
+  - org/jobrunr/storylinedemo/creditcards/CreditScoreController.java?focus=L37-L52
 
 tryIt: |
   Request a credit score calculation via the API. Poll for the result 
   and watch it appear once the background job completes.
 
-tryItUrl: /credit-score/request
 dashboardUrl: http://localhost:8080/dashboard/jobs
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/results/

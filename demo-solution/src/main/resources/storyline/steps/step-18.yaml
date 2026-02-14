@@ -6,7 +6,7 @@ scenario: |
   How many jobs are we processing per minute? What's the failure rate? 
   Are queues backing up?
   <br><br>
-  They need metrics that feed into Prometheus and Grafana.
+  They need metrics that feed into Prometheus and Grafana (or some competing observability platform).
 
 challenge: |
   How do we expose job metrics for monitoring and alerting systems?
@@ -19,14 +19,13 @@ solution: |
   # In application.properties
   jobrunr.jobs.metrics.enabled=true
   jobrunr.jobs.metrics.micrometer-timers.enabled=true
-  </code>
-  </pre>
+  </code></pre>
   <br>
   Available metrics include:
   <ul>
     <li><code>jobrunr_jobs_by_state</code> — Jobs per state (ENQUEUED, PROCESSING, etc.)</li>
-    <li><code>jobrunr_jobs_processed_total</code> — Total jobs processed</li>
-    <li><code>jobrunr_jobs_failed_total</code> — Total failed jobs</li>
+    <li><code>jobrunr_jobs_in_progress</code> — Jobs in progress</li>
+    <li><code>jobrunr_jobs_runs_*</code> — Jobs execution times</li>
     <li><code>jobrunr_background_job_server_*</code> — Server health metrics</li>
   </ul>
 
@@ -38,7 +37,7 @@ tryIt: |
   <br><br>
   <a href="http://localhost:9090/query?g0.expr=jobrunr_jobs_by_state" target="_blank">http://localhost:9090</a>
   <br><br>
-  Try: <code>jobrunr_jobs_by_state</code> or <code>rate(jobrunr_jobs_processed_total[5m])</code>
+  Try: <code>jobrunr_jobs_by_state</code> or <code>rate(jobrunr_jobs_in_progress_seconds_count[5m])</code>
 
 dashboardUrl: http://localhost:9090/query?g0.expr=jobrunr_jobs_by_state
 
