@@ -1,5 +1,0 @@
-<div class="notification is-success is-light">
-    <button class="delete" onclick="this.parentElement.remove()"></button>
-    <p><strong>Success!</strong></p>
-    <p>{{ message }}</p>
-</div>

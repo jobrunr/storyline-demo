@@ -51,6 +51,7 @@ public class StorylineReader {
 
             return new Storyline(
                     index.title,
+                    index.icon,
                     index.subtitle,
                     index.slogan,
                     index.intro,
@@ -103,6 +104,7 @@ public class StorylineReader {
     // DTOs for YAML deserialization
     private static class IndexYaml {
         public String title;
+        public String icon;
         public String subtitle;
         public String slogan;
         public String intro;

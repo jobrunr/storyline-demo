@@ -6,6 +6,7 @@ import java.util.SequencedMap;
 
 public record Storyline(
     String title,
+    String icon,
     String subTitle,
     String slogan,
     String intro,
