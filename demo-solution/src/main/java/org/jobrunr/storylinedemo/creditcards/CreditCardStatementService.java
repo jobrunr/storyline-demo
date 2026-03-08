@@ -5,6 +5,7 @@ import org.jobrunr.jobs.annotations.Recurring;
 import org.jobrunr.jobs.context.JobContext;
 import org.jobrunr.jobs.context.JobDashboardProgressBar;
 import org.jobrunr.scheduling.JobScheduler;
+import org.jobrunr.storage.StorageProvider;
 import org.jobrunr.storylinedemo.queues.Priority;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +22,12 @@ public class CreditCardStatementService {
 
     private final JobScheduler jobScheduler;
     private final CreditCardRepository creditCardRepository;
+    private final StorageProvider storageProvider;
 
-    public CreditCardStatementService(CreditCardRepository creditCardRepository, JobScheduler jobScheduler) {
+    public CreditCardStatementService(CreditCardRepository creditCardRepository, JobScheduler jobScheduler, StorageProvider storageProvider) {
         this.creditCardRepository = creditCardRepository;
         this.jobScheduler = jobScheduler;
+        this.storageProvider = storageProvider;
     }
 
     // Step 3: Advanced cron - Run on the LAST BUSINESS DAY of each month (not just last day!)
@@ -35,9 +38,11 @@ public class CreditCardStatementService {
         // Step 7: Start a batch to process all statements atomically
         jobScheduler
                 .startBatch(this::generateMonthlyExpensesForEachCreditCard)
-                .continueWith(this::generateSummaryReport)
-                // Step 8: Add onFailure to notify the team if something goes wrong
-                .onFailure(this::notifyOpsTeam);
+                .continueWith(
+                    /* onSuccess */ this::generateSummaryReport,
+                    // Step 8: Add onFailure to notify the team if something goes wrong
+                    /* onFailure */ () -> notifyOpsTeam(JobContext.Null)
+                );
     }
 
     @Job(name = "Generate Monthly Credit Card Statements for all Cardholders")
@@ -82,8 +87,11 @@ public class CreditCardStatementService {
 
     // Step 8: Notification job that runs when the batch fails
     @Job(name = "Notify Ops Team of Failure")
-    public void notifyOpsTeam() {
-        LOGGER.error("🚨 ALERT: Monthly statement generation failed! Notifying ops team via Slack...");
+    public void notifyOpsTeam(JobContext context) {
+        var batchJobId = context.getAwaitedJob();
+        var batchJob = storageProvider.getJobById(batchJobId);
+        var progressBar = JobDashboardProgressBar.get(batchJob);
+        LOGGER.error("🚨 ALERT: Monthly statement generation failed! {} total statements were scheduled.", progressBar.getTotalAmount());
         // In production, this would send to Slack, PagerDuty, email, etc.
     }
 

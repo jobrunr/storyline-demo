@@ -22,7 +22,7 @@ solution: |
   More configuration options are available in the docs!
 
 codeReferences:
-  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L76-L81
+  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L82-L86
 
 tryIt: |
   Trigger the bulk expense summary report generation. Watch some jobs fail (the code randomly 

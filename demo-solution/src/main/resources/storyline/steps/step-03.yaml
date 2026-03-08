@@ -19,7 +19,7 @@ solution: |
   like <code>"0 0 LW-3 * *"</code> for 3 days before the last business day.
 
 codeReferences:
-  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L29-L34
+  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L33-L37
 
 tryIt: |
   Check the Recurring Jobs dashboard to see the monthly statement job scheduled 

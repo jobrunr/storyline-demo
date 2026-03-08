@@ -28,7 +28,7 @@ solution: |
   one mutex per printer ID!
 
 codeReferences:
-  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L51-L56
+  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L56-L61
 
 tryIt: |
   Generate multiple statements and watch them process one at a time, 
