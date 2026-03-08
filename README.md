@@ -4,9 +4,9 @@ Welcome to **JobRunr Finance**, an interactive demo where you'll experience real
 
 ## The Story
 
-It's Monday morning at JobRunr Finance. Thousands of customers are waiting for their credit cards, payments need processing, and regulators are watching every move. Through **20 hands-on steps across 5 acts**, you'll solve critical problems from processing a flood of applications at 8 AM to debugging cross-border payments at midnight.
+It's Monday morning at JobRunr Finance. Thousands of customers are waiting for their credit cards, payments need processing, and regulators are watching every move. Through **21 hands-on steps across 5 acts**, you'll solve critical problems from processing a flood of applications at 8 AM to debugging cross-border payments at midnight.
 
-## The 20 Steps
+## The 21 Steps
 
 ### 🚀 Act 1: Getting Started
 *Customers are flooding the website. Time to process applications at scale.*
@@ -57,6 +57,7 @@ It's Monday morning at JobRunr Finance. Thousands of customers are waiting for t
 | 18 | Metrics That Matter | Prometheus + Micrometer — Observability |
 | 19 | Debug Like a Detective | Distributed Tracing — Jaeger integration |
 | 20 | Replacing Outdated Jobs | `enqueueOrReplace()` — Update pending jobs |
+| 21 | Compliance by Default | Job Filters — React to state changes without touching business code |
 
 ---
 
@@ -64,7 +65,7 @@ It's Monday morning at JobRunr Finance. Thousands of customers are waiting for t
 
 The project contains three subprojects:
 
-- **`demo-solution`** — The fully implemented version with all 20 steps
+- **`demo-solution`** — The fully implemented version with all 21 steps
 - **`demo-start`** — A skeleton version where you implement the features yourself
 - **`government-app`** — A mock external API for rate limiting & tracing demos (port `8089`)
 - **`storyline-viewer`** — An interactive web guide with HTMX/Pebble templates

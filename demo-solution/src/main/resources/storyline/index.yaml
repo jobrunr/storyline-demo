@@ -49,9 +49,10 @@ flow:
       - ./steps/step-16.yaml
   - category: "Production Ready"
     icon: '<i class="fas fa-chart-line has-text-success"></i>'
-    description: "Job results, metrics, tracing, and job replacement."
+    description: "Job results, metrics, tracing, job replacement, and compliance filters."
     steps:
       - ./steps/step-17.yaml
       - ./steps/step-18.yaml
       - ./steps/step-19.yaml
       - ./steps/step-20.yaml
+      - ./steps/step-21.yaml

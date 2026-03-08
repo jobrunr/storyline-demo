@@ -36,7 +36,7 @@ dependencies {
 
     // JobRunr Pro & Jackson serialization
     implementation project(':storyline-viewer')
-    implementation 'org.jobrunr:jobrunr-pro-spring-boot-4-starter:1.0.0-SNAPSHOT'
+    implementation 'org.jobrunr:jobrunr-pro-spring-boot-4-starter:8.5.0'
 
     implementation 'com.zaxxer:HikariCP'
     implementation 'org.postgresql:postgresql'

@@ -1,0 +1,52 @@
+title: "Compliance by Default"
+estimatedTime: PT4M
+
+scenario: |
+  The compliance team has a new requirement: every payment job state change must be
+  audited — when it starts processing, when it succeeds, and especially when it fails permanently.
+  <br><br>
+  Adding audit logging inside every job method is error-prone and couples business logic to
+  infrastructure concerns. There must be a better way.
+
+challenge: |
+  How do we react to job state changes without modifying the jobs themselves?
+
+solution: |
+  Implement a <strong>JobFilter</strong> — a hook that runs automatically on every job lifecycle event.
+  <br><br>
+  <pre class="p-0 m-0">
+  <code class="language-java hljs">
+  @Component
+  public class PaymentAuditFilter implements ApplyStateFilter {
+
+      @Override
+      public void onStateApplied(Job job, JobState oldState, JobState newState) {
+          // runs on every state change of every job
+      }
+  }
+  </code></pre>
+  <br>
+  Because it's a Spring <code>@Component</code>, JobRunr picks it up automatically.
+  No changes needed in <code>PaymentService</code> — the audit trail is added as a cross-cutting concern.
+  <br><br>
+  Other filter types let you hook in at different points:
+  <ul>
+    <li><code>JobClientFilter</code> — when a job is created</li>
+    <li><code>ElectStateFilter</code> — when JobRunr decides what state a job should move to</li>
+    <li><code>JobServerFilter</code> — before and after a job is processed</li>
+  </ul>
+
+codeReferences:
+  - org/jobrunr/storylinedemo/payments/PaymentAuditFilter.java?focus=L30-L42
+
+tryIt: |
+  Create a few payments and watch the server logs — every state transition is audited.
+  <br><br>
+  Force a failure by making a payment to a credit card that doesn't exist.
+  You'll see the <code>AUDIT | Payment job … failed permanently</code> warning appear automatically.
+
+tryItUrl: /payments/new
+
+dashboardUrl: http://localhost:8080/dashboard/jobs?state=FAILED
+
+learnMore: https://www.jobrunr.io/en/documentation/pro/job-filters/
