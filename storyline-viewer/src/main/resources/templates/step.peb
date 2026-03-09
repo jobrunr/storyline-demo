@@ -38,20 +38,20 @@
     {% if step.scenario %}
     <div class="box has-background-light">
         <h3 class="title is-4">The Scenario</h3>
-        <p class="is-size-5">{{ step.scenario | raw }}</p>
+        <div class="is-size-5">{{ step.scenario | raw }}</div>
     </div>
     {% endif %}
 
     <!-- The Challenge -->
     <div class="box has-background-warning-light">
         <h3 class="title is-4">The Challenge</h3>
-        <p class="is-size-5">{{ step.challenge | raw }}</p>
+        <div class="is-size-5">{{ step.challenge | raw }}</div>
     </div>
 
     <!-- The Solution -->
     <div class="box has-background-success-light">
         <h3 class="title is-4">The Solution</h3>
-        <p class="is-size-5">{{ step.solution | raw}}</p>
+        <div class="is-size-5">{{ step.solution | raw }}</div>
         {% if step.learnMore %}
         <p class="mt-4">
             <a href="{{ step.learnMore }}" target="_blank" class="has-text-link">
@@ -65,7 +65,7 @@
     <!-- Try It / Dashboard Link -->
     <div class="box has-background-info-light">
         <h3 class="title is-4">Try It Yourself</h3>
-        <p class="is-size-5 mb-4">{{ step.tryIt | raw}}</p>
+        <div class="is-size-5 mb-4">{{ step.tryIt | raw }}</div>
     </div>
 
     <!-- Toggle between Code and Demo -->
