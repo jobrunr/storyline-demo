@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -44,17 +45,14 @@ public class CreditCardController {
     }
 
     @GetMapping("/activate")
-    public String showActivationForm(Model model) {
+    public String showActivationForm() {
         return "credit-cards/activate";
     }
 
     @PostMapping("/activate")
-    public String processActivationForm(@Valid @ModelAttribute("creditCard") CreditCard creditCard, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("errors", fieldErrors(bindingResult));
-            return "credit-cards/activate";
-        }
-        creditCardService.processActivation(creditCard);
+    public String processActivationForm(@RequestParam String number, Model model) {
+        creditCardService.processActivation(number);
+        model.addAttribute("success", true);
         return "credit-cards/activate";
     }
 
