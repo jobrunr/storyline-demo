@@ -99,16 +99,24 @@
     <!-- Code view -->
     <div id="code-{{ step.number }}" class="tab-content {% if step.codeReferences|length > 0 %}is-active{% endif %}">
         {% if step.codeReferences|length > 0 %}
-        <div>
-            {% for codeReference in step.codeReferences %}
-            {% set fileName = (codeReference | split('/') | last) | split ('\?') | first %}
-            <span class="has-text-weight-bold is-inline-block mb-3 is-clickable" hx-get="/code/{{ codeReference }}" hx-target="next pre">
-                <i class="fas fa-file-code"></i> {{ fileName }}
-            </span>
-            <a id="{{ fileName }}-view-switch" class="is-inline-block mr-2" hx-get="/code/{{ codeReference }}" hx-target="next pre">(view complete file)</a>
-            {% endfor %}
-            <pre class="p-0" hx-trigger="load" hx-get="/code/{{ step.codeReferences[0] }}"><code class="language-java">Loading code...</code></pre>
-        </div>
+            <div class="tabs is-boxed mb-0 file-tabs">
+                <ul>
+                    {% for codeReference in step.codeReferences %}
+                    {% set fileName = (codeReference | split('/') | last) | split('\?') | first %}
+                    <li class="file-tab {% if loop.first %}is-active{% endif %}"
+                        hx-get="/code/{{ codeReference }}"
+                        hx-target="#code-pre-{{ step.number }}">
+                        <a>
+                            <span class="icon is-small"><i class="fas fa-file-code"></i></span>
+                            <span>{{ fileName }}</span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div id="code-view-switch" class="code-view-switch-action"></div>
+            <pre id="code-pre-{{ step.number }}" class="code-pre p-0"
+                 hx-trigger="load" hx-get="/code/{{ step.codeReferences[0] }}"><code class="language-java">Loading code...</code></pre>
         {% else %}
         <div class="notification is-info">
             <p>This step focuses on dashboard exploration. No specific code to display.</p>

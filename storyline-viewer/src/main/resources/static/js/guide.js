@@ -205,6 +205,13 @@ function initializeTabSwitching() {
             }
         });
     });
+
+    document.querySelectorAll('.file-tab').forEach(tab => {
+        tab.addEventListener('click', function () {
+            this.closest('ul').querySelectorAll('.file-tab').forEach(t => t.classList.remove('is-active'));
+            this.classList.add('is-active');
+        });
+    });
 }
 
 // Show notification

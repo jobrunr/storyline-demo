@@ -1,4 +1,6 @@
 <code class="language-java">{{ code }}</code>
 {%- if viewSwitch -%}
-<a id="{{ fileName }}-view-switch" hx-swap-oob="true" class="is-inline-block mr-2" hx-get="/code{{ codeFile }}?focus={{ focus }}&show={{ toShow }}" hx-target="next pre">({{ label }})</a>
+<div id="code-view-switch" hx-swap-oob="true" class="code-view-switch-action">
+    <a hx-get="/code{{ codeFile }}?focus={{ focus }}&show={{ toShow }}" hx-target=".code-pre">{% if toShow == 'all' %}view full file{% else %}view snippet{% endif %}</a>
+</div>
 {%- endif -%}
