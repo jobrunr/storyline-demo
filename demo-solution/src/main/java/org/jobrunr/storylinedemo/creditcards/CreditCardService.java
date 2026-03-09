@@ -44,9 +44,9 @@ public class CreditCardService {
     }
 
     @Transactional
-    public void processActivation(CreditCard creditCard) {
-        // Activate the credit card
-        CreditCard creditCardFromRepo = creditCardRepository.findByEmail(creditCard.getEmail());
+    public void processActivation(String number) {
+        CreditCard creditCardFromRepo = creditCardRepository.findByNumber(number)
+                .orElseThrow(() -> new IllegalArgumentException("Credit card not found: " + number));
         creditCardFromRepo.activate();
         creditCardRepository.save(creditCardFromRepo);
 
