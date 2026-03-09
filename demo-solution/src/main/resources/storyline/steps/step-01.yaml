@@ -19,8 +19,7 @@ solution: |
   that appears in the dashboard, making it easy to find specific applications.
 
 codeReferences:
-  - org/jobrunr/storylinedemo/creditcards/CreditCardService.java?focus=L31-L37
-  - org/jobrunr/storylinedemo/creditcards/CreditCardService.java?focus=L56-L66
+  - org/jobrunr/storylinedemo/creditcards/CreditCardService.java?focus=L31-L37,L57-L66
 
 tryIt: |
   Register a new credit card and watch the job appear in the dashboard within milliseconds.

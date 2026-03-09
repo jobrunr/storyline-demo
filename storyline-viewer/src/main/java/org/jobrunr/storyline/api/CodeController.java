@@ -62,19 +62,24 @@ public class CodeController {
 
     private static String getCodeToShow(String code, String focus, String show) {
         if (isNotBlank(focus) && "focus".equals(show)) {
-            int startLine = -1, endLine = -1;
-            if (focus.startsWith("L")) {
-                startLine = Integer.parseInt(substringBefore(focus, "-").replace("L", ""));
-                endLine = Integer.parseInt(substringAfter(focus, "-").replace("L", ""));
-            } else if (focus.startsWith("#")) { // find relevant method
-                throw new UnsupportedOperationException("Method focus not implemented yet");
-            }
-            return stream(code.split(System.lineSeparator()))
-                    .skip(startLine - 1)
-                    .limit(endLine - startLine + 1)
-                    .collect(joining(System.lineSeparator()));
+            String[] lines = code.split(System.lineSeparator());
+            return stream(focus.split(","))
+                    .map(range -> extractRange(lines, range))
+                    .collect(joining("\n\n// ...\n\n"));
         }
         return code;
+    }
+
+    private static String extractRange(String[] lines, String range) {
+        if (range.startsWith("#")) {
+            throw new UnsupportedOperationException("Method focus not implemented yet");
+        }
+        int startLine = Integer.parseInt(substringBefore(range, "-").replace("L", ""));
+        int endLine = Integer.parseInt(substringAfter(range, "-").replace("L", ""));
+        return stream(lines)
+                .skip(startLine - 1)
+                .limit(endLine - startLine + 1)
+                .collect(joining(System.lineSeparator()));
     }
 
     private String getCodeFileAsStringFromProjectOrGithub(String codeFile) {

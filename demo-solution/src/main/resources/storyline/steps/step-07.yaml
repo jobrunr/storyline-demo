@@ -25,8 +25,7 @@ solution: |
   The continuation only runs when ALL children succeed.
 
 codeReferences:
-  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L36-L42
-  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L48-L54
+  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L36-L42,L48-L54
 
 tryIt: |
   Trigger the monthly statement generation recurring job on the Dashboard. Watch the batch create all individual 
