@@ -33,11 +33,11 @@ codeReferences:
   - org/jobrunr/storylinedemo/creditcards/CreditCardService.java?focus=L38-L44
 
 tryIt: |
-  <ul>
-  <ol>Register a credit card</ol>
-  <ol>Immediately update the registration with new details</ol>
-  <ol>Watch the job get replaced in the dashboard!</ol>
-  </ul>
+  <ol>
+  <li>Register a credit card</li>
+  <li>Immediately update the registration with new details</li>
+  <li>Watch the job get replaced in the dashboard!</li>
+  </ol>
 
 tryItUrl: /credit-cards/register
 dashboardUrl: http://localhost:8080/dashboard/jobs
