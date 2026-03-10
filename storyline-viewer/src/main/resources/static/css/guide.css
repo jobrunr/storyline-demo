@@ -265,6 +265,117 @@ body {
     display: block;
 }
 
+/* Demo Stepper */
+.demo-stepper {
+    padding: 1.5rem;
+}
+
+.demo-step {
+    display: flex;
+    gap: 1rem;
+    align-items: stretch;
+}
+
+.demo-step-aside {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    width: 2rem;
+}
+
+.demo-step-marker {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.8rem;
+    transition: background 0.3s ease;
+}
+
+.demo-step-marker.is-done {
+    background: var(--jobrunr-success);
+}
+
+.demo-step-line {
+    flex: 1;
+    width: 2px;
+    background: #e5e7eb;
+    min-height: 1rem;
+    margin: 0.25rem 0;
+}
+
+.demo-step-body {
+    flex: 1;
+    min-width: 0;
+    padding-bottom: 1.25rem;
+}
+
+.demo-action-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #fafafa;
+    user-select: none;
+}
+
+.demo-action-row:hover {
+    border-color: var(--color-primary);
+    background: white;
+    box-shadow: 0 2px 8px rgba(116, 76, 191, 0.1);
+}
+
+.demo-action-row.is-done {
+    border-color: var(--jobrunr-success);
+    background: rgba(16, 185, 129, 0.04);
+}
+
+.demo-action-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: var(--jobrunr-dark);
+}
+
+.demo-action-status {
+    display: flex;
+    align-items: center;
+    color: var(--jobrunr-light-gray);
+    font-size: 0.875rem;
+}
+
+.demo-action-row.htmx-request .demo-action-run-icon {
+    display: none;
+}
+
+.demo-action-feedback {
+    margin-top: 0.4rem;
+    font-size: 0.8rem;
+}
+
+.demo-step-body-form {
+    padding-bottom: 0;
+    overflow: hidden;
+}
+
+.demo-iframe {
+    height: 700px;
+    width: 100%;
+    border: none;
+    display: block;
+}
+
 .tabs li.is-active a {
     border-bottom-color: var(--color-primary);
     color: var(--color-primary);

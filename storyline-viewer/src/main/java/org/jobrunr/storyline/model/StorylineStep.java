@@ -14,6 +14,7 @@ public record StorylineStep(int number,
     String tryIt,
     List<String> codeReferences,
     String tryItUrl,
+    List<QuickAction> quickActions,
     String dashboardUrl,
     String videoUrl,
     String learnMore) {

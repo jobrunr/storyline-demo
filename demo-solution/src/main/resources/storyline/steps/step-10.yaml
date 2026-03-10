@@ -30,12 +30,15 @@ codeReferences:
 
 tryIt: |
   <ol>
-  <li>1. Trigger 1000 expense reports (low priority)</li>
-  <li>2. Make a payment (high priority)</li>
-  <li>3. Watch the payment complete immediately despite the backlog!</li>
+  <li>Trigger 1000 expense reports (low priority)</li>
+  <li>Make a payment (high priority)</li>
+  <li>Watch the payment complete immediately despite the backlog!</li>
   </ol>
 
-tryItUrl: /bulk-generate-expenses
+quickAction:
+  label: Generate 1000 Expenses
+  url: /bulk-generate-expenses?count=1000
+tryItUrl: /payments/new
 dashboardUrl: http://localhost:8080/dashboard/jobs?queue=High
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/priority-queues/

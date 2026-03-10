@@ -1,6 +1,7 @@
 package org.jobrunr.storyline;
 
 import org.jobrunr.storyline.model.Category;
+import org.jobrunr.storyline.model.QuickAction;
 import org.jobrunr.storyline.model.Storyline;
 import org.jobrunr.storyline.model.StorylineStep;
 import org.springframework.core.io.ClassPathResource;
@@ -89,6 +90,7 @@ public class StorylineReader {
             stepYaml.tryIt,
             codeReferences(stepYaml),
             stepYaml.tryItUrl,
+            quickActions(stepYaml),
             stepYaml.dashboardUrl,
             stepYaml.videoUrl,
             stepYaml.learnMore
@@ -98,6 +100,12 @@ public class StorylineReader {
     private List<String> codeReferences(StepYaml stepYaml) {
         if(stepYaml.codeReferences != null) return stepYaml.codeReferences;
         if(stepYaml.codeReference != null) return List.of(stepYaml.codeReference);
+        return List.of();
+    }
+
+    private List<QuickAction> quickActions(StepYaml stepYaml) {
+        if(stepYaml.quickActions != null) return stepYaml.quickActions;
+        if(stepYaml.quickAction != null) return List.of(stepYaml.quickAction);
         return List.of();
     }
 
@@ -130,6 +138,8 @@ public class StorylineReader {
         public String codeReference;
         public List<String> codeReferences;
         public String tryItUrl;
+        public QuickAction quickAction;
+        public List<QuickAction> quickActions;
         public String dashboardUrl;
         public String videoUrl;
         public String learnMore;

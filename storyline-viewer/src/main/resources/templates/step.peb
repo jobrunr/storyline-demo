@@ -65,7 +65,7 @@
     <!-- Try It / Dashboard Link -->
     <div class="box has-background-info-light">
         <h3 class="title is-4">Try It Yourself</h3>
-        <div class="is-size-5 mb-4">{{ step.tryIt | raw }}</div>
+        <div class="is-size-5">{{ step.tryIt | raw }}</div>
     </div>
 
     <!-- Toggle between Code and Demo -->
@@ -77,7 +77,7 @@
                     <span>View Code</span>
                 </a>
             </li>
-            {% if step.tryItUrl %}
+            {% if step.tryItUrl or step.quickActions|length > 0 %}
             <li class="tab-link" data-tab="demo-{{ step.number }}">
                 <a>
                     <span class="icon"><i class="fas fa-play-circle"></i></span>
@@ -124,25 +124,61 @@
         {% endif %}
     </div>
 
-    {% if step.tryItUrl %}
-    <div id="demo-{{ step.number }}" class="tab-content">
-        <div id="demo-container-{{ step.number }}">
-            <iframe src="{{ step.tryItUrl }}"
-                scrolling="no"
-                style="height: 700px; width:100%; border:none; overflow:hidden;">
-            </iframe>
+    {% if step.tryItUrl or step.quickActions|length > 0 %}
+    <div id="demo-{{ step.number }}" class="tab-content" style="padding: 0;">
+        {% if step.quickActions|length > 0 %}
+        <div class="demo-stepper">
+            {% for action in step.quickActions %}
+            <div class="demo-step">
+                <div class="demo-step-aside">
+                    <div id="demo-step-marker-{{ step.number }}-{{ loop.index }}" class="demo-step-marker">{{ loop.index + 1 }}</div>
+                    {% if not loop.last or step.tryItUrl %}
+                    <div class="demo-step-line"></div>
+                    {% endif %}
+                </div>
+                <div class="demo-step-body">
+                    <div class="demo-action-row"
+                         hx-get="{{ action.url }}"
+                         hx-swap="none"
+                         hx-disabled-elt="this"
+                         hx-on::after-request="demoActionComplete(event, {{ step.number }}, {{ loop.index }})">
+                        <span class="demo-action-label">
+                            <span class="icon has-text-info"><i class="fas fa-bolt"></i></span>
+                            <span>{{ action.label }}</span>
+                        </span>
+                        <span class="demo-action-status">
+                            <span class="htmx-indicator">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </span>
+                            <span id="demo-step-run-icon-{{ step.number }}-{{ loop.index }}" class="demo-action-run-icon">
+                                <i class="fas fa-play"></i>
+                            </span>
+                        </span>
+                    </div>
+                    <div id="quick-action-result-{{ step.number }}-{{ loop.index }}" class="demo-action-feedback"></div>
+                </div>
+            </div>
+            {% endfor %}
+            {% if step.tryItUrl %}
+            <div class="demo-step">
+                <div class="demo-step-aside">
+                    <div class="demo-step-marker">{{ step.quickActions | length + 1 }}</div>
+                </div>
+                <div class="demo-step-body demo-step-body-form">
+                    <iframe src="{{ step.tryItUrl }}" scrolling="no" class="demo-iframe"></iframe>
+                </div>
+            </div>
+            {% endif %}
         </div>
+        {% else %}
+        <iframe src="{{ step.tryItUrl }}" scrolling="no" class="demo-iframe"></iframe>
+        {% endif %}
     </div>
     {% endif %}
 
     {% if step.dashboardUrl %}
     <div id="dashboard-{{ step.number }}" class="tab-content" style="padding: 0">
-        <div id="dashboard-container-{{ step.number }}">
-            <iframe src="{{ step.dashboardUrl }}"
-                loading="lazy"
-                style="height: 700px; width:100%; border:none; ">
-            </iframe>
-        </div>
+        <iframe src="{{ step.dashboardUrl }}" loading="lazy" class="demo-iframe"></iframe>
     </div>
     {% endif %}
 

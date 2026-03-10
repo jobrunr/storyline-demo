@@ -178,6 +178,24 @@ function updateTimeline() {
     });
 }
 
+// Demo action row completion handler
+function demoActionComplete(event, stepNumber, actionIndex) {
+    const row = event.detail.elt;
+    const marker = document.getElementById(`demo-step-marker-${stepNumber}-${actionIndex}`);
+    const runIcon = document.getElementById(`demo-step-run-icon-${stepNumber}-${actionIndex}`);
+    const result = document.getElementById(`quick-action-result-${stepNumber}-${actionIndex}`);
+
+    if (event.detail.successful) {
+        row.classList.add('is-done');
+        marker.classList.add('is-done');
+        runIcon.innerHTML = '<i class="fas fa-check has-text-success"></i>';
+        result.innerHTML = '<span class="has-text-success"><i class="fas fa-check-circle"></i> Triggered successfully</span>';
+        setTimeout(() => result.innerHTML = '', 3000);
+    } else {
+        result.innerHTML = '<span class="has-text-danger"><i class="fas fa-exclamation-triangle"></i> Action failed — check the application logs.</span>';
+    }
+}
+
 // Tab switching
 function initializeTabSwitching() {
     document.querySelectorAll('.tab-link').forEach(tab => {

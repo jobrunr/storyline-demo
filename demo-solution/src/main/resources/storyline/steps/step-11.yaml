@@ -31,6 +31,8 @@ tryIt: |
   Trigger payments for both American Express and Mastercard holders.
   Watch Amex payments complete 5x faster on average!
 
+tryItUrl: /payments/new
+
 dashboardUrl: http://localhost:8080/dashboard/jobs
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/dynamic-queues/

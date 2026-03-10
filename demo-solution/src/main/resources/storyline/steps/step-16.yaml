@@ -36,7 +36,9 @@ tryIt: |
   Trigger a bulk statement generation and watch the progress bar 
   advance in real-time in the dashboard job details.
 
-tryItUrl: /bulk-generate-expenses
+quickAction:
+  label: Generate Bulk Statements
+  url: /bulk-generate-expenses
 dashboardUrl: http://localhost:8080/dashboard/jobs?state=PROCESSING
 
 learnMore: https://www.jobrunr.io/en/documentation/background-methods/logging-progress/

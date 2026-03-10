@@ -28,7 +28,9 @@ tryIt: |
   Trigger the bulk expense summary report generation. Watch some jobs fail (the code randomly 
   throws exceptions!) and then automatically retry until they succeed.
 
-tryItUrl: /bulk-generate-summary-reports
+quickAction:
+  label: Generate Summary Reports
+  url: /bulk-generate-summary-reports
 dashboardUrl: http://localhost:8080/dashboard/jobs?state=SCHEDULED&jobExceptionType!=java.lang.RuntimeException
 
 learnMore: https://www.jobrunr.io/en/documentation/background-methods/dealing-with-exceptions/
