@@ -15,6 +15,11 @@ solution: |
   <br><br>
   <pre class="p-0 m-0">
   <code class="language-java hljs">
+  jobScheduler.create(aJob()
+      .withQueue("High") // You can also use an enum for this
+      .withDetails(() -> createCreditCard(card)));
+
+  // or via the @Job annotation
   @Job(queue = "High")
   public void processPayment(Payment payment) { ... }
 

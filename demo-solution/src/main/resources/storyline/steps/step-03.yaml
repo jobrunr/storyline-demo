@@ -5,7 +5,7 @@ scenario: |
   Monthly credit card statements must be generated on the <em>last business day</em> 
   of each month, not just the last calendar day.
   <br><br>
-  If the 31st falls on a Saturday, the reports should run on Friday the 29th instead.
+  If the 31st falls on a Saturday, the reports should run on Friday the 30th instead.
 
 challenge: |
   Standard cron expressions can't handle business day logic. How do we schedule jobs 
