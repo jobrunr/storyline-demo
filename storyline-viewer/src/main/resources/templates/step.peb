@@ -7,6 +7,9 @@
             <div class="level-item">
                 <div>
                     <div class="mb-3">
+                        <a href="/storyline" hx-get="/storyline" hx-target="#step-content" hx-push-url="true" hx-swap="innerHTML show:window:top" class="has-text-grey mr-3">
+                            <i class="fas fa-arrow-left"></i> Overview
+                        </a>
                         <span class="heading mr-2">Step {{ step.number }} of {{ storyline.storylineMetadata.totalAmountOfSteps }}</span>
                         ·
                         <span class="is-size-6 has-text-grey ml-2">
@@ -190,6 +193,12 @@
            hx-get="/storyline/step/{{ step.number - 1 }}" hx-target="#step-content" hx-push-url="true" hx-swap="innerHTML show:window:top" preload>
             <span class="icon"><i class="fas fa-arrow-left"></i></span>
             <span>Previous</span>
+        </a>
+        {% else %}
+        <a href="/storyline" class="button is-light is-medium"
+           hx-get="/storyline" hx-target="#step-content" hx-push-url="true" hx-swap="innerHTML show:window:top" preload>
+            <span class="icon"><i class="fas fa-arrow-left"></i></span>
+            <span>Welcome</span>
         </a>
         {% endif %}
 

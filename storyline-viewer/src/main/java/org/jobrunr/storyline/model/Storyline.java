@@ -10,6 +10,7 @@ public record Storyline(
     String subTitle,
     String slogan,
     String intro,
+    String guideIntro,
     String codeRoot,
     String githubLink,
     SequencedMap<Category, List<StorylineStep>> stepsByCategory

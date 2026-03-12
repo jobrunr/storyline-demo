@@ -23,9 +23,9 @@ public class StorylineController {
     }
 
     @GetMapping({"/storyline", "/storyline/"})
-    public String guide(Model model) {
+    public String guide(@RequestHeader(value = "HX-Request", required = false) String hxRequest, Model model) {
         model.addAttribute("storyline", storyline);
-        return "guide";
+        return hxRequest != null ? "welcome" : "guide";
     }
 
     @GetMapping("/storyline/step/{stepNumber}")

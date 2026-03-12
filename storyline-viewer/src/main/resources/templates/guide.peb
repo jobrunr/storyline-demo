@@ -79,22 +79,21 @@
                 <!-- Welcome screen -->
                 {% if step is null %}
                 <div id="welcome-screen" class="content-screen active">
-                    <div class="hero is-medium">
-                        <div class="hero-body has-text-centered">
-                            <h1 class="title is-1">
-                                Welcome to {{ storyline.title }}
-                            </h1>
-                            <p class="subtitle is-4 mt-4">
-                                Click on any step in the timeline to begin your journey
-                            </p>
-                            <div class="buttons is-centered mt-6">
-                                <a href="/storyline/step/1" class="button is-primary is-large"
-                                hx-get="/storyline/step/1" hx-target="#step-content" hx-push-url="true" hx-swap="innerHTML show:window:top" preload>
-                                    <span class="icon"><i class="fas fa-play"></i></span>
-                                    <span>Start with Step 1</span>
-                                </a>
-                            </div>
-                        </div>
+                    <div class="has-text-centered pt-6 pb-5">
+                        <h1 class="title is-2 mb-1">Welcome to {{ storyline.title }}</h1>
+                    </div>
+                    {% if storyline.guideIntro %}
+                    <div class="box mx-auto content" style="max-width: 860px; padding: 2.5rem 3rem; line-height: 1.75;">
+                        {{ storyline.guideIntro | raw }}
+                    </div>
+                    {% endif %}
+                    <div class="has-text-centered pt-5 pb-6">
+                        <p class="has-text-grey mb-5">Click on any step in the timeline to begin your journey</p>
+                        <a href="/storyline/step/1" class="button is-primary is-medium"
+                        hx-get="/storyline/step/1" hx-target="#step-content" hx-push-url="true" hx-swap="innerHTML show:window:top" preload>
+                            <span class="icon"><i class="fas fa-play"></i></span>
+                            <span>Start with Step 1</span>
+                        </a>
                     </div>
                 </div>
                 {% else %}

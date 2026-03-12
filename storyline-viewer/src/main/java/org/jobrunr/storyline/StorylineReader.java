@@ -56,6 +56,7 @@ public class StorylineReader {
                     index.subtitle,
                     index.slogan,
                     index.intro,
+                    index.guideIntro,
                     Optional.ofNullable(index.codeRoot).orElse("src/main/java"),
                     index.githubLink,
                     stepsByCategory
@@ -116,6 +117,7 @@ public class StorylineReader {
         public String subtitle;
         public String slogan;
         public String intro;
+        public String guideIntro;
         public String codeRoot;
         public String githubLink;
         public List<CategoryFlow> flow;
