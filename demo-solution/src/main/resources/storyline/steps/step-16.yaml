@@ -21,7 +21,7 @@ solution: |
 
       for (Card card : cards) {
           generateStatement(card);
-          progress.increaseByOne();
+          progress.incrementSucceeded();
           context.logger().info("Generated statement for {}", card.getNumber());
       }
   }

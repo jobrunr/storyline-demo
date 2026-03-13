@@ -116,14 +116,22 @@ function updateCompleteButton(stepNumber, isComplete) {
     }
 }
 
-// Initialize complete buttons based on stored progress
 function initializeCompleteButtons() {
-    const stepContent = document.getElementById('step-content');
-    const currentStep = stepContent?.querySelector('.content-screen[data-step]');
-    if (currentStep) {
-        const stepNumber = parseInt(currentStep.dataset.step);
-        updateCompleteButton(stepNumber, isStepComplete(stepNumber));
-    }
+    const currentStep = document.querySelector('#step-content .content-screen[data-step]');
+    const container = document.getElementById('navbar-complete-btn');
+    if (!currentStep || !container) return;
+    const stepNumber = parseInt(currentStep.dataset.step);
+    const isComplete = isStepComplete(stepNumber);
+    container.innerHTML = `
+        <button id="btn-complete-${stepNumber}" class="button is-success is-small" onclick="markStepComplete(${stepNumber})" style="display: ${isComplete ? 'none' : 'inline-flex'};">
+            <span class="icon"><i class="fas fa-check"></i></span>
+            <span>Step ${stepNumber}: Mark Complete</span>
+        </button>
+        <button id="btn-incomplete-${stepNumber}" class="button is-warning is-small" onclick="markStepIncomplete(${stepNumber})" style="display: ${isComplete ? 'inline-flex' : 'none'};">
+            <span class="icon"><i class="fas fa-undo"></i></span>
+            <span>Step ${stepNumber}: Mark Incomplete</span>
+        </button>
+    `;
 }
 
 // Update visual state of step
