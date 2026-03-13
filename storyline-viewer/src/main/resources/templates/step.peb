@@ -74,7 +74,7 @@
     <!-- Toggle between Code and Demo -->
     <div class="tabs is-boxed is-large">
         <ul>
-            <li class="tab-link {% if step.codeReferences|length > 0 %}is-active{% endif %}" data-tab="code-{{ step.number }}">
+            <li class="tab-link" data-tab="code-{{ step.number }}">
                 <a>
                     <span class="icon"><i class="fas fa-code"></i></span>
                     <span>View Code</span>
@@ -100,7 +100,7 @@
     </div>
 
     <!-- Code view -->
-    <div id="code-{{ step.number }}" class="tab-content {% if step.codeReferences|length > 0 %}is-active{% endif %}">
+    <div id="code-{{ step.number }}" class="tab-content">
         {% if step.codeReferences|length > 0 %}
             <div class="tabs is-boxed mb-0 file-tabs">
                 <ul>
