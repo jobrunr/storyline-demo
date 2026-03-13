@@ -168,13 +168,13 @@
                     <div class="demo-step-marker">{{ step.quickActions | length + 1 }}</div>
                 </div>
                 <div class="demo-step-body demo-step-body-form">
-                    <iframe src="{{ step.tryItUrl }}" scrolling="no" class="demo-iframe"></iframe>
+                    <iframe src="{{ step.tryItUrl }}" class="demo-iframe"></iframe>
                 </div>
             </div>
             {% endif %}
         </div>
         {% else %}
-        <iframe src="{{ step.tryItUrl }}" scrolling="no" class="demo-iframe"></iframe>
+        <iframe src="{{ step.tryItUrl }}" class="demo-iframe"></iframe>
         {% endif %}
     </div>
     {% endif %}
