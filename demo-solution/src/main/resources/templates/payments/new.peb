@@ -69,6 +69,7 @@
             {% endif %}
         </div>
 
+        <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}">
         <button type="submit" class="submit-btn">
             Submit Payment
         </button>

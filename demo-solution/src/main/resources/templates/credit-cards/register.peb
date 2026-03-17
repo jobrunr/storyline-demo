@@ -49,6 +49,7 @@
             <p class="error-message">{{ errors.type }}</p>
             {% endif %}
         </div>
+        <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}">
         <button type="submit" class="submit-btn">
             Register
         </button>
