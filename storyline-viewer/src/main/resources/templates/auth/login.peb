@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in - {{ storyline.title }}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<section class="hero is-fullheight">
+    <div class="hero-body">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-5-tablet is-4-desktop">
+                    <div class="box">
+                        <div class="has-text-centered mb-6">
+                            <img src="/logo.svg" alt="JobRunr" style="max-height: 48px;">
+                            <h1 class="title is-4 mt-4 mb-1">Welcome back</h1>
+                            <p class="subtitle is-6 has-text-grey">Enter your email to receive a magic link.</p>
+                        </div>
+
+                        <form method="post" action="/login">
+                            <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}">
+                            <div class="field">
+                                <label class="label">Email address</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" type="email" name="email" placeholder="you@example.com" required autofocus>
+                                    <span class="icon is-left"><i class="fas fa-envelope"></i></span>
+                                </div>
+                            </div>
+                            <button class="button is-primary is-fullwidth mt-4" type="submit">
+                                Send magic link
+                            </button>
+                        </form>
+
+                        <p class="has-text-centered mt-4 is-size-7 has-text-grey">
+                            Not yet registered?
+                            <a href="/register">Create an account</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+</body>
+</html>

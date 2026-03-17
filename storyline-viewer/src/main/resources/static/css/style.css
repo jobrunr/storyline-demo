@@ -502,3 +502,21 @@ a {
         left: 1.5rem;
     }
 }
+
+/* Auth pages: apply brand colors to Bulma primary classes */
+.button.is-primary {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+}
+
+.button.is-primary:hover,
+.button.is-primary:focus {
+    background-color: var(--jobrunr-purple);
+    border-color: var(--jobrunr-purple);
+    color: #fff;
+}
+
+.has-text-primary {
+    color: var(--color-primary) !important;
+}

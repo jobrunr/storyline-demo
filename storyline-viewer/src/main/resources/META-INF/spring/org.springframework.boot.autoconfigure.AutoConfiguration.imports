@@ -1,2 +1,3 @@
 org.jobrunr.storyline.StorylineConfiguration
+org.jobrunr.storyline.security.StorylineSecurityAutoConfiguration
 
