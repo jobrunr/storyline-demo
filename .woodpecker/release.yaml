@@ -1,6 +1,5 @@
 when:
-  event:
-    - tag
+  event: tag
 
 workspace:
   path: jobrunr-pro-finance-demo/src
