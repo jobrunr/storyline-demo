@@ -4,7 +4,7 @@ when:
       - push
       - pull_request
     branch:
-      - master
+      - main
   - event: manual
 
 
