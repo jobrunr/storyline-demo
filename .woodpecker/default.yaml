@@ -1,0 +1,27 @@
+# Trigger on branch and event filters
+when:
+  - event:
+      - push
+      - pull_request
+    branch:
+      - master
+  - event: manual
+
+
+workspace:
+  path: jobrunr-pro-finance-demo/src
+
+steps:
+  - name: prepare-docker-build-container
+    image: docker
+    privileged: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    commands:
+      - docker build -f BuildDockerfile -t registry.jobrunr.io/jobrunr/jobrunr-pro-finance-demo:latest .
+
+  - name: build
+    image: registry.jobrunr.io/jobrunr/jobrunr-pro-finance-demo:latest
+    commands:
+      - echo "Running on ${CI_SYSTEM_NAME:-<not set>}"
+      - gradle --no-daemon clean build
