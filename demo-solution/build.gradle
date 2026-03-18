@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '4.0.2'
     id 'io.spring.dependency-management' version '1.1.7'
+    id 'com.google.cloud.tools.jib' version '3.5.3'
 }
 
 group = 'org.jobrunr'
@@ -50,4 +51,21 @@ dependencies {
 // Run from project root so codeRoot path resolves correctly
 tasks.named('bootRun') {
     workingDir = rootProject.projectDir
+}
+
+jib {
+	from {
+		image = 'azul/zulu-openjdk-alpine:25-jre-latest'
+	}
+	to {
+		image = 'registry.jobrunr.io/jobrunr/jobrunr-pro-finance-demo'
+		tags = [ 'latest', project.version ]
+		auth {
+			username = System.getenv('JOBRUNR_REGISTRY_USER') ?: "NOT_PROVIDED"
+			password = System.getenv('JOBRUNR_REGISTRY_PASSWORD') ?: "NOT_PROVIDED"
+		}
+	}
+	dockerClient {
+		executable = '/usr/local/bin/docker'
+	}
 }

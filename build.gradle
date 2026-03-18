@@ -13,8 +13,8 @@ subprojects {
         maven {
             url "https://repo.jobrunr.io/private-releases/"
             credentials {
-                username "$jobRunrRepoUser"
-                password "$jobRunrRepoPassword"
+                username = System.getenv('JOBRUNR_REPO_USER') ?: "$jobRunrRepoUser"
+                password = System.getenv('JOBRUNR_REPO_PASSWORD') ?: "$jobRunrRepoPassword"
             }
         }
     }
