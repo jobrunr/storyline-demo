@@ -57,6 +57,13 @@
         <div class="is-size-5">{{ step.tryIt | raw }}</div>
     </div>
 
+    {% if securityEnabled and not isAuthenticated %}
+    <div class="notification is-warning">
+        <span class="icon"><i class="fas fa-lock"></i></span>
+        <span>You need to <a href="/login">log in</a> to perform write operations. You can still view the code solution and dashboard.</span>
+    </div>
+    {% endif %}
+
     <!-- Toggle between Code and Demo -->
     <div class="tabs is-boxed is-large">
         <ul>

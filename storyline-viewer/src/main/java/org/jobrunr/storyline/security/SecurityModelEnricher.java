@@ -12,8 +12,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 @ControllerAdvice
 public class SecurityModelEnricher {
 
+    private final StorylineSecurityProperties securityProperties;
+
+    public SecurityModelEnricher(StorylineSecurityProperties securityProperties) {
+        this.securityProperties = securityProperties;
+    }
+
     @ModelAttribute
     public void addAuthInfo(Model model, HttpServletRequest request) {
+        model.addAttribute("securityEnabled", securityProperties.isEnabled());
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || auth instanceof AnonymousAuthenticationToken || !auth.isAuthenticated()) {
             model.addAttribute("isAuthenticated", false);
