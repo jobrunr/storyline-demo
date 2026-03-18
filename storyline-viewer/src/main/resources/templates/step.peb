@@ -63,6 +63,12 @@
         <span>You need to <a href="/login">log in</a> to perform write operations. You can still view the code solution and dashboard.</span>
     </div>
     {% endif %}
+    {% if isLiveDemo and step.liveNotice %}
+    <div class="notification is-info">
+        <span class="icon"><i class="fas fa-circle-info"></i></span>
+        <span>{{ step.liveNotice }}</span>
+    </div>
+    {% endif %}
 
     <!-- Toggle between Code and Demo -->
     <div class="tabs is-boxed is-large">

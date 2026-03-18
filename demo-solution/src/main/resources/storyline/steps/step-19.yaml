@@ -35,3 +35,5 @@ tryIt: |
 dashboardUrl: http://localhost:16686
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/observability/
+
+liveNotice: "Jaeger is not available in this live demo. Run the demo locally to explore distributed traces."

@@ -94,7 +94,8 @@ public class StorylineReader {
             quickActions(stepYaml),
             stepYaml.dashboardUrl,
             stepYaml.videoUrl,
-            stepYaml.learnMore
+            stepYaml.learnMore,
+            stepYaml.liveNotice
         );
     }
 
@@ -145,5 +146,6 @@ public class StorylineReader {
         public String dashboardUrl;
         public String videoUrl;
         public String learnMore;
+        public String liveNotice;
     }
 }

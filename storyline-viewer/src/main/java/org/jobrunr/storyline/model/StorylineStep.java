@@ -17,6 +17,7 @@ public record StorylineStep(int number,
     List<QuickAction> quickActions,
     String dashboardUrl,
     String videoUrl,
-    String learnMore) {
+    String learnMore,
+    String liveNotice) {
 
 }

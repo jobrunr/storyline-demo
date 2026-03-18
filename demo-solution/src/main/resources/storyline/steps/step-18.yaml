@@ -42,3 +42,5 @@ tryIt: |
 dashboardUrl: http://localhost:9090/query?g0.expr=jobrunr_jobs_by_state
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/observability/
+
+liveNotice: "Prometheus is not available in this live demo. Run the demo locally to explore the metrics."
