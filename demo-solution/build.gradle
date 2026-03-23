@@ -37,7 +37,7 @@ dependencies {
 
     // JobRunr Pro & Jackson serialization
     implementation project(':storyline-viewer')
-    implementation 'org.jobrunr:jobrunr-pro-spring-boot-4-starter:8.5.0'
+    implementation 'org.jobrunr:jobrunr-pro-spring-boot-4-starter:1.0.0-SNAPSHOT'
 
     implementation 'com.zaxxer:HikariCP'
     implementation 'org.postgresql:postgresql'
@@ -68,4 +68,43 @@ jib {
 	dockerClient {
 		executable = '/usr/local/bin/docker'
 	}
+}
+
+tasks.register("ensureJobRunrProVersion") {
+    group = "verification"
+    description = "Ensures JobRunr dependency version is correct"
+
+    doLast {
+        // Only run if the CI variable is defined
+        if (System.getenv('CI') == null) {
+            return
+        }
+
+        def expectedVersion = '1.0.0-SNAPSHOT'
+        def group = 'org.jobrunr'
+        def name = 'jobrunr-pro-spring-boot-4-starter'
+
+        // Looking through all the dependencies in the configurations to find the JobRunr dependency
+        configurations.findAll().each { config ->
+            config.dependencies.each { dep ->
+                if (dep.name == name && dep.group == group) {
+                    def actualVersion = dep.version
+
+                    // Enforce version match
+                    if (actualVersion != expectedVersion) {
+                        def error = """
+                        JobRunr Version Check FAILED --- Expected version: $expectedVersion --- Actual version: $actualVersion
+                        Your dependency declaration: $group:$name:$actualVersion
+                        To fix, update to version: $expectedVersion
+                        """
+                        throw new GradleException(error)
+                    }
+                }
+            }
+        }
+    }
+}
+
+tasks.named("build") {
+    finalizedBy "ensureJobRunrProVersion"
 }
