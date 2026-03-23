@@ -87,7 +87,7 @@ tasks.register("ensureJobRunrProVersion") {
         // Looking through all the dependencies in the configurations to find the JobRunr dependency
         configurations.findAll().each { config ->
             config.dependencies.each { dep ->
-                if (dep.name == name && dep.group == group) {
+                if (dep.group == group && dep.name == name) {
                     def actualVersion = dep.version
 
                     // Enforce version match
@@ -106,5 +106,5 @@ tasks.register("ensureJobRunrProVersion") {
 }
 
 tasks.named("build") {
-    finalizedBy "ensureJobRunrProVersion"
+    dependsOn "ensureJobRunrProVersion"
 }
