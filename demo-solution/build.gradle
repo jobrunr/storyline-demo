@@ -82,22 +82,24 @@ tasks.register("ensureJobRunrProVersion") {
 
         def expectedVersion = '1.0.0-SNAPSHOT'
         def group = 'org.jobrunr'
-        def name = 'jobrunr-pro-spring-boot-4-starter'
+        def allowlist = ['storyline-viewer']
 
         // Looking through all the dependencies in the configurations to find the JobRunr dependency
         configurations.findAll().each { config ->
             config.dependencies.each { dep ->
-                if (dep.group == group && dep.name == name) {
-                    def actualVersion = dep.version
+                if (dep.group == group) {
+                    if (!allowlist.contains(dep.name)) {
+                        def actualVersion = dep.version
 
-                    // Enforce version match
-                    if (actualVersion != expectedVersion) {
-                        def error = """
-                        JobRunr Version Check FAILED --- Expected version: $expectedVersion --- Actual version: $actualVersion
-                        Your dependency declaration: $group:$name:$actualVersion
-                        To fix, update to version: $expectedVersion
-                        """
-                        throw new GradleException(error)
+                        // Enforce version match
+                        if (actualVersion != expectedVersion) {
+                            def error = """
+                            JobRunr Version Check FAILED --- Expected version: $expectedVersion --- Actual version: $actualVersion
+                            Your dependency declaration: $group:$name:$actualVersion
+                            To fix, update to version: $expectedVersion
+                            """
+                            throw new GradleException(error)
+                        }
                     }
                 }
             }
