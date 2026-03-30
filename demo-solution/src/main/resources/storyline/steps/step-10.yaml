@@ -44,6 +44,6 @@ quickAction:
   label: Generate 1000 Expenses
   url: /bulk-generate-expenses?count=1000
 tryItUrl: /payments/new
-dashboardUrl: http://localhost:8080/dashboard/jobs?queue=High
+dashboardUrl: /dashboard/jobs?queue=High
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/priority-queues/

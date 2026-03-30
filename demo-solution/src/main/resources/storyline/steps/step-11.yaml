@@ -33,6 +33,6 @@ tryIt: |
 
 tryItUrl: /payments/new
 
-dashboardUrl: http://localhost:8080/dashboard/jobs
+dashboardUrl: /dashboard/jobs
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/dynamic-queues/

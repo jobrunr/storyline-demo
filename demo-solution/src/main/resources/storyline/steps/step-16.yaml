@@ -39,6 +39,6 @@ tryIt: |
 quickAction:
   label: Generate Bulk Statements
   url: /bulk-generate-expenses
-dashboardUrl: http://localhost:8080/dashboard/jobs?state=PROCESSING
+dashboardUrl: /dashboard/jobs?state=PROCESSING
 
 learnMore: https://www.jobrunr.io/en/documentation/background-methods/logging-progress/

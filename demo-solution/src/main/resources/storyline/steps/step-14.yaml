@@ -38,6 +38,6 @@ tryIt: |
     <code>./gradlew :demo-solution:bootRun --args='--server.port=8081 --jobrunr.dashboard.enabled=false --jobrunr.background-job-server.tags=external'</code></li>
   </ol>
 
-dashboardUrl: http://localhost:8080/dashboard/servers
+dashboardUrl: /dashboard/servers
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/server-tags/

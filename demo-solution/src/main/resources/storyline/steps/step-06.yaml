@@ -35,6 +35,6 @@ tryIt: |
 
 tryItUrl: /payments/new
 
-dashboardUrl: http://localhost:8080/dashboard/jobs?jobSignature=org.jobrunr.storylinedemo.payment.PaymentService.processPayment%28java.lang.Long%2C+org.jobrunr.jobs.context.JobContext%29
+dashboardUrl: /dashboard/jobs?jobSignature=org.jobrunr.storylinedemo.payment.PaymentService.processPayment%28java.lang.Long%2C+org.jobrunr.jobs.context.JobContext%29
 
 learnMore: https://www.jobrunr.io/en/documentation/background-methods/best-practices/

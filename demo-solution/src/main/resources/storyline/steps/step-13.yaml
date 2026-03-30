@@ -31,6 +31,6 @@ tryIt: |
   The export job has a timeout configured. If the government API is slow, 
   watch the job fail after the timeout and retry automatically.
 
-dashboardUrl: http://localhost:8080/dashboard/jobs?state=FAILED
+dashboardUrl: /dashboard/jobs?state=FAILED
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/job-timeout/

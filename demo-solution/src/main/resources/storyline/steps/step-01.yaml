@@ -26,6 +26,6 @@ tryIt: |
   Notice how the web page responds immediately — the background job handles the rest.
 
 tryItUrl: /credit-cards/register
-dashboardUrl: http://localhost:8080/dashboard/jobs?state=SUCCEEDED
+dashboardUrl: /dashboard/jobs?state=SUCCEEDED
 
 learnMore: https://www.jobrunr.io/en/documentation/background-methods/enqueueing-jobs/

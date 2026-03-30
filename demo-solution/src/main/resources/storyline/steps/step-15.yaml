@@ -36,6 +36,6 @@ tryIt: |
   government jobs process 5 and 3 at a time, while Stripe jobs spread evenly
   across each minute.
 
-dashboardUrl: http://localhost:8080/dashboard/jobs
+dashboardUrl: /dashboard/jobs
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/rate-limiters/

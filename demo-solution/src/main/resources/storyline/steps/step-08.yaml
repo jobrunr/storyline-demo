@@ -33,6 +33,6 @@ tryIt: |
   Watch the summary job fail (it has a 50% failure rate!) and see the notification job trigger automatically. 
   It did not fail? Then no worries, JobRunr moved the <code>onFailure</code> Job to <code>NOT_APPLICABLE</code> state.
 
-dashboardUrl: http://localhost:8080/dashboard/jobs?state=FAILED
+dashboardUrl: /dashboard/jobs?state=FAILED
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/job-chaining/

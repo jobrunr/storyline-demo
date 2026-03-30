@@ -47,6 +47,6 @@ tryIt: |
 
 tryItUrl: /payments/new
 
-dashboardUrl: http://localhost:8080/dashboard/jobs?state=FAILED
+dashboardUrl: /dashboard/jobs?state=FAILED
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/job-filters/

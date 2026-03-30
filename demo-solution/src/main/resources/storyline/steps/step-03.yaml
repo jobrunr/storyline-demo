@@ -25,6 +25,6 @@ tryIt: |
   Check the Recurring Jobs dashboard to see the monthly statement job scheduled 
   for the last business day. The next run time automatically adjusts for weekends!
 
-dashboardUrl: http://localhost:8080/dashboard/recurring-jobs
+dashboardUrl: /dashboard/recurring-jobs
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/advanced-cron-expressions/

@@ -42,6 +42,6 @@ tryIt: |
   Request a credit score calculation via the API. Poll for the result 
   and watch it appear once the background job completes.
 
-dashboardUrl: http://localhost:8080/dashboard/jobs
+dashboardUrl: /dashboard/jobs
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/results/

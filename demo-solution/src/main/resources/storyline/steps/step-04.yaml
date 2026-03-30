@@ -34,6 +34,6 @@ tryIt: |
     <li>Use the search to find a specific customer's job</li>
   </ol>
 
-dashboardUrl: http://localhost:8080/dashboard
+dashboardUrl: /dashboard
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/jobrunr-pro-dashboard/

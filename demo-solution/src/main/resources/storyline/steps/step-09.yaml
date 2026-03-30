@@ -38,6 +38,6 @@ tryIt: |
   Then use the dashboard's label filter to find specific customers instantly!
 
 tryItUrl: /credit-cards/register
-dashboardUrl: http://localhost:8080/dashboard/jobs
+dashboardUrl: /dashboard/jobs
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/jobrunr-pro-dashboard/
