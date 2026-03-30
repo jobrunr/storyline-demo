@@ -1,0 +1,38 @@
+title: "Fair Play"
+estimatedTime: PT4M
+
+scenario: |
+  American Express charges higher fees than Mastercard, but their payments
+  are processed at the same rate. Amex cardholders expect premium service.
+  <br><br>
+  We need to process more payments for premium cards while still being fair to everyone.
+
+challenge: |
+  How do we process more payments for premium cardholders while still being fair to everyone?
+
+solution: |
+  Use <strong>Dynamic Queues with Weighted Round-Robin</strong>:
+  <br><br>
+  <pre class="p-0 m-0">
+  <code class="language-properties hljs">
+  # In application.properties
+  jobrunr.jobs.dynamic-queue.weighted-round-robin.label-prefix=cardType:
+  jobrunr.jobs.dynamic-queue.weighted-round-robin.queues.AMERICAN_EXPRESS=5
+  jobrunr.jobs.dynamic-queue.weighted-round-robin.queues.MASTERCARD=1
+  </code></pre>
+  <br>
+  American Express cardholders get 5 payments processed for every 1 Mastercard payment.
+  No one gets starved, but premium cards get premium treatment!
+
+codeReferences:
+  - org/jobrunr/storylinedemo/payments/PaymentService.java?focus=L57-L62
+
+tryIt: |
+  Trigger payments for both American Express and Mastercard holders.
+  Watch Amex payments complete 5x faster on average!
+
+tryItUrl: /payments/new
+
+dashboardUrl: http://localhost:8080/dashboard/jobs
+
+learnMore: https://www.jobrunr.io/en/documentation/pro/dynamic-queues/

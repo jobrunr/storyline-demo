@@ -1,0 +1,39 @@
+title: "Dashboard First Look"
+estimatedTime: PT4M
+
+scenario: |
+  Once you have jobs running in production, you need visibility:
+  Which jobs are running? What failed? What's queued up?
+  <br><br>
+  You can't manage what you can't see.
+
+challenge: |
+  How do we monitor thousands of background jobs without writing custom tooling?
+
+solution: |
+  The JobRunr Pro Dashboard provides a real-time view of your entire job ecosystem:
+  <br><br>
+  <ul>
+    <li><strong>Jobs view</strong>: Filter by state (ENQUEUED, PROCESSING, SUCCEEDED, FAILED)</li>
+    <li><strong>Recurring Jobs</strong>: See all recurring jobs and their next run times</li>
+    <li><strong>Servers</strong>: Monitor which servers are processing jobs</li>
+    <li><strong>Search</strong>: Find any job by name, method signature, or parameters, etc.</li>
+  </ul>
+  <br>
+  The embedded dashboard, a JobRunr Pro Enterprise feature, runs inside your Spring Boot app — no separate deployment needed! 
+
+codeReferences:
+  - org/jobrunr/storylinedemo/StorylineDemoApplication.java
+
+tryIt: |
+  Explore the dashboard! Try these actions:
+  <ol>
+    <li>View succeeded jobs from your credit card registrations</li>
+    <li>Check the recurring jobs and their schedules</li>
+    <li>Look at the Servers tab to see your background job server</li>
+    <li>Use the search to find a specific customer's job</li>
+  </ol>
+
+dashboardUrl: http://localhost:8080/dashboard
+
+learnMore: https://www.jobrunr.io/en/documentation/pro/jobrunr-pro-dashboard/

@@ -1,0 +1,42 @@
+title: "One Printer, Many Jobs"
+estimatedTime: PT4M
+
+scenario: |
+  The PDF generation service can only handle one document at a time.
+  When multiple jobs print simultaneously, we get corrupted documents.
+  <br><br>
+  We need exclusive access to shared resources.
+
+challenge: |
+  How do we ensure only one job can use a shared resource at a time?
+
+solution: |
+  Use a <strong>Mutex</strong> (mutually exclusive lock) to protect shared resources:
+  <br><br>
+  <pre class="p-0 m-0">
+  <code class="language-java hljs">
+  @Job(mutex = "pdf-printer")
+  public void generatePDF(Statement statement) {
+      pdfService.print(statement); // Only one job runs at a time
+  }
+  </code></pre>
+  <br>
+  Jobs with the same mutex are processed one at a time. Others wait in 
+  <code>AWAITING</code> state until the mutex is released.
+  <br><br>
+  You can also use dynamic mutexes: <code>@Job(mutex = "printer/%0")</code> creates 
+  one mutex per printer ID!
+
+codeReferences:
+  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L56-L61
+
+tryIt: |
+  Generate multiple statements and watch them process one at a time, 
+  even though multiple workers are available.
+
+quickAction:
+  label: Generate Multiple Statements
+  url: /bulk-generate-expenses
+dashboardUrl: http://localhost:8080/dashboard/jobs
+
+learnMore: https://www.jobrunr.io/en/documentation/pro/mutexes/

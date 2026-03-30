@@ -1,0 +1,77 @@
+title: JobRunr Finance Demo
+icon: 🏦
+subtitle: Learn Background Job Processing Step by Step
+slogan: Learn JobRunr Pro by building the backend for a neobank
+intro: |
+  Welcome to <strong>JobRunr Finance</strong> — a neobank where background jobs power everything
+  from customer onboarding to international payments.
+  <br><br>
+  Through 21 hands-on steps, you'll implement real patterns you'd find in production:
+  processing applications, scheduling reminders, generating statements, and scaling globally.
+  Each step introduces a JobRunr Pro feature with working code you can explore.
+  <br><br>
+  <em>No toy examples — just real patterns.</em>
+
+guideIntro: |
+  Welcome to <strong>JobRunr Finance</strong> — a neobank where background jobs power everything
+  from customer onboarding to international payments.
+  <br><br>
+  Through 21 hands-on steps, you'll work through real patterns you'd find in production.
+  Each step is structured the same way:
+  <ul>
+    <li><strong>Scenario</strong> — the business context and why the problem matters</li>
+    <li><strong>Challenge</strong> — the question you need to answer</li>
+    <li><strong>Solution</strong> — how JobRunr Pro solves it <span class="tag is-warning is-light">spoiler</span></li>
+    <li><strong>Try It</strong> — hands-on in the running app and JobRunr dashboard</li>
+  </ul>
+  <strong>Challenge yourself:</strong> A starter template is available for you to implement each step yourself.
+  Each step includes the solution description and the actual implementation code — attempt the challenge first,
+  then come back to compare or get unstuck.
+  <br><br>
+  <span class="tag is-warning is-light">spoiler</span> <em>Note that reading an earlier step may reveal how a later one is solved.</em>
+
+codeRoot: demo-solution/src/main/java
+githubLink: https://github.com/jobrunr/storyline-demo
+
+flow:
+  - category: "Getting Started"
+    icon: '<i class="fas fa-rocket has-text-primary"></i>'
+    description: "Your first background jobs: enqueue, schedule, and recurring tasks."
+    steps:
+      - ./steps/step-01.yaml
+      - ./steps/step-02.yaml
+      - ./steps/step-03.yaml
+      - ./steps/step-04.yaml
+  - category: "Handling Failures"
+    icon: '<i class="fas fa-wrench has-text-warning"></i>'
+    description: "Retries, idempotency, batches, and error notifications."
+    steps:
+      - ./steps/step-05.yaml
+      - ./steps/step-06.yaml
+      - ./steps/step-07.yaml
+      - ./steps/step-08.yaml
+      - ./steps/step-09.yaml
+  - category: "Priority & Concurrency"
+    icon: '<i class="fas fa-bolt has-text-danger"></i>'
+    description: "Queues, weighted scheduling, mutexes, and timeouts."
+    steps:
+      - ./steps/step-10.yaml
+      - ./steps/step-11.yaml
+      - ./steps/step-12.yaml
+      - ./steps/step-13.yaml
+  - category: "Scaling Out"
+    icon: '<i class="fas fa-globe has-text-info"></i>'
+    description: "Server tags, rate limiting, and progress tracking."
+    steps:
+      - ./steps/step-14.yaml
+      - ./steps/step-15.yaml
+      - ./steps/step-16.yaml
+  - category: "Production Ready"
+    icon: '<i class="fas fa-chart-line has-text-success"></i>'
+    description: "Job results, metrics, tracing, job replacement, and compliance filters."
+    steps:
+      - ./steps/step-17.yaml
+      - ./steps/step-18.yaml
+      - ./steps/step-19.yaml
+      - ./steps/step-20.yaml
+      - ./steps/step-21.yaml

@@ -1,0 +1,125 @@
+{% extends "base" %}
+
+{% block head %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@samlam140330/bulma-timeline@1.0.3/dist/css/bulma-timeline.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+    <link rel="stylesheet" href="/css/guide.css">
+    <script src="https://unpkg.com/htmx.org@2.0.8"></script>
+    <script src="https://unpkg.com/htmx-ext-preload@2.1.0/preload.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.9.0/highlightjs-line-numbers.min.js"></script>
+{% endblock %}
+
+{% block content %}
+    <nav class="navbar is-dark" role="navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item navbar-logo" href="/">
+                <span class="logo-animated-nav">
+                    <img src="/swirl.svg" class="swirl-spin" alt="">
+                    <span class="storyline-icon">{{ storyline.icon }}</span>
+                </span>
+                <span class="navbar-title">{{ storyline.title }}</span>
+            </a>
+        </div>
+        <div class="navbar-end">
+            <div class="navbar-item navbar-progress">
+                <span style="margin-right: 0.5rem;">Progress:</span>
+                <span id="progress-text">0/{{ storyline.storylineMetadata.totalAmountOfSteps }}</span>
+                <progress class="progress is-primary" value="0" max="{{ storyline.storylineMetadata.totalAmountOfSteps }}" id="progress-bar">0%</progress>
+            </div>
+            <div id="navbar-complete-btn" class="navbar-item"></div>
+            <div class="navbar-item">
+                {% if isAuthenticated %}
+                <form method="post" action="/logout" style="margin:0;">
+                    <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}">
+                    <button class="button is-small is-light" type="submit">
+                        <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
+                        <span>{{ currentUser }}</span>
+                    </button>
+                </form>
+                {% else %}
+                <a class="button is-small is-primary" href="/login">
+                    <span class="icon"><i class="fas fa-sign-in-alt"></i></span>
+                    <span>Sign in</span>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="columns is-gapless" hx-ext="preload">
+        <!-- Left sidebar: Timeline -->
+        <div class="column is-narrow timeline-sidebar">
+            <div class="p-4">
+                <h2 class="title is-5 has-text-dark mb-4">
+                    <i class="fas fa-route"></i> Your Learning Path
+                </h2>
+
+                <!-- Timeline -->
+                <div class="timeline">
+                    {% for entry in storyline.stepsByCategory %}
+                        <header class="timeline-header">
+                            <span class="tag is-primary">{{ entry.key.icon | raw }} {{ entry.key.name }}</span>
+                        </header>
+                        {% for step in entry.value %}
+                            <div class="timeline-item" data-step="{{ step.number }}">
+                                <div class="timeline-marker is-icon" data-step-marker="{{ step.number }}">
+                                    <i class="fa-regular fa-circle marker-pending"></i>
+                                    <i class="fas fa-circle marker-active"></i>
+                                    <i class="fas fa-check marker-completed"></i>
+                                </div>
+                                <div class="timeline-content">
+                                    <a href="/storyline/step/{{ step.number }}" class="step-link" data-step="{{ step.number }}"
+                                       hx-get="/storyline/step/{{ step.number }}" hx-target="#step-content" hx-push-url="true" hx-swap="innerHTML show:window:top" preload>
+                                        <div class="box step-box">
+                                            <p class="heading mb-1">Step {{ step.number }} · <i class="fas fa-clock"></i> {{ step.estimatedTime.toMinutes }} min</p>
+                                            <p class="title is-6">{{ step.title }}</p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                    <div class="timeline-header">
+                        <span class="tag is-medium is-success"><i class="fas fa-trophy mr-2"></i> Complete!</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right content area -->
+        <div class="column content-area">
+            <div class="p-5" id="content-container">
+                <!-- Welcome screen -->
+                {% if step is null %}
+                <div id="welcome-screen" class="content-screen active">
+                    <div class="has-text-centered pt-6 pb-5">
+                        <h1 class="title is-2 mb-1">Welcome to {{ storyline.title }}</h1>
+                    </div>
+                    {% if storyline.guideIntro %}
+                    <div class="box mx-auto content" style="max-width: 860px; padding: 2.5rem 3rem; line-height: 1.75;">
+                        {{ storyline.guideIntro | raw }}
+                    </div>
+                    {% endif %}
+                    <div class="has-text-centered pt-5 pb-6">
+                        <p class="has-text-grey mb-5">Click on any step in the timeline to begin your journey</p>
+                        <a href="/storyline/step/1" class="button is-primary is-medium"
+                        hx-get="/storyline/step/1" hx-target="#step-content" hx-push-url="true" hx-swap="innerHTML show:window:top" preload>
+                            <span class="icon"><i class="fas fa-play"></i></span>
+                            <span>Start with Step 1</span>
+                        </a>
+                    </div>
+                </div>
+                {% else %}
+                <div id="welcome-screen" class="content-screen"></div>
+                {% endif %}
+
+                <!-- Step content loaded via HTMX -->
+                <div id="step-content">{% if step is not null %}{% include "step" %}{% endif %}</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/guide.js"></script>
+{% endblock %}

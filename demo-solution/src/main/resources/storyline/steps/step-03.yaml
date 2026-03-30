@@ -1,0 +1,30 @@
+title: "Month-End Reports"
+estimatedTime: PT3M
+
+scenario: |
+  Monthly credit card statements must be generated on the <em>last business day</em> 
+  of each month, not just the last calendar day.
+  <br><br>
+  If the 31st falls on a Saturday, the reports should run on Friday the 30th instead.
+
+challenge: |
+  Standard cron expressions can't handle business day logic. How do we schedule jobs 
+  for complex calendar-based scenarios?
+
+solution: |
+  JobRunr Pro's advanced CRON parser supports business day expressions!
+  Use <code>Cron.lastBusinessDayOfTheMonth()</code> or the expression <code>"0 0 LW * *"</code>.
+  <br><br>
+  Other options include <code>firstBusinessDayOfTheMonth()</code> and expressions 
+  like <code>"0 0 LW-3 * *"</code> for 3 days before the last business day.
+
+codeReferences:
+  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L33-L37
+
+tryIt: |
+  Check the Recurring Jobs dashboard to see the monthly statement job scheduled 
+  for the last business day. The next run time automatically adjusts for weekends!
+
+dashboardUrl: http://localhost:8080/dashboard/recurring-jobs
+
+learnMore: https://www.jobrunr.io/en/documentation/pro/advanced-cron-expressions/

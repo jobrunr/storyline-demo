@@ -1,0 +1,43 @@
+title: "Finding the Needle"
+estimatedTime: PT3M
+
+scenario: |
+  Customer support asks: "John Smith says his credit card application is stuck."
+  With 100,000 jobs in the system, scrolling through pages isn't practical.
+  <br><br>
+  We need a way to find specific jobs instantly.
+
+challenge: |
+  With thousands of jobs, how do we find a specific customer's job instantly?
+
+solution: |
+  Add <strong>labels</strong> to your jobs for powerful filtering:
+  <br><br>
+  <pre class="p-0 m-0">
+  <code class="language-java hljs">
+  jobScheduler.create(aJob()
+      .withLabels("customer: john.smith@email.com", "card: AMEX")
+      .withDetails(() -> createCreditCard(card)));
+
+  // or via the @Job annotation
+  @Job(labels = "{"customer: %0", "card: %1"}")
+  </code></pre>
+  <br>
+  Labels appear in the dashboard and can be used for:
+  <ul>
+    <li>Filtering jobs by customer, card type, region, etc.</li>
+    <li>Building dynamic queues based on labels</li>
+    <li>Finding specific jobs via search</li>
+  </ul>
+
+codeReferences:
+  - org/jobrunr/storylinedemo/creditcards/events/listeners/ScheduleEmailOnCreditCardRegistered.java?focus=L32-L37
+
+tryIt: |
+  Register several credit cards with different emails and card types.
+  Then use the dashboard's label filter to find specific customers instantly!
+
+tryItUrl: /credit-cards/register
+dashboardUrl: http://localhost:8080/dashboard/jobs
+
+learnMore: https://www.jobrunr.io/en/documentation/pro/jobrunr-pro-dashboard/

@@ -1,0 +1,36 @@
+title: "The Hung Job"
+estimatedTime: PT3M
+
+scenario: |
+  A job has been "processing" for 2 hours. The external fraud detection API 
+  is unresponsive, and the job is stuck waiting for a response that may never come.
+  <br><br>
+  The worker thread is blocked and can't process other jobs.
+
+challenge: |
+  How do we prevent jobs from running forever when external dependencies hang?
+
+solution: |
+  Use <strong>Job Timeouts</strong> to automatically fail jobs that take too long:
+  <br><br>
+  <pre class="p-0 m-0">
+  <code class="language-java hljs">
+  @Job(processTimeOut = "PT5M")  // Fail after 5 minutes
+  public void callExternalAPI() {
+      externalService.callSlowAPI();
+  }
+  </code></pre>
+  <br>
+  If the job exceeds the timeout, JobRunr marks it as <code>FAILED</code> and frees the worker.
+  The job can then retry with exponential backoff (when the API might be responsive again).
+
+codeReferences:
+  - org/jobrunr/storylinedemo/payments/PaymentService.java?focus=L71-L74
+
+tryIt: |
+  The export job has a timeout configured. If the government API is slow, 
+  watch the job fail after the timeout and retry automatically.
+
+dashboardUrl: http://localhost:8080/dashboard/jobs?state=FAILED
+
+learnMore: https://www.jobrunr.io/en/documentation/pro/job-timeout/

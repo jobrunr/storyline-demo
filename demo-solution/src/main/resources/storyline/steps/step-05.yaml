@@ -1,0 +1,36 @@
+title: "Automatic Retries"
+estimatedTime: PT4M
+
+scenario: |
+  PDF generation occasionally fails due to network timeouts, memory pressure, 
+  or temporary service unavailability. These transient failures are a fact of life 
+  in distributed systems.
+  <br><br>
+  Without automatic retries, you'd need to track failures and manually requeue them.
+
+challenge: |
+  How do we handle transient failures without losing jobs or requiring manual intervention?
+
+solution: |
+  JobRunr automatically retries failed jobs with <strong>exponential backoff</strong>!
+  <br><br>
+  By default, a failed job is retried up to 10 times with increasing delays:
+  <code>3s → 9s → 27s → 1m21s → 4m3s → ...</code>
+  <br><br>
+  This gives transient issues time to resolve while not overwhelming the system.
+  You can customize the amount of retries per Job with <code>@Job(retries = 5)</code>.
+  More configuration options are available in the docs!
+
+codeReferences:
+  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L82-L86
+
+tryIt: |
+  Trigger the bulk expense summary report generation. Watch some jobs fail (the code randomly 
+  throws exceptions!) and then automatically retry until they succeed.
+
+quickAction:
+  label: Generate Summary Reports
+  url: /bulk-generate-summary-reports
+dashboardUrl: http://localhost:8080/dashboard/jobs?state=SCHEDULED&jobExceptionType!=java.lang.RuntimeException
+
+learnMore: https://www.jobrunr.io/en/documentation/background-methods/dealing-with-exceptions/

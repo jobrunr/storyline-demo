@@ -1,0 +1,49 @@
+title: "VIP Treatment"
+estimatedTime: PT4M
+
+scenario: |
+  The job queue has 10,000 monthly statements, but a customer just made 
+  a payment that needs to be processed urgently.
+  <br><br>
+  Payments are revenue. Reports can wait. We need a way to prioritize.
+
+challenge: |
+  How do we ensure critical jobs jump the queue and get processed immediately?
+
+solution: |
+  Use <strong>Priority Queues</strong> to define job importance:
+  <br><br>
+  <pre class="p-0 m-0">
+  <code class="language-java hljs">
+  jobScheduler.create(aJob()
+      .withQueue("High") // You can also use an enum for this
+      .withDetails(() -> createCreditCard(card)));
+
+  // or via the @Job annotation
+  @Job(queue = "High")
+  public void processPayment(Payment payment) { ... }
+
+  @Job(queue = "Low")
+  public void generateReport() { ... }
+  </code></pre>
+  <br>
+  Configure the queues in order of priority. JobRunr always processes higher-priority 
+  queues first.
+
+codeReferences:
+  - org/jobrunr/storylinedemo/payments/PaymentService.java?focus=L57-L60
+
+tryIt: |
+  <ol>
+  <li>Trigger 1000 expense reports (low priority)</li>
+  <li>Make a payment (high priority)</li>
+  <li>Watch the payment complete immediately despite the backlog!</li>
+  </ol>
+
+quickAction:
+  label: Generate 1000 Expenses
+  url: /bulk-generate-expenses?count=1000
+tryItUrl: /payments/new
+dashboardUrl: http://localhost:8080/dashboard/jobs?queue=High
+
+learnMore: https://www.jobrunr.io/en/documentation/pro/priority-queues/

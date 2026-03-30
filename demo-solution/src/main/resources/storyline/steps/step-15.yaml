@@ -1,0 +1,41 @@
+title: "Go Easy on Your Partners"
+estimatedTime: PT4M
+
+scenario: |
+  External APIs don't appreciate being hammered. PayPal blocks you after too many
+  concurrent requests. Stripe charges overage fees if you exceed per-minute limits.
+  And the government compliance API? You might just DDoS them...
+  <br><br>
+  We need to throttle our requests to stay within each provider's limits.
+
+challenge: |
+  How do we throttle requests to stay within each provider's limits?
+
+solution: |
+  Use <strong>Rate Limiters</strong> — JobRunr Pro offers two types:
+  <br><br>
+  <pre class="p-0 m-0">
+  <code class="language-properties hljs">
+  # Concurrent Rate Limiter — max simultaneous jobs
+  jobrunr.jobs.rate-limiter.concurrent-job-rate-limiter.PAYPAL=5
+  jobrunr.jobs.rate-limiter.concurrent-job-rate-limiter.REPORTING=3
+
+  # Sliding Time Window Rate Limiter — max jobs per time window
+  jobrunr.jobs.rate-limiter.sliding-time-window-rate-limiter.STRIPE=10/PT1M
+  </code></pre>
+  <br>
+  PayPal: max 5 concurrent. Stripe: max 10 per minute. Government: max 3 concurrent.
+  <br>
+  No more angry API providers or surprise bills!
+
+codeReferences:
+  - org/jobrunr/storylinedemo/payments/PaymentService.java?focus=L53-L80
+
+tryIt: |
+  Create bulk payments across all platforms. Watch the dashboard — PayPal and
+  government jobs process 5 and 3 at a time, while Stripe jobs spread evenly
+  across each minute.
+
+dashboardUrl: http://localhost:8080/dashboard/jobs
+
+learnMore: https://www.jobrunr.io/en/documentation/pro/rate-limiters/

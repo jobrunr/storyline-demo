@@ -1,0 +1,70 @@
+{% extends "base" %}
+
+{% block content %}
+<section class="hero is-primary is-medium">
+    <div class="hero-body">
+        <div class="container has-text-centered">
+            <img src="/logo.svg" alt="JobRunr" style="max-width: 180px; margin-bottom: 1.5rem;">
+            <h1 class="title is-1 mb-4">
+                {{ storyline.title }} {{ storyline.icon }}
+            </h1>
+            <p class="hero-description">
+                {{ storyline.slogan }}
+            </p>
+            <a class="btn-primary-light btn mt-5" href="/storyline">Start the Interactive Guide
+                <span class="sr-only"></span>
+                <span class="icon-wrapper">
+                    <span class="icon"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" height="1em" width="1em"><path d="M438.6 278.6c12.5-12.5 12.5-32.8.0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3.0s-12.5 32.8.0 45.3L338.8 224H32c-17.7.0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8.0 45.3s32.8 12.5 45.3.0l160-160z"></path></svg></span>
+                    <span class="icon" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" height="1em" width="1em"><path d="M438.6 278.6c12.5-12.5 12.5-32.8.0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3.0s-12.5 32.8.0 45.3L338.8 224H32c-17.7.0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8.0 45.3s32.8 12.5 45.3.0l160-160z"></path></svg></span>
+                </span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="intro-section">
+            <p class="intro-text">
+                {{ storyline.intro | raw }}
+            </p>
+        </div>
+
+        <div class="timeline-container">
+            <div class="timeline-line"></div>
+            {% for entry in storyline.stepsByCategory %}
+            <div class="timeline-act {% if loop.index is odd %}act-right{% else %}act-left{% endif %}">
+                <div class="timeline-marker-act">
+                    <span class="act-icon">{{ entry.key.icon | raw }}</span>
+                </div>
+                <div class="act-card">
+                    <h3 class="act-title">{{ entry.key.name }}</h3>
+                    <div class="act-steps">
+                        {% for step in entry.value %}
+                        <div class="step-item">
+                            <div class="step-header">
+                                <span class="step-number">{{ step.number }}</span>
+                                <span class="step-title">{{ step.title }}</span>
+                                <span class="step-time">{{ step.estimatedTime.toMinutes }} min</span>
+                            </div>
+                            <p class="step-challenge">{{ step.challenge }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="has-text-centered mt-6">
+            <a class="btn-primary-light btn mt-5" href="/storyline">Begin Your Journey
+                <span class="sr-only"></span>
+                <span class="icon-wrapper">
+                    <span class="icon"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" height="1em" width="1em"><path d="M438.6 278.6c12.5-12.5 12.5-32.8.0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3.0s-12.5 32.8.0 45.3L338.8 224H32c-17.7.0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8.0 45.3s32.8 12.5 45.3.0l160-160z"></path></svg></span>
+                    <span class="icon" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" height="1em" width="1em"><path d="M438.6 278.6c12.5-12.5 12.5-32.8.0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3.0s-12.5 32.8.0 45.3L338.8 224H32c-17.7.0-32 14.3-32 32s14.3 32 32 32h306.7L233.4 393.4c-12.5 12.5-12.5 32.8.0 45.3s32.8 12.5 45.3.0l160-160z"></path></svg></span>
+                </span>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,31 @@
+title: "Customer Onboarding"
+estimatedTime: PT3M
+
+scenario: |
+  When a customer applies for a credit card, we need to run identity verification, 
+  fraud checks, and card provisioning. These operations take 5-10 seconds each.
+  <br><br>
+  Running them synchronously during the web request would make the page feel slow.
+
+challenge: |
+  How do we acknowledge the customer immediately while processing their application reliably in the background?
+
+solution: |
+  Use <code>jobScheduler.enqueue()</code> to offload the heavy lifting to a background job.
+  The web request returns instantly with "Application received!" while JobRunr processes 
+  the actual work asynchronously.
+  <br><br>
+  The <code>@Job(name = "Create %0")</code> annotation gives each job a meaningful name 
+  that appears in the dashboard, making it easy to find specific applications.
+
+codeReferences:
+  - org/jobrunr/storylinedemo/creditcards/CreditCardService.java?focus=L31-L37,L57-L66
+
+tryIt: |
+  Register a new credit card and watch the job appear in the dashboard within milliseconds.
+  Notice how the web page responds immediately — the background job handles the rest.
+
+tryItUrl: /credit-cards/register
+dashboardUrl: http://localhost:8080/dashboard/jobs?state=SUCCEEDED
+
+learnMore: https://www.jobrunr.io/en/documentation/background-methods/enqueueing-jobs/

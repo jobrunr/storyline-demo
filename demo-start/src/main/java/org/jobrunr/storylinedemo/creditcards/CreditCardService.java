@@ -8,29 +8,44 @@ import org.springframework.stereotype.Service;
 @Service
 public class CreditCardService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(CreditCardService.class);
+
     private final JobScheduler jobScheduler;
     private final CreditCardRepository creditCardRepository;
-    private static final Logger LOGGER = LoggerFactory.getLogger(CreditCardService.class);
 
     public CreditCardService(JobScheduler jobScheduler, CreditCardRepository creditCardRepository) {
         this.jobScheduler = jobScheduler;
         this.creditCardRepository = creditCardRepository;
     }
 
+    // TODO Step 1: Enqueue a background job for credit card creation
     public void processRegistration(CreditCard creditCard) {
-        // TODO Step 1: enqueue creation of a card + schedule one in seven days to send a reminder email
-        LOGGER.info("processRegistration: Implement me!");
-
-        // TODO Step 5: filters by credit card type
+        // Use enqueue to process the application in the background
+        // The web request returns immediately while JobRunr handles the work
     }
 
-    public void sendReminderEmail(CreditCard creditCard) {
-        LOGGER.info("Sending out reminder to: {}", creditCard.getEmail());
+    // TODO Step 20: Replace a pending job with updated customer info
+    public void processRegistrationOrReplace(CreditCard creditCard) {
+        // Create a unique job ID from the customer's email
+        // If a job already exists for this customer, it will be replaced
     }
 
+    public void processActivation(String number) {
+        CreditCard creditCardFromRepo = creditCardRepository.findByNumber(number)
+                .orElseThrow(() -> new IllegalArgumentException("Credit card not found: " + number));
+        creditCardFromRepo.activate();
+        creditCardRepository.save(creditCardFromRepo);
+
+        // TODO Step 2B: Cancel card activation reminder job
+    }
+
+    // TODO Give a nice name for the dashboard with customer info
     public void createNewCreditCard(CreditCard creditCard) {
-        creditCardRepository.save(creditCard);
-        LOGGER.info("Created new credit card: {}", creditCard);
+        // Step 1: Save to repository
+        var creditCardFromRepo = creditCardRepository.save(creditCard);
+        LOGGER.info("Created new credit card: {}", creditCardFromRepo);
+
+        // TODO Step 2A: Schedule card activation reminder job
     }
 
 }

@@ -1,0 +1,43 @@
+title: "Different Tracks"
+estimatedTime: PT5M
+
+scenario: |
+  PayPal and Stripe require API credentials that the security team mandates
+  must only exist on dedicated, hardened servers. Internal JobRunr Finance
+  transfers don't need these keys and can run anywhere.
+  <br><br>
+  We need to ensure external payments only run on servers with the right credentials.
+
+challenge: |
+  How do we ensure external payments only run on servers with the right credentials?
+
+solution: |
+  Use <strong>Server Tags</strong> to match jobs with capable servers:
+  <br><br>
+  <pre class="p-0 m-0">
+  <code class="language-java hljs">
+  // Tag the job based on platform
+  jobScheduler.create(aJob()
+      .withServerTag(payment.getPlatform().getServerTag())
+      .withDetails(() -> processPayment(payment)));
+
+  // In application.properties (on dedicated servers only)
+  jobrunr.background-job-server.tags=external
+  </code></pre>
+  <br>
+  Start a dedicated server with <code>jobrunr.background-job-server.tags=external</code> to process PayPal and Stripe payments securely!
+
+codeReferences:
+  - org/jobrunr/storylinedemo/payments/PaymentService.java?focus=L57-L64
+
+tryIt: |
+  <ol>
+    <li>Create payments for all three platforms</li>
+    <li>JobRunr Finance payments process immediately on any server</li>
+    <li>PayPal/Stripe payments wait until you start the external server:<br><br>
+    <code>./gradlew :demo-solution:bootRun --args='--server.port=8081 --jobrunr.dashboard.enabled=false --jobrunr.background-job-server.tags=external'</code></li>
+  </ol>
+
+dashboardUrl: http://localhost:8080/dashboard/servers
+
+learnMore: https://www.jobrunr.io/en/documentation/pro/server-tags/

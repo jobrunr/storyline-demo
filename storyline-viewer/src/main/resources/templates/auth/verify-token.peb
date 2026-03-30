@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify sign-in - {{ storyline.title }}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<section class="hero is-fullheight">
+    <div class="hero-body">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-5-tablet is-4-desktop has-text-centered">
+                    <div class="box">
+                        <span class="icon is-large has-text-primary mb-4" style="font-size: 3rem;">
+                            <i class="fas fa-key"></i>
+                        </span>
+                        <h1 class="title is-4">One click to sign in</h1>
+                        <p class="mb-5 has-text-grey">Your magic link is valid. Click the button below to complete your sign-in.</p>
+                        <form method="post" action="/login/ott">
+                            <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}">
+                            <input type="hidden" name="token" value="{{ token }}">
+                            <button class="button is-primary is-fullwidth" type="submit">
+                                Sign in to {{ storyline.title }}
+                            </button>
+                        </form>
+                        <p class="is-size-7 has-text-grey mt-4">
+                            Link expired? <a href="/login">Request a new one</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+</body>
+</html>

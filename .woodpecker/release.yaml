@@ -1,0 +1,49 @@
+when:
+  event: tag
+
+workspace:
+  path: jobrunr-pro-finance-demo/src
+
+steps:
+  - name: prepare-docker-build-container
+    image: docker
+    privileged: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    commands:
+      - docker build -f BuildDockerfile -t registry.jobrunr.io/jobrunr/jobrunr-pro-finance-demo:latest .
+
+  - name: build
+    image: registry.jobrunr.io/jobrunr/jobrunr-pro-finance-demo:latest
+    commands:
+      - echo "Running on ${CI_SYSTEM_NAME:-<not set>}"
+      - gradle --no-daemon test
+
+  - name: build-prd-container
+    image: registry.jobrunr.io/jobrunr/jobrunr-pro-finance-demo:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    commands:
+      - echo "Building and pushing image with Jib..."
+      - gradle --no-daemon jib
+    environment:
+      JOBRUNR_REGISTRY_USER:
+        from_secret: JOBRUNR_REGISTRY_USER
+      JOBRUNR_REGISTRY_PASSWORD:
+        from_secret: JOBRUNR_REGISTRY_PASSWORD
+      JOBRUNR_REPO_USER:
+        from_secret: JOBRUNR_REPO_USER
+      JOBRUNR_REPO_PASSWORD:
+        from_secret: JOBRUNR_REPO_PASSWORD
+
+  - name: deploy
+    image: appleboy/drone-ssh
+    settings:
+      host:
+        from_secret: PRD_SSH_HOST
+      username:
+        from_secret: PRD_SSH_USER
+      key:
+        from_secret: PRD_SSH_PRIVATE_KEY
+      script:
+        - /home/jobrunr/jobrunr_services/redeploy.sh finance.demo.jobrunr.io jobrunr-pro-finance-demo

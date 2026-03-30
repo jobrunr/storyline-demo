@@ -1,0 +1,40 @@
+title: "Don't Charge Twice!"
+estimatedTime: PT5M
+
+scenario: |
+  A payment job failed AFTER the payment was processed but BEFORE it was recorded.
+  When the job retried, it charged the customer again.
+  <br><br>
+  This is a classic idempotency problem — retrying a job must not repeat completed steps.
+
+challenge: |
+  How do we make jobs safe to retry without duplicating irreversible operations like payments?
+
+solution: |
+  Use <code>JobContext.runStepOnce("step-name", () -> yourLogic)</code> to mark critical sections.
+  JobRunr remembers which steps completed, so retries skip already-successful operations.
+  <br><br>
+  <pre class="p-0 m-0">
+  <code class="language-java hljs">
+  public void processPayment(JobContext context, Payment payment) {
+      context.runStepOnce("charge-card", () -> paymentGateway.charge(payment));
+      context.runStepOnce("send-receipt", () -> emailService.sendReceipt(payment));
+      context.runStepOnce("update-ledger", () -> ledgerService.record(payment));
+  }
+  </code></pre>
+  <br>
+  If the job fails after "charge-card" but before "send-receipt", the retry will skip 
+  the charge and continue from the receipt.
+
+codeReferences:
+  - org/jobrunr/storylinedemo/payments/PaymentService.java?focus=L82-L95
+
+tryIt: |
+  Make a payment using the credit card you've created earlier and watch the job context track completed steps. 
+  If you manually retry the job, it won't duplicate the payment!
+
+tryItUrl: /payments/new
+
+dashboardUrl: http://localhost:8080/dashboard/jobs?jobSignature=org.jobrunr.storylinedemo.payment.PaymentService.processPayment%28java.lang.Long%2C+org.jobrunr.jobs.context.JobContext%29
+
+learnMore: https://www.jobrunr.io/en/documentation/background-methods/best-practices/

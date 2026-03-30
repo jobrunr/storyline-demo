@@ -1,0 +1,38 @@
+title: "Alert the Team"
+estimatedTime: PT3M
+
+scenario: |
+  Sometimes batch jobs fail after processing thousands of items.
+  We need automatic notifications when critical jobs fail — not just retries.
+  <br><br>
+  The ops team should know immediately, not discover it hours later.
+
+challenge: |
+  How do we trigger error handling workflows when a job fails permanently?
+
+solution: |
+  Use <code>onFailure()</code> to chain a notification job that runs only when the parent fails:
+  <br><br>
+  <pre class="p-0 m-0">
+  <code class="language-java hljs">
+  jobScheduler
+      .startBatch(this::generateAllStatements)
+      .onFailure(this::notifyOpsTeam);
+  </code></pre>
+  <br>
+  The ops team gets a Slack/email notification immediately when the job fails.
+  You can combine <code>continueWith()</code> and <code>onFailure()</code> for complete workflows!
+  <br><br>
+  <strong>Bonus:</strong> inside the notification job, use <code>context.getAwaitedJob()</code> to retrieve
+  the failed batch job and include the total statement count in the alert.
+
+codeReferences:
+  - org/jobrunr/storylinedemo/creditcards/CreditCardStatementService.java?focus=L36-L46
+
+tryIt: |
+  Watch the summary job fail (it has a 50% failure rate!) and see the notification job trigger automatically. 
+  It did not fail? Then no worries, JobRunr moved the <code>onFailure</code> Job to <code>NOT_APPLICABLE</code> state.
+
+dashboardUrl: http://localhost:8080/dashboard/jobs?state=FAILED
+
+learnMore: https://www.jobrunr.io/en/documentation/pro/job-chaining/

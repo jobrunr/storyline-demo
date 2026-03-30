@@ -1,0 +1,571 @@
+/* Guide page styles - JobRunr branded */
+:root {
+    --jobrunr-purple: #7c3aed;
+    --jobrunr-blue: #3b82f6;
+    --jobrunr-cyan: #06b6d4;
+    --jobrunr-success: #10b981;
+    --jobrunr-dark: #1e293b;
+    --jobrunr-gray: #64748b;
+    --jobrunr-light-gray: #94a3b8;
+    --color-primary: #744cbf;
+    --color-secondary: #00F0B5;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.timeline-sidebar {
+    background-image: url('/img-background.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: calc(100vh - 52px);
+    overscroll-behavior: contain;
+    position: sticky;
+    top: 52px;
+    align-self: flex-start;
+}
+
+.timeline-sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.timeline-sidebar::-webkit-scrollbar-track {
+    background: #e2e8f0;
+}
+
+.timeline-sidebar::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 4px;
+}
+
+.timeline-sidebar::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+}
+
+/* Progress in navbar */
+.navbar-progress {
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    color: white;
+    font-size: 0.875rem;
+}
+
+.navbar-progress .progress {
+    width: 150px;
+    margin: 0 0.75rem;
+    height: 0.5rem;
+}
+
+.content-area {
+    background: #f8f9fa;
+    overflow-y: auto;
+}
+
+.content-area::-webkit-scrollbar {
+    width: 10px;
+}
+
+.content-area::-webkit-scrollbar-track {
+    background: #e2e8f0;
+}
+
+.content-area::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 5px;
+}
+
+/* Timeline customization */
+.timeline {
+    padding-left: 0;
+    margin-left: 0;
+    width: 100%;
+}
+
+.timeline .timeline-item {
+    padding-bottom: 1.5rem;
+    padding-left: 0;
+}
+
+.timeline .timeline-content {
+    padding-left: 1.5rem !important;
+    padding-right: 0 !important;
+    text-align: left !important;
+}
+
+.timeline .timeline-header {
+    width: auto; 
+    min-width: 0;
+    max-width: none;
+    justify-content: flex-start; 
+    align-self: flex-start;
+    padding: 0.5rem 1rem;
+}
+
+.timeline-header .tag {
+    background: var(--color-primary);
+    color: white;
+    font-weight: 600;
+    font-size: 0.75rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 12px;
+    white-space: nowrap;
+}
+
+.timeline-header .tag i {
+    margin-right: 0.25rem;
+}
+
+/* Timeline marker base styles */
+.timeline .timeline-marker.is-icon {
+    width: 2rem;
+    height: 2rem;
+    background: white;
+    border: 2px solid var(--jobrunr-light-gray);
+    transition: all 0.3s ease;
+}
+
+.timeline .timeline-marker.is-icon i {
+    font-size: 0.75rem;
+    color: var(--jobrunr-light-gray);
+}
+
+/* Icon visibility - show only pending by default */
+.timeline .timeline-marker .marker-active,
+.timeline .timeline-marker .marker-completed {
+    display: none;
+}
+
+.timeline .timeline-marker .marker-pending {
+    display: inline;
+}
+
+/* Completed state - show checkmark */
+.timeline .timeline-item.completed .timeline-marker.is-icon {
+    background: var(--jobrunr-success);
+    border-color: var(--jobrunr-success);
+}
+
+.timeline .timeline-item.completed .timeline-marker.is-icon i {
+    color: white;
+}
+
+.timeline .timeline-item.completed .marker-pending,
+.timeline .timeline-item.completed .marker-active {
+    display: none;
+}
+
+.timeline .timeline-item.completed .marker-completed {
+    display: inline;
+}
+
+/* Active state - filled dot with ring */
+.timeline .timeline-item.active .timeline-marker.is-icon {
+    background: white;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(116, 76, 191, 0.2);
+}
+
+.timeline .timeline-item.active .timeline-marker.is-icon i {
+    color: var(--color-primary);
+}
+
+.timeline .timeline-item.active .marker-pending,
+.timeline .timeline-item.active .marker-completed {
+    display: none;
+}
+
+.timeline .timeline-item.active .marker-active {
+    display: inline;
+}
+
+.step-box {
+    background: white;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    padding: 0.75rem 1rem;
+}
+
+.step-box .title.is-6 {
+    font-size: 0.875rem;
+    margin-bottom: 0;
+}
+
+.step-box:hover {
+    border-color: var(--color-primary);
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
+}
+
+.step-box .heading {
+    color: var(--jobrunr-gray);
+    font-size: 0.75rem;
+}
+
+.step-box .title {
+    color: var(--jobrunr-dark);
+}
+
+.timeline-item.completed .step-box {
+    border-color: var(--jobrunr-success);
+    background: rgba(16, 185, 129, 0.1);
+}
+
+.timeline-item.active .step-box {
+    border-color: var(--color-primary);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+    background: #f5f3ff;
+}
+
+/* Content screens */
+.content-screen {
+    display: none;
+}
+
+.content-screen.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Tabs */
+.tabs {
+    margin-bottom: 0 !important;
+}
+
+.tab-content {
+    display: none;
+    padding: 1.5rem;
+    background: white;
+    border: none;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.tab-content.is-active {
+    display: block;
+}
+
+/* Demo Stepper */
+.demo-stepper {
+    padding: 1.5rem;
+}
+
+.demo-step {
+    display: flex;
+    gap: 1rem;
+    align-items: stretch;
+}
+
+.demo-step-aside {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    width: 2rem;
+}
+
+.demo-step-marker {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.8rem;
+    transition: background 0.3s ease;
+}
+
+.demo-step-marker.is-done {
+    background: var(--jobrunr-success);
+}
+
+.demo-step-line {
+    flex: 1;
+    width: 2px;
+    background: #e5e7eb;
+    min-height: 1rem;
+    margin: 0.25rem 0;
+}
+
+.demo-step-body {
+    flex: 1;
+    min-width: 0;
+    padding-bottom: 1.25rem;
+}
+
+.demo-action-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #fafafa;
+    user-select: none;
+}
+
+.demo-action-row:hover {
+    border-color: var(--color-primary);
+    background: white;
+    box-shadow: 0 2px 8px rgba(116, 76, 191, 0.1);
+}
+
+.demo-action-row.is-done {
+    border-color: var(--jobrunr-success);
+    background: rgba(16, 185, 129, 0.04);
+}
+
+.demo-action-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: var(--jobrunr-dark);
+}
+
+.demo-action-status {
+    display: flex;
+    align-items: center;
+    color: var(--jobrunr-light-gray);
+    font-size: 0.875rem;
+}
+
+.demo-action-row.htmx-request .demo-action-run-icon {
+    display: none;
+}
+
+.demo-action-feedback {
+    margin-top: 0.4rem;
+    font-size: 0.8rem;
+}
+
+.demo-step-body-form {
+    padding-bottom: 0;
+    overflow: hidden;
+}
+
+.demo-iframe {
+    height: 700px;
+    width: 100%;
+    border: none;
+    display: block;
+}
+
+.tabs li.is-active a {
+    border-bottom-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.tabs a {
+    transition: all 0.2s ease;
+}
+
+.tabs a:hover {
+    color: var(--color-primary);
+}
+
+/* Code blocks */
+.file-tabs {
+    border-bottom: none;
+}
+
+.code-view-switch-action {
+    text-align: right;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.8rem;
+    background: #f5f5f5;
+    border: 1px solid #dbdbdb;
+    border-top: none;
+    border-bottom: none;
+}
+
+.code-view-switch-action a {
+    color: var(--jobrunr-light-gray);
+}
+
+.code-view-switch-action a:hover {
+    color: var(--color-primary);
+}
+
+pre {
+    max-height: 500px;
+    overflow-y: auto;
+    border-radius: 12px;
+    background: #1e293b !important;
+}
+
+pre.code-pre {
+    border-radius: 0 0 12px 12px;
+}
+
+pre code {
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* Step boxes in content area */
+.box {
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: none;
+}
+
+.box ol {
+    margin-left: 1.75rem;
+}
+
+.box.has-background-light {
+    background: #f0f9ff !important;
+    border-left: 4px solid var(--jobrunr-cyan);
+}
+
+.box.has-background-warning-light {
+    background: #fffbeb !important;
+    border-left: 4px solid #f59e0b;
+}
+
+.box.has-background-success-light {
+    background: #ecfdf5 !important;
+    border-left: 4px solid var(--jobrunr-success);
+}
+
+.box.has-background-info-light {
+    background: #f5f3ff !important;
+    border-left: 4px solid var(--color-primary);
+}
+
+/* Buttons */
+.button.is-primary {
+    background-color: var(--color-primary);
+    border: none;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    color: white;
+}
+
+.button.is-primary:hover {
+    background-color: var(--color-secondary);
+    color: var(--jobrunr-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 240, 181, 0.4);
+}
+
+.button.is-success {
+    background-color: var(--jobrunr-success);
+    border-color: var(--jobrunr-success);
+    transition: all 0.3s ease;
+}
+
+.button.is-success:hover {
+    background-color: #229954;
+    transform: translateY(-2px);
+}
+
+.button.is-link {
+    background-color: var(--jobrunr-blue);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.button.is-link:hover {
+    background-color: var(--jobrunr-dark-blue);
+    transform: translateY(-2px);
+}
+
+/* Progress bar */
+.progress.is-primary::-webkit-progress-value {
+    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+}
+
+.progress.is-primary::-moz-progress-bar {
+    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+}
+
+/* Navbar */
+.navbar.is-dark {
+    background: var(--jobrunr-dark);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar .button.is-light {
+    font-weight: 500;
+}
+
+/* Navbar animated logo */
+.navbar-logo {
+    gap: 0.5rem;
+}
+
+.logo-animated-nav {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-animated-nav .swirl-spin {
+    width: 36px;
+    height: 36px;
+    transition: transform 0.8s ease;
+}
+
+.navbar-logo:hover .swirl-spin {
+    transform: rotate(360deg);
+}
+
+.navbar-title {
+    font-weight: bold;
+}
+
+.logo-animated-nav .storyline-icon {
+    position: absolute;
+    font-size: 0.875rem;
+    opacity: 0.9;
+    z-index: 1;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .columns.is-gapless {
+        flex-direction: column;
+        height: auto !important;
+    }
+
+    .timeline-sidebar {
+        height: auto;
+        max-height: 300px;
+    }
+
+    .content-area {
+        height: auto;
+    }
+}

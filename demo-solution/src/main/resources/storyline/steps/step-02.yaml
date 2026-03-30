@@ -1,0 +1,35 @@
+title: "Gentle Reminders"
+estimatedTime: PT4M
+
+scenario: |
+  Customers often receive their cards but forget to activate them.
+  We want to send a friendly reminder email 7 days after registration —
+  but only if the card hasn't been activated yet.
+  <br><br>
+  Sending reminders for already-activated cards would annoy customers.
+
+challenge: |
+  How do we schedule a future job that can be cancelled if circumstances change?
+
+solution: |
+  Use <code>scheduleAt()</code> to create a job that runs 7 days in the future.
+  When the customer activates their card, mark the reminder job as <code>DELETED</code>.
+  <br><br>
+  JobRunr will skip the job gracefully and show it in the dashboard with a clear reason.
+  The job will be automatically cleaned up after 3 days.
+
+codeReferences:
+  - org/jobrunr/storylinedemo/creditcards/events/listeners/ScheduleEmailOnCreditCardRegistered.java?focus=L27-L49
+  - org/jobrunr/storylinedemo/creditcards/events/listeners/CancelScheduledEmailOnCreditCardActivated.java?focus=L21-L34
+
+tryIt: |
+  <ol>
+  <li>Register a new credit card — notice the scheduled reminder job</li>
+  <li>Activate the card — watch the scheduled reminder job change to <code>DELETED</code></li>
+  <li>Check the dashboard to see the cancellation reason</li>
+  </ol>
+
+tryItUrl: /credit-cards/register
+dashboardUrl: http://localhost:8080/dashboard/jobs?state=SCHEDULED
+
+learnMore: https://www.jobrunr.io/en/documentation/background-methods/scheduling-jobs/

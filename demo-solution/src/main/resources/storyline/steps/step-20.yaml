@@ -1,0 +1,45 @@
+title: "Replacing Outdated Jobs"
+estimatedTime: PT4M
+
+scenario: |
+  A customer updated their address AFTER submitting a credit card application,
+  but BEFORE the job processed. The pending job has the old address.
+  <br><br>
+  We need to update the job with the new information.
+
+challenge: |
+  How do we update or replace a job that's already enqueued or even processing?
+
+solution: |
+  Use <strong>enqueueOrReplace()</strong> to update existing jobs:
+  <br><br>
+  <pre class="p-0 m-0">
+  <code class="language-java hljs">
+  // Create job with a unique ID
+  UUID jobId = JobProId.fromIdentifier(customer.getEmail());
+  jobScheduler.enqueue(jobId, () -> processApplication(customer));
+
+  // Later, customer updates their info...
+  customer.setAddress(newAddress);
+
+  // Replace the job with updated data
+  jobScheduler.enqueueOrReplace(jobId, () -> processApplication(customer));
+  </code></pre>
+  <br>
+  If the job is already processing, it will be interrupted and restarted with 
+  the new data!
+
+codeReferences:
+  - org/jobrunr/storylinedemo/creditcards/CreditCardService.java?focus=L38-L44
+
+tryIt: |
+  <ol>
+  <li>Register a credit card</li>
+  <li>Immediately update the registration with new details</li>
+  <li>Watch the job get replaced in the dashboard!</li>
+  </ol>
+
+tryItUrl: /credit-cards/register
+dashboardUrl: http://localhost:8080/dashboard/jobs
+
+learnMore: https://www.jobrunr.io/en/documentation/pro/replace-jobs/

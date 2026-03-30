@@ -1,0 +1,217 @@
+<!-- Hide welcome screen via OOB swap -->
+<div id="welcome-screen" hx-swap-oob="true" class="content-screen"></div>
+
+
+<div id="step-{{ step.number }}" class="content-screen active" data-step="{{ step.number }}">
+    <div class="level mb-5">
+        <div class="level-left">
+            <div class="level-item">
+                <div>
+                    <div class="mb-3">
+                        <span class="heading mr-2">Step {{ step.number }} of {{ storyline.storylineMetadata.totalAmountOfSteps }}</span>
+                        ·
+                        <span class="is-size-6 has-text-grey ml-2">
+                            <i class="fas fa-clock"></i> {{ step.estimatedTime.toMinutes }} minutes
+                        </span>
+                    </div>
+
+                    <h1 class="title is-2">
+                        {{ step.title }}
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- The Scenario -->
+    {% if step.scenario %}
+    <div class="box has-background-light">
+        <h3 class="title is-4">The Scenario</h3>
+        <div class="is-size-5">{{ step.scenario | raw }}</div>
+    </div>
+    {% endif %}
+
+    <!-- The Challenge -->
+    <div class="box has-background-warning-light">
+        <h3 class="title is-4">The Challenge</h3>
+        <div class="is-size-5">{{ step.challenge | raw }}</div>
+    </div>
+
+    <!-- The Solution -->
+    <div class="box has-background-success-light">
+        <h3 class="title is-4">The Solution</h3>
+        <div class="is-size-5">{{ step.solution | raw }}</div>
+        {% if step.learnMore %}
+        <p class="mt-4">
+            <a href="{{ step.learnMore }}" target="_blank" class="has-text-link">
+                <span class="icon"><i class="fas fa-book"></i></span>
+                <span>Read the documentation →</span>
+            </a>
+        </p>
+        {% endif %}
+    </div>
+
+    <!-- Try It / Dashboard Link -->
+    <div class="box has-background-info-light">
+        <h3 class="title is-4">Try It Yourself</h3>
+        <div class="is-size-5">{{ step.tryIt | raw }}</div>
+    </div>
+
+    {% if securityEnabled and not isAuthenticated %}
+    <div class="notification is-warning">
+        <span class="icon"><i class="fas fa-lock"></i></span>
+        <span>You need to <a href="/login">log in</a> to perform write operations. You can still view the code solution and dashboard.</span>
+    </div>
+    {% endif %}
+    {% if isLiveDemo and step.liveNotice %}
+    <div class="notification is-info">
+        <span class="icon"><i class="fas fa-circle-info"></i></span>
+        <span>{{ step.liveNotice }}</span>
+    </div>
+    {% endif %}
+
+    <!-- Toggle between Code and Demo -->
+    <div class="tabs is-boxed is-large">
+        <ul>
+            <li class="tab-link" data-tab="code-{{ step.number }}">
+                <a>
+                    <span class="icon"><i class="fas fa-code"></i></span>
+                    <span>View Code</span>
+                </a>
+            </li>
+            {% if step.tryItUrl or step.quickActions|length > 0 %}
+            <li class="tab-link" data-tab="demo-{{ step.number }}">
+                <a>
+                    <span class="icon"><i class="fas fa-play-circle"></i></span>
+                    <span>Try Demo</span>
+                </a>
+            </li>
+            {% endif %}
+            {% if step.dashboardUrl %}
+            <li class="tab-link" data-tab="dashboard-{{ step.number }}">
+                <a>
+                    <span class="icon"><i class="fas fa-dashboard"></i></span>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <!-- Code view -->
+    <div id="code-{{ step.number }}" class="tab-content">
+        {% if step.codeReferences|length > 0 %}
+            <div class="tabs is-boxed mb-0 file-tabs">
+                <ul>
+                    {% for codeReference in step.codeReferences %}
+                    {% set fileName = (codeReference | split('/') | last) | split('\?') | first %}
+                    <li class="file-tab {% if loop.first %}is-active{% endif %}"
+                        hx-get="/code/{{ codeReference }}"
+                        hx-target="#code-pre-{{ step.number }}">
+                        <a>
+                            <span class="icon is-small"><i class="fas fa-file-code"></i></span>
+                            <span>{{ fileName }}</span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div id="code-view-switch" class="code-view-switch-action"></div>
+            <pre id="code-pre-{{ step.number }}" class="code-pre p-0"
+                 hx-trigger="load" hx-get="/code/{{ step.codeReferences[0] }}"><code class="language-java">Loading code...</code></pre>
+        {% else %}
+        <div class="notification is-info">
+            <p>This step focuses on dashboard exploration. No specific code to display.</p>
+        </div>
+        {% endif %}
+    </div>
+
+    {% if step.tryItUrl or step.quickActions|length > 0 %}
+    <div id="demo-{{ step.number }}" class="tab-content" style="padding: 0;">
+        {% if step.quickActions|length > 0 %}
+        <div class="demo-stepper">
+            {% for action in step.quickActions %}
+            <div class="demo-step">
+                <div class="demo-step-aside">
+                    <div id="demo-step-marker-{{ step.number }}-{{ loop.index }}" class="demo-step-marker">{{ loop.index + 1 }}</div>
+                    {% if not loop.last or step.tryItUrl %}
+                    <div class="demo-step-line"></div>
+                    {% endif %}
+                </div>
+                <div class="demo-step-body">
+                    <div class="demo-action-row"
+                         hx-get="{{ action.url }}"
+                         hx-swap="none"
+                         hx-disabled-elt="this"
+                         hx-on::after-request="demoActionComplete(event, {{ step.number }}, {{ loop.index }})">
+                        <span class="demo-action-label">
+                            <span class="icon has-text-info"><i class="fas fa-bolt"></i></span>
+                            <span>{{ action.label }}</span>
+                        </span>
+                        <span class="demo-action-status">
+                            <span class="htmx-indicator">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </span>
+                            <span id="demo-step-run-icon-{{ step.number }}-{{ loop.index }}" class="demo-action-run-icon">
+                                <i class="fas fa-play"></i>
+                            </span>
+                        </span>
+                    </div>
+                    <div id="quick-action-result-{{ step.number }}-{{ loop.index }}" class="demo-action-feedback"></div>
+                </div>
+            </div>
+            {% endfor %}
+            {% if step.tryItUrl %}
+            <div class="demo-step">
+                <div class="demo-step-aside">
+                    <div class="demo-step-marker">{{ step.quickActions | length + 1 }}</div>
+                </div>
+                <div class="demo-step-body demo-step-body-form">
+                    <iframe src="{{ step.tryItUrl }}" class="demo-iframe"></iframe>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% else %}
+        <iframe src="{{ step.tryItUrl }}" class="demo-iframe"></iframe>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% if step.dashboardUrl %}
+    <div id="dashboard-{{ step.number }}" class="tab-content" style="padding: 0">
+        <iframe src="{{ step.dashboardUrl }}" loading="lazy" class="demo-iframe"></iframe>
+    </div>
+    {% endif %}
+
+
+    <!-- Navigation -->
+    <div class="buttons is-centered mt-6">
+        {% if step.number > 1 %}
+        <a href="/storyline/step/{{ step.number - 1 }}" class="button is-light is-medium"
+           hx-get="/storyline/step/{{ step.number - 1 }}" hx-target="#step-content" hx-push-url="true" hx-swap="innerHTML show:window:top" preload>
+            <span class="icon"><i class="fas fa-arrow-left"></i></span>
+            <span>Previous</span>
+        </a>
+        {% else %}
+        <a href="/storyline" class="button is-light is-medium"
+           hx-get="/storyline" hx-target="#step-content" hx-push-url="true" hx-swap="innerHTML show:window:top" preload>
+            <span class="icon"><i class="fas fa-arrow-left"></i></span>
+            <span>Welcome</span>
+        </a>
+        {% endif %}
+
+        {% if step.number < storyline.storylineMetadata.totalAmountOfSteps %}
+        <a href="/storyline/step/{{ step.number + 1 }}" class="button is-primary is-medium"
+           hx-get="/storyline/step/{{ step.number + 1 }}" hx-target="#step-content" hx-push-url="true" hx-swap="innerHTML show:window:top" preload>
+            <span>Next</span>
+            <span class="icon"><i class="fas fa-arrow-right"></i></span>
+        </a>
+        {% else %}
+        <a href="/" class="button is-success is-medium">
+            <span class="icon"><i class="fas fa-trophy"></i></span>
+            <span>Complete!</span>
+        </a>
+        {% endif %}
+    </div>
+</div>

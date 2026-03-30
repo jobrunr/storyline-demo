@@ -1,0 +1,39 @@
+title: "Debug Like a Detective"
+estimatedTime: PT5M
+
+scenario: |
+  After a routine redeploy, credit card creation jobs are taking 10x longer
+  than usual. Users are complaining, but the code hasn't changed.
+  <br><br>
+  We need to identify which step or resource is causing the slowdown.
+
+challenge: |
+  How do we identify which step or resource is slowing down our jobs?
+
+solution: |
+  JobRunr Pro integrates with <strong>OpenTelemetry</strong> to provide detailed job traces:
+  <br><br>
+  <pre class="p-0 m-0">
+  <code class="language-properties hljs">
+  # In application.properties
+  management.tracing.sampling.probability=1.0
+  management.opentelemetry.tracing.export.otlp.endpoint=http://localhost:4318/v1/traces
+  jobrunr.jobs.metrics.otel-observability.enabled=true
+  </code></pre>
+  <br>
+  JobRunr automatically creates spans for job execution, so you can pinpoint
+  exactly where time is being spent — whether it's the database, an external API,
+  or your own code.
+
+tryIt: |
+  <ol>
+    <li>Register a credit card and watch the job complete</li>
+    <li>Open <a href="http://localhost:16686" target="_blank">Jaeger</a> and search for service "storyline-demo"</li>
+    <li>Analyze the different spans of the job's trace to find the bottleneck</li>
+  </ol>
+
+dashboardUrl: http://localhost:16686
+
+learnMore: https://www.jobrunr.io/en/documentation/pro/observability/
+
+liveNotice: "Jaeger is not available in this live demo. Run the demo locally to explore distributed traces."

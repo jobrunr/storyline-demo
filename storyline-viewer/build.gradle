@@ -1,0 +1,36 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
+plugins {
+    id 'java-library'
+    id 'org.springframework.boot' version '4.0.3' apply false
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom(SpringBootPlugin.BOM_COORDINATES)
+    }
+}
+
+group = 'org.jobrunr'
+version = '0.0.1-SNAPSHOT'
+description = 'storyline-demo-guide'
+
+
+dependencies {
+    // Spring dependencies + hot reload, validation
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'tools.jackson.dataformat:jackson-dataformat-yaml'
+    implementation 'org.apache.commons:commons-lang3'
+    implementation 'io.pebbletemplates:pebble-spring-boot-starter:4.0.0'
+
+    // Security + magic link auth (brought to all consumers; beans activate via storyline.security.enabled)
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    compileOnly 'org.springframework.boot:spring-boot-starter-data-jdbc'
+
+    // Generates spring-configuration-metadata.json from @ConfigurationProperties so IDEs
+    // can validate and autocomplete storyline.security.* properties in application.properties
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+}

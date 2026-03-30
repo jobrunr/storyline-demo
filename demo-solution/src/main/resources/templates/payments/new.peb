@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make a Payment</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="icon" href="/favicon.svg">
+</head>
+<body class="flex-center">
+
+<nav class="page-nav">
+    <a href="/credit-cards/register">Register Card</a>
+    <a href="/credit-cards/activate">Activate Card</a>
+    <a href="/payments/new" class="active">Make Payment</a>
+</nav>
+
+<div class="card-container" hx-boost="true">
+    <div class="header">
+        <h1>Make a Payment</h1>
+        <p>Transfer funds to another platform or user.</p>
+    </div>
+
+    <form id="payment-form" action="/payments/new" method="post">
+        <div class="form-field">
+            <label for="creditCardId">From Credit Card</label>
+            <select id="creditCardId" name="creditCardId">
+                <option value="" disabled {% if payment.creditCardId is null %}selected{% endif %}>Select your credit card</option>
+                {% for card in creditCards %}
+                <option value="{{ card.id }}" {% if payment.creditCardId == card.id %}selected{% endif %}>
+                    {{ card.type }} - {{ card.name }}
+                </option>
+                {% endfor %}
+            </select>
+            {% if errors.creditCardId %}
+            <p class="error-message">{{ errors.creditCardId }}</p>
+            {% endif %}
+        </div>
+
+        <div class="form-field">
+            <label for="amount">Amount ($)</label>
+            <input type="number" id="amount" name="amount" step="0.01" min="0.01"
+                   placeholder="Enter amount" value="{{ payment.amount }}">
+            {% if errors.amount %}
+            <p class="error-message">{{ errors.amount }}</p>
+            {% endif %}
+        </div>
+
+        <div class="form-field">
+            <label for="platform">Destination Platform</label>
+            <select id="platform" name="platform" onchange="updateRecipientPlaceholder()">
+                <option value="" disabled {% if payment.platform is null %}selected{% endif %}>Select destination</option>
+                {% for platform in platforms %}
+                <option value="{{ platform }}" {% if payment.platform == platform %}selected{% endif %}>
+                    {{ platform }}
+                </option>
+                {% endfor %}
+            </select>
+            {% if errors.platform %}
+            <p class="error-message">{{ errors.platform }}</p>
+            {% endif %}
+        </div>
+
+        <div class="form-field">
+            <label for="recipient">Recipient</label>
+            <input type="text" id="recipient" name="recipient"
+                   placeholder="Enter recipient details" value="{{ payment.recipient }}">
+            {% if errors.recipient %}
+            <p class="error-message">{{ errors.recipient }}</p>
+            {% endif %}
+        </div>
+
+        <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}">
+        <button type="submit" class="submit-btn">
+            Submit Payment
+        </button>
+    </form>
+
+    {% if success %}
+    <div class="success-message">
+        Payment submitted! Check the JobRunr dashboard to see it being processed.
+    </div>
+    {% endif %}
+</div>
+
+<script type="text/javascript">
+    const placeholders = {
+        'JOBRUNR_FINANCE': 'Enter credit card number',
+        'PAYPAL': 'Enter PayPal email address',
+        'STRIPE': 'Enter Stripe account ID (acct_...)'
+    };
+
+    function updateRecipientPlaceholder() {
+        const platform = document.getElementById('platform').value;
+        const recipientInput = document.getElementById('recipient');
+        recipientInput.placeholder = placeholders[platform] || 'Enter recipient details';
+    }
+
+    document.getElementById('platform').addEventListener('change', updateRecipientPlaceholder);
+</script>
+</body>
+</html>

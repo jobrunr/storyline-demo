@@ -1,71 +1,133 @@
-# JobRunr Finance Storyline Demo
+# JobRunr Finance — A Day in the Life of Background Job Processing 🏦
 
-In this demo, we gradually explore the capabilities of JobRunr Pro by following the steps below.
+Welcome to **JobRunr Finance**, an interactive demo where you'll experience real-world challenges that arise throughout a day at a fictional bank, and discover how JobRunr Pro handles each one with elegance.
 
-Find and complete all the `// TODO Step x` comments in project `demo-start`! 
-You can easily locate these by searching for the comment in your favourite IDE (e.g. `⌘+SHIFT+F` in IntelliJ).
+## The Story
 
-1. Create 2 **basic jobs**: (a) creation of the credit card, (b) Schedule a future job in a week: a reminder email to confirm receival. 
-2. **Recurring Jobs**: reports of expenses need to be generated each month. Simulate PDF generation using `Thread.sleep()`. Cron `0 0 1 * *` = "at 00:00 on day-of-month 1".
-3. **Batches**. We after successful generation of expense reports, generate/send a summary report (another job).
-4. Sometimes PDF generation **fails**. Showcase automatic retries & what happens when a batch job throws a `RuntimeException`.
-5. Add **job labels** per credit card type to more easily filter on the dashboard. Showcase filtering on name.
-6. Show the **Pro Dashboard** to inspect which credit cards are created, which jobs failed, various filters, ...
-7. **High-prio jobs**: payment should have priority over monthly report generation . Create `high-prio,low-prio` queues. Trigger 1000 expenses and showcase the high-prios still get done.
-8. **Queues**: Well-paying `ENTERPRISE` customers should have priority over `PRO` customers. Create a `customer:` prefix and add `CustomerType.name()` as the label suffix. Switch to _weighted round-robin_ to showcase the difference.
-9. International payments should be processed on **another server** using server tags. (To start the second server, see the Gradle command below.) 
-10. International payments should also be exported to an external system that has to be **rate-limited** to avoid DDoSing their system.
-11. Showcase **observability/metrics** possibilities: Micrometer metrics are exposed to the Prometheus Docker container by adding two more properties. Prometheus runs at http://localhost:9090.
-12. Showcase **observability/tracing** possibilities: Traces are being exported to the Jaeger Docker container by adding two Spring Boot & two JobRunr Pro properties. Jaeger runs at http://localhost:16686.
+It's Monday morning at JobRunr Finance. Thousands of customers are waiting for their credit cards, payments need processing, and regulators are watching every move. Through **21 hands-on steps across 5 acts**, you'll solve critical problems from processing a flood of applications at 8 AM to debugging cross-border payments at midnight.
+
+## The 21 Steps
+
+### 🚀 Act 1: Getting Started
+*Customers are flooding the website. Time to process applications at scale.*
+
+| Step | Title | Feature |
+|------|-------|---------|
+| 1 | Customer Onboarding | `enqueue()` — Background job basics |
+| 2 | Gentle Reminders | `schedule()` + `delete()` — Cancel when circumstances change |
+| 3 | Month-End Reports | `@Recurring` + Advanced CRON — Business day support |
+| 4 | Dashboard First Look | Pro Dashboard — Real-time monitoring |
+
+### 🔧 Act 2: Handling Failures
+*The first problems start appearing. How do we handle failures gracefully?*
+
+| Step | Title | Feature |
+|------|-------|---------|
+| 5 | The PDF Printer Jam | Automatic retries with exponential backoff |
+| 6 | Don't Charge Twice! | `runStepOnce()` — Idempotent job processing |
+| 7 | Batch Processing | Batches + `continueWith()` — Coordinated workflows |
+| 8 | Alert the Team | `onFailure()` chains — Error notifications |
+| 9 | Finding the Needle | Labels — Filter 100K jobs instantly |
+
+### ⚡️ Act 3: Priority & Concurrency
+*Volume is spiking. Some jobs are more important than others.*
+
+| Step | Title | Feature |
+|------|-------|---------|
+| 10 | VIP Treatment | Priority Queues — Critical jobs first |
+| 11 | Fair Play | Weighted Round-Robin — AMEX vs MASTERCARD customers |
+| 12 | One Printer, Many Jobs | Mutexes — Exclusive resource access |
+| 13 | The Hung Job | Job Timeouts — Fail stuck jobs automatically |
+
+### 🌍 Act 4: Scaling Out
+*International markets are opening. Time to scale across borders.*
+
+| Step | Title | Feature |
+|------|-------|---------|
+| 14 | Different Tracks | Server Tags — Route to servers with credentials |
+| 15 | Go Easy on Your Partners | Rate Limiters — Throttle external API calls |
+| 16 | Track Every Transaction | Progress Bars + Logging — Real-time visibility |
+
+### 📈 Act 5: Production Ready
+*Preparing for tomorrow. Monitoring, debugging, and continuous improvement.*
+
+| Step | Title | Feature |
+|------|-------|---------|
+| 17 | Credit Score API | Job Results — Return data from background jobs |
+| 18 | Metrics That Matter | Prometheus + Micrometer — Observability |
+| 19 | Debug Like a Detective | Distributed Tracing — Jaeger integration |
+| 20 | Replacing Outdated Jobs | `enqueueOrReplace()` — Update pending jobs |
+| 21 | Compliance by Default | Job Filters — React to state changes without touching business code |
+
+---
+
+## Project Structure
 
 The project contains three subprojects:
 
-- `demo-solution`; the implemented version;
-- `demo-start`; the version without any JobRunr specifics where the above steps have yet to be implemented.
-- `government-app`; a mostly empty app representing the government where expenses need to be exported to
-  - Runs at port `8089` and supports GET to `/verify` returning the string `looks good to me!`
+- **`demo-solution`** — The fully implemented version with all 21 steps
+- **`demo-start`** — A skeleton version where you implement the features yourself
+- **`government-app`** — A mock external API for rate limiting & tracing demos (port `8089`)
+- **`storyline-viewer`** — An interactive web guide with HTMX/Pebble templates
 
-The following schematic describes the project structure, its actions (registering a new credit card), and its JobRunr jobs running in the background:
+## Getting Started
 
-![](structure.png)
+### 1. Add JobRunr Credentials
 
-## Adding JobRunr credentials
+**Private Maven Repository** — Create `gradle.properties` in the project root:
 
-You will need to enter your JobRunr credentials in two ways:
-
-**Private Maven repository credentials**
-
-Create `gradle.properties` in the root folder of this project with the following contents:
-
-```
-PRIVATE_MAVEN_REPO_URL=https://repo.jobrunr.io
-org.gradle.jvmargs=-Xmx2048M -Dfile.encoding=UTF-8 --add-opens=java.base/java.io=ALL-UNNAMED
-org.gradle.caching=true
-
-mavenUser=yourUserName
-mavenPass=yourPassword
+```properties
+jobRunrRepoUser=yourUserName
+jobRunrRepoPassword=yourPassword
 ```
 
-**JobRunr Pro license key**
+**License Key** — Create `jobrunr-pro.license` in `src/main/resources` of each subproject or make it available via the environment variable `JOBRUNR_PRO_LICENSE`.
 
-Create `jobrunr-pro.license` in `src/main/resources` of each of the subprojects and paste in your license key.
+### 2. Start the Infrastructure
 
-## Starting the application
-
-1. Start the database container: `docker compose up`
-2. Start the Spring Boot container: run `StorylineDemoApplication` or use Gradle: `./gradlew :demo-solution:bootRun`.
-   public class GovernmentApp {
-3. To showcase distributed tracing, also start the government app by running `GovernmentApp` or using Gradle: `./gradlew :governmentApp:bootRun`.
-3. Navigate to http://localhost:8080/.
-   - The JobRunr dashboard runs at http://localhost:8000/ (and on the same port in the solution to showcase the embedded dashboard)
-   - The government app runs at http://localhost:8089/.
-   - Prometheus runs at http://localhost:9090/.
-   - Jaeger runs at http://localhost:16686/.
-
-To run the second background server, override these properties: 
-`server.port` (set to `8081`), `jobrunr.dashboard.enabled` (set to `false`), and set the correct server tags with `jobrunr.background-job-server.tags` (set to `international`):
-
+```bash
+docker compose up
 ```
-./gradlew :demo-start:bootRun --args='--server.port=8081 --jobrunr.dashboard.enabled=false --jobrunr.background-job-server.tags=international'
-./gradlew :demo-solution:bootRun --args='--server.port=8081 --jobrunr.dashboard.enabled=false --jobrunr.background-job-server.tags=international'
+
+This starts PostgreSQL, Prometheus, and Jaeger.
+
+### 3. Run the Application
+
+```bash
+./gradlew :demo-solution:bootRun
 ```
+
+### 4. Explore!
+
+| Service | URL |
+|---------|-----|
+| Web App | http://localhost:8080/ |
+| JobRunr Dashboard | http://localhost:8080/dashboard |
+| Prometheus | http://localhost:9090/ |
+| Jaeger | http://localhost:16686/ |
+| Government API | http://localhost:8089/ |
+
+### 5. Start the External Server (Step 14)
+
+```bash
+./gradlew :demo-solution:bootRun --args='--server.port=8081 --jobrunr.dashboard.enabled=false --jobrunr.background-job-server.tags=external'
+```
+
+---
+
+## API Endpoints for Testing
+
+| Endpoint | Description |
+|----------|-------------|
+| `/credit-cards/register` | Register a new credit card |
+| `/credit-cards/activate` | Activate a credit card |
+| `/bulk-add-cards` | Add 100 random credit cards |
+| `/bulk-generate-expenses` | Generate 100 expense reports |
+| `/bulk-generate-with-progress` | Generate with progress bar |
+| `/trigger-payments` | Trigger nightly payment processing |
+| `/credit-score/request/{customerId}` | Request credit score (Job Results demo) |
+| `/credit-score/result/{jobId}` | Poll for credit score result |
+
+---
+
+Ready to save the day? **Let's begin!** 🚀
