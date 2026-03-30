@@ -1,7 +1,15 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
 plugins {
-    id 'java'
-    id 'org.springframework.boot' version '4.0.2'
+    id 'java-library'
+    id 'org.springframework.boot' version '4.0.3' apply false
     id 'io.spring.dependency-management' version '1.1.7'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom(SpringBootPlugin.BOM_COORDINATES)
+    }
 }
 
 group = 'org.jobrunr'
@@ -25,6 +33,4 @@ dependencies {
     // Generates spring-configuration-metadata.json from @ConfigurationProperties so IDEs
     // can validate and autocomplete storyline.security.* properties in application.properties
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
