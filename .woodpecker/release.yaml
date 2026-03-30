@@ -31,6 +31,10 @@ steps:
         from_secret: JOBRUNR_REGISTRY_USER
       JOBRUNR_REGISTRY_PASSWORD:
         from_secret: JOBRUNR_REGISTRY_PASSWORD
+      JOBRUNR_REPO_USER:
+        from_secret: JOBRUNR_REPO_USER
+      JOBRUNR_REPO_PASSWORD:
+        from_secret: JOBRUNR_REPO_PASSWORD
 
   - name: deploy
     image: appleboy/drone-ssh

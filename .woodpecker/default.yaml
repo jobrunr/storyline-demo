@@ -25,3 +25,8 @@ steps:
     commands:
       - echo "Running on ${CI_SYSTEM_NAME:-<not set>}"
       - gradle --no-daemon clean build
+    environment:
+      JOBRUNR_REPO_USER:
+        from_secret: JOBRUNR_REPO_USER
+      JOBRUNR_REPO_PASSWORD:
+        from_secret: JOBRUNR_REPO_PASSWORD
