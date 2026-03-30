@@ -18,6 +18,11 @@ steps:
     commands:
       - echo "Running on ${CI_SYSTEM_NAME:-<not set>}"
       - gradle --no-daemon test
+    environment:
+      JOBRUNR_REPO_USER:
+          from_secret: JOBRUNR_REPO_USER
+      JOBRUNR_REPO_PASSWORD:
+        from_secret: JOBRUNR_REPO_PASSWORD
 
   - name: build-prd-container
     image: registry.jobrunr.io/jobrunr/jobrunr-pro-finance-demo:latest
@@ -31,10 +36,6 @@ steps:
         from_secret: JOBRUNR_REGISTRY_USER
       JOBRUNR_REGISTRY_PASSWORD:
         from_secret: JOBRUNR_REGISTRY_PASSWORD
-      JOBRUNR_REPO_USER:
-        from_secret: JOBRUNR_REPO_USER
-      JOBRUNR_REPO_PASSWORD:
-        from_secret: JOBRUNR_REPO_PASSWORD
 
   - name: deploy
     image: appleboy/drone-ssh
