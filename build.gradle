@@ -4,6 +4,7 @@ subprojects {
             sourceCompatibility = JavaVersion.VERSION_25
             targetCompatibility = JavaVersion.VERSION_25
             options.release.set(25)
+            options.compilerArgs << '-parameters'
         }
     }
 
