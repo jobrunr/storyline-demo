@@ -64,7 +64,7 @@ public class StorylineMagicLinkService implements OneTimeTokenGenerationSuccessH
                 .replacePath(request.getContextPath())
                 .replaceQuery(null)
                 .fragment(null)
-                .path("/jobrunr-logo-white.webp")
+                .path("/jobrunr-logo-png.png")
                 .toUriString();
     }
 

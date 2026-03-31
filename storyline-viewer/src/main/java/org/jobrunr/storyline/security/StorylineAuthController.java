@@ -3,6 +3,7 @@ package org.jobrunr.storyline.security;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import org.jobrunr.storyline.model.Storyline;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -14,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Validated
 public class StorylineAuthController {
 
+    private final Storyline storyline;
     private final StorylineUserRepository userRepository;
     private final StorylineMagicLinkService magicLinkService;
 
-    public StorylineAuthController(StorylineUserRepository userRepository, StorylineMagicLinkService magicLinkService) {
+    public StorylineAuthController(Storyline storyline, StorylineUserRepository userRepository, StorylineMagicLinkService magicLinkService) {
+        this.storyline = storyline;
         this.userRepository = userRepository;
         this.magicLinkService = magicLinkService;
     }
@@ -30,6 +33,7 @@ public class StorylineAuthController {
     @GetMapping("/login/ott")
     public String ottVerifyPage(@RequestParam(required = false) String token, Model model) {
         model.addAttribute("token", token != null ? token : "");
+        model.addAttribute("storyline", storyline);
         return "auth/verify-token";
     }
 
