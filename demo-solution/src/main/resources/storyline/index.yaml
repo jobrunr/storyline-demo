@@ -31,7 +31,7 @@ guideIntro: |
   <span class="tag is-warning is-light">spoiler</span> <em>Note that reading an earlier step may reveal how a later one is solved.</em>
 
 codeRoot: demo-solution/src/main/java
-githubLink: https://github.com/jobrunr/storyline-demo
+githubLink: https://raw.githubusercontent.com/jobrunr/storyline-demo/refs/heads/main
 
 flow:
   - category: "Getting Started"

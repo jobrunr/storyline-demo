@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
@@ -30,9 +31,11 @@ public class CodeController {
     private static final Logger LOGGER = LoggerFactory.getLogger(CodeController.class);
 
     private final Storyline storyline;
+    private final RestClient restClient;
 
-    public CodeController(Storyline storyline) {
+    public CodeController(Storyline storyline, RestClient.Builder restClientBuilder) {
         this.storyline = storyline;
+        this.restClient = restClientBuilder.baseUrl(storyline.githubLink() + "/" + storyline.codeRoot()).build();
     }
 
     @GetMapping(value = "/code/{*codeReference}")
@@ -103,8 +106,14 @@ public class CodeController {
     }
 
     private Optional<String> loadFromGitHub(String codeFile) {
-        // TODO: Implement GitHub fetching using WebClient or similar
-        // For now, return null to indicate not implemented
-        return Optional.empty();
+        if (storyline.githubLink() == null) return Optional.empty();
+        try {
+            LOGGER.debug("Attempting to load code file {} from GitHub", codeFile);
+            String content = restClient.get().uri(codeFile).retrieve().body(String.class);
+            return Optional.ofNullable(content);
+        } catch (Exception e) {
+            LOGGER.warn("Failed to load code file {} from GitHub", codeFile);
+            return Optional.empty();
+        }
     }
 }
