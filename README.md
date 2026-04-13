@@ -127,7 +127,3 @@ This starts PostgreSQL, Prometheus, and Jaeger.
 | `/trigger-payments` | Trigger nightly payment processing |
 | `/credit-score/request/{customerId}` | Request credit score (Job Results demo) |
 | `/credit-score/result/{jobId}` | Poll for credit score result |
-
----
-
-Ready to save the day? **Let's begin!** 🚀
