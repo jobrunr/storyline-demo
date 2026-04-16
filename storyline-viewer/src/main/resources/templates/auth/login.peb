@@ -7,6 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.4/css/bulma.min.css">
     <link rel="stylesheet" href="/css/style.css">
+    {% include "../_ms-clarity" %}
 </head>
 <body>
 <section class="hero is-fullheight">
@@ -21,7 +22,7 @@
                             <p class="subtitle is-6 has-text-grey">You can still view the code solutions and the dashboard without an account.</p>
                         </div>
 
-                        <form method="post" action="/login">
+                        <form method="post" action="/login" data-clarity-mask="True">
                             <input type="hidden" name="{{ _csrf.parameterName }}" value="{{ _csrf.token }}">
                             <div class="field">
                                 <label class="label">Email address</label>

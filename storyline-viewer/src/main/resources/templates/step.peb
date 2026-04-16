@@ -167,20 +167,20 @@
                     <div class="demo-step-marker">{{ step.quickActions | length + 1 }}</div>
                 </div>
                 <div class="demo-step-body demo-step-body-form">
-                    <iframe src="{{ step.tryItUrl }}" class="demo-iframe"></iframe>
+                    <iframe src="{{ step.tryItUrl }}" class="demo-iframe" data-clarity-unmask="true"></iframe>
                 </div>
             </div>
             {% endif %}
         </div>
         {% else %}
-        <iframe src="{{ step.tryItUrl }}" class="demo-iframe"></iframe>
+        <iframe src="{{ step.tryItUrl }}" class="demo-iframe" data-clarity-unmask="true"></iframe>
         {% endif %}
     </div>
     {% endif %}
 
     {% if step.dashboardUrl %}
     <div id="dashboard-{{ step.number }}" class="tab-content" style="padding: 0">
-        <iframe src="{{ step.dashboardUrl }}" loading="lazy" class="demo-iframe"></iframe>
+        <iframe src="{{ step.dashboardUrl }}" loading="lazy" class="demo-iframe" data-clarity-unmask="true"></iframe>
     </div>
     {% endif %}
 
