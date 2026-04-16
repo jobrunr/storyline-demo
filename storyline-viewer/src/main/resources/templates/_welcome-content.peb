@@ -1,0 +1,19 @@
+<div class="has-text-centered pt-6 pb-5">
+    <h1 class="title is-2 mb-1">Welcome to {{ storyline.title }}</h1>
+</div>
+{% if storyline.guideIntro %}
+<div class="box mx-auto content" style="max-width: 860px; padding: 2.5rem 3rem; line-height: 1.75;">
+    {{ storyline.guideIntro | raw }}
+    {% if securityEnabled and not isAuthenticated %}
+    <p class="mt-4"><span class="icon"><i class="fas fa-lock"></i></span>You'll need to <a href="/login">log in</a> to perform write operations. You can still view the code solution and dashboard.</p>
+    {% endif %}
+</div>
+{% endif %}
+<div class="has-text-centered pt-5 pb-6">
+    <p class="has-text-grey mb-3">Click on any step in the timeline to begin your journey</p>
+    <a href="/storyline/step/1" class="button is-primary is-medium"
+    hx-get="/storyline/step/1" hx-target="#step-content" hx-push-url="true" hx-swap="innerHTML show:window:top" preload>
+        <span class="icon"><i class="fas fa-play"></i></span>
+        <span>Start with Step 1</span>
+    </a>
+</div>

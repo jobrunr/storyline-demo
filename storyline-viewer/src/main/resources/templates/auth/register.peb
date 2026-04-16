@@ -17,7 +17,7 @@
                     <div class="box">
                         <div class="has-text-centered mb-6">
                             <img src="/logo.svg" alt="JobRunr" style="max-height: 48px;">
-                            <h1 class="title is-4 mt-4 mb-1">Create your account</h1>
+                            <h1 class="title is-4 mt-4 mb-2">Create your account</h1>
                             <p class="subtitle is-6 has-text-grey">We'll send a magic link to sign you in.</p>
                         </div>
 
