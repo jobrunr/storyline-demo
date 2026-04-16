@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
     <link rel="stylesheet" href="/css/style.css">
     {% block head %}<!-- for extra css and js -->{% endblock %}
+    {% include "./_ms-clarity" %}
 </head>
 <body>
     {% block content %}
