@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="/css/style.css">
     {% block head %}<!-- for extra css and js -->{% endblock %}
     {% include "./_ms-clarity" %}
+    {% include "./_google-analytics" %}
+    {% include "./_hubspot" %}
+    {% include "./_linkedin" %}
+    {% include "./_jobrunr-ping" %}
 </head>
 <body>
     {% block content %}
