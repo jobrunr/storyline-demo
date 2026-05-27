@@ -24,8 +24,7 @@
         {% block footer %}
             <div class="content has-text-centered">
                 <p>
-                    <strong>JobRunr Demo</strong> - Powered by
-                    <a href="https://www.jobrunr.io" target="_blank">JobRunr Pro</a>
+                    Built with <a href="https://www.jobrunr.io/en/pro/" target="_blank"><strong>JobRunr Pro</strong></a>
                 </p>
             </div>
         {% endblock %}

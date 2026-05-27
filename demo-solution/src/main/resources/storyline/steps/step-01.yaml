@@ -4,7 +4,7 @@ estimatedTime: PT3M
 scenario: |
   When a customer applies for a credit card, we need to run identity verification, 
   fraud checks, and card provisioning. These operations take 5-10 seconds each.
-  <br><br>
+  <br>
   Running them synchronously during the web request would make the page feel slow.
 
 challenge: |
@@ -14,7 +14,7 @@ solution: |
   Use <code>jobScheduler.enqueue()</code> to offload the heavy lifting to a background job.
   The web request returns instantly with "Application received!" while JobRunr processes 
   the actual work asynchronously.
-  <br><br>
+  <br>
   The <code>@Job(name = "Create %0")</code> annotation gives each job a meaningful name 
   that appears in the dashboard, making it easy to find specific applications.
 

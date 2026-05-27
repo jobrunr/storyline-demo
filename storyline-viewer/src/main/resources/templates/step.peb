@@ -15,7 +15,7 @@
                         </span>
                     </div>
 
-                    <h1 class="title is-2">
+                    <h1 class="title is-4">
                         {{ step.title }}
                     </h1>
                 </div>
@@ -26,21 +26,21 @@
     <!-- The Scenario -->
     {% if step.scenario %}
     <div class="box has-background-light">
-        <h3 class="title is-4">The Scenario</h3>
-        <div class="is-size-5">{{ step.scenario | raw }}</div>
+        <h3 class="title is-5">The Scenario</h3>
+        <div class="is-size-6">{{ step.scenario | raw }}</div>
     </div>
     {% endif %}
 
     <!-- The Challenge -->
     <div class="box has-background-warning-light">
-        <h3 class="title is-4">The Challenge</h3>
-        <div class="is-size-5">{{ step.challenge | raw }}</div>
+        <h3 class="title is-5">The Challenge</h3>
+        <div class="is-size-6">{{ step.challenge | raw }}</div>
     </div>
 
     <!-- The Solution -->
     <div class="box has-background-success-light">
-        <h3 class="title is-4">The Solution</h3>
-        <div class="is-size-5">{{ step.solution | raw }}</div>
+        <h3 class="title is-5">The Solution</h3>
+        <div class="is-size-6">{{ step.solution | raw }}</div>
         {% if step.learnMore %}
         <p class="mt-4">
             <a href="{{ step.learnMore }}" target="_blank" class="has-text-link">
@@ -53,8 +53,8 @@
 
     <!-- Try It / Dashboard Link -->
     <div class="box has-background-info-light">
-        <h3 class="title is-4">Try It Yourself</h3>
-        <div class="is-size-5">{{ step.tryIt | raw }}</div>
+        <h3 class="title is-5">Try It Yourself</h3>
+        <div class="is-size-6">{{ step.tryIt | raw }}</div>
     </div>
 
     {% if securityEnabled and not isAuthenticated %}
@@ -71,7 +71,7 @@
     {% endif %}
 
     <!-- Toggle between Code and Demo -->
-    <div class="tabs is-boxed is-large">
+    <div class="tabs is-boxed">
         <ul>
             <li class="tab-link is-active" data-tab="code-{{ step.number }}">
                 <a>

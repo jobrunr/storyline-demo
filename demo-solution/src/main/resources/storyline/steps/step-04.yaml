@@ -4,7 +4,7 @@ estimatedTime: PT4M
 scenario: |
   Once you have jobs running in production, you need visibility:
   Which jobs are running? What failed? What's queued up?
-  <br><br>
+  <br>
   You can't manage what you can't see.
 
 challenge: |
@@ -12,7 +12,7 @@ challenge: |
 
 solution: |
   The JobRunr Pro Dashboard provides a real-time view of your entire job ecosystem:
-  <br><br>
+  <br>
   <ul>
     <li><strong>Jobs view</strong>: Filter by state (ENQUEUED, PROCESSING, SUCCEEDED, FAILED)</li>
     <li><strong>Recurring Jobs</strong>: See all recurring jobs and their next run times</li>

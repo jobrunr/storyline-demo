@@ -4,7 +4,7 @@ estimatedTime: PT3M
 scenario: |
   Monthly credit card statements must be generated on the <em>last business day</em> 
   of each month, not just the last calendar day.
-  <br><br>
+  <br>
   If the 31st falls on a Saturday, the reports should run on Friday the 30th instead.
 
 challenge: |
@@ -14,7 +14,7 @@ challenge: |
 solution: |
   JobRunr Pro's advanced CRON parser supports business day expressions!
   Use <code>Cron.lastBusinessDayOfTheMonth()</code> or the expression <code>"0 0 LW * *"</code>.
-  <br><br>
+  <br>
   Other options include <code>firstBusinessDayOfTheMonth()</code> and expressions 
   like <code>"0 0 LW-3 * *"</code> for 3 days before the last business day.
 

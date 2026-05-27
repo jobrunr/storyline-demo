@@ -5,7 +5,7 @@ scenario: |
   Customers often receive their cards but forget to activate them.
   We want to send a friendly reminder email 7 days after registration —
   but only if the card hasn't been activated yet.
-  <br><br>
+  <br>
   Sending reminders for already-activated cards would annoy customers.
 
 challenge: |
@@ -14,7 +14,7 @@ challenge: |
 solution: |
   Use <code>scheduleAt()</code> to create a job that runs 7 days in the future.
   When the customer activates their card, mark the reminder job as <code>DELETED</code>.
-  <br><br>
+  <br>
   JobRunr will skip the job gracefully and show it in the dashboard with a clear reason.
   The job will be automatically cleaned up after 3 days.
 
