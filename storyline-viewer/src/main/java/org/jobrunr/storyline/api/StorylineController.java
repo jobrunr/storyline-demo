@@ -34,4 +34,10 @@ public class StorylineController {
         model.addAttribute("step", storyline.getStep(stepNumber));
         return hxRequest != null ? "step" : "guide";
     }
+
+    @GetMapping("/m")
+    public String mobile(Model model) {
+        model.addAttribute("storyline", storyline);
+        return "mobile";
+    }
 }

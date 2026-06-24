@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+    <title>{{ storyline.title }} - Interactive Demo</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+    <link rel="stylesheet" href="/css/mobile.css">
+    <script src="https://unpkg.com/htmx.org@2.0.8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+    {% include "./_ms-clarity" %}
+    {% include "./_google-analytics" %}
+    {% include "./_hubspot" %}
+    {% include "./_linkedin" %}
+    {% include "./_jobrunr-ping" %}
+</head>
+<body>
+
+<!-- Top bar -->
+<header class="m-topbar">
+    <a class="m-brand" href="/?view=desktop">
+        <span class="m-brand-icon">{{ storyline.icon }}</span>
+        <span class="m-brand-title">JobRunr</span>
+    </a>
+    <div class="m-progress">
+        <span class="m-progress-label" id="m-step-label">Welcome</span>
+        <div class="m-progress-track"><div class="m-progress-fill" id="m-progress-fill"></div></div>
+    </div>
+</header>
+
+<!-- Card stack -->
+<main class="m-stack" id="m-stack">
+
+    <!-- 0. Intro / what this demo is -->
+    <section class="card card--intro" data-kind="intro">
+        <div class="card__body card__body--center">
+            <span class="card__chapter">{{ storyline.icon }} Interactive demo</span>
+            <h1 class="card__title">Build a neo-bank with JobRunr Pro</h1>
+            <div class="card__lead">A quick, hands-on walkthrough of the background-job patterns behind a modern bank. For each step you'll see:</div>
+            <ul class="intro-legend">
+                <li><span class="intro-legend__ic"><i class="fas fa-circle-question"></i></span> The <strong>challenge</strong> we need to solve</li>
+                <li><span class="intro-legend__ic"><i class="fas fa-code"></i></span> The <strong>real code</strong> that solves it</li>
+                <li><span class="intro-legend__ic"><i class="fas fa-chart-line"></i></span> How it looks live in the <strong>dashboard</strong></li>
+            </ul>
+        </div>
+        <div class="card__hint"><i class="fas fa-hand-pointer"></i> Swipe to start</div>
+    </section>
+
+    {% for entry in storyline.stepsByCategory %}
+    {% for step in entry.value %}
+
+    <!-- 1. Title / what it's about -->
+    <section class="card card--title" data-step="{{ step.number }}" data-kind="title">
+        <div class="card__body card__body--center">
+            <span class="card__chapter">{{ step.category }}</span>
+            <span class="card__eyebrow">Step {{ step.number }} · {{ step.estimatedTime.toMinutes }} min</span>
+            <h1 class="card__title">{{ step.title }}</h1>
+            {% if step.scenario %}
+            <div class="card__lead">{{ step.scenario | raw }}</div>
+            {% endif %}
+        </div>
+        <div class="card__hint"><i class="fas fa-hand-pointer"></i> Swipe to continue</div>
+    </section>
+
+    <!-- 2. Challenge + how we solve it -->
+    <section class="card card--challenge" data-step="{{ step.number }}" data-kind="challenge">
+        <div class="card__body">
+            <div class="block block--challenge">
+                <span class="block__tag"><i class="fas fa-circle-question"></i> The Challenge</span>
+                <div class="block__text">{{ step.challenge | raw }}</div>
+            </div>
+            <div class="block block--solution">
+                <span class="block__tag"><i class="fas fa-lightbulb"></i> How we solve it</span>
+                <div class="block__text">{{ step.solution | raw }}</div>
+                {% if step.learnMore %}
+                <a class="block__link" href="{{ step.learnMore }}" target="_blank" rel="noopener">
+                    <i class="fas fa-book"></i> Read the docs →
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. The code -->
+    <section class="card card--code" data-step="{{ step.number }}" data-kind="code">
+        <div class="card__codehead">
+            <i class="fas fa-code"></i>
+            <span>The Code</span>
+            {% if step.codeReferences | length > 0 %}
+            {% set fileName = (step.codeReferences[0] | split('/') | last) | split('\?') | first %}
+            <span class="card__filename">{{ fileName }}</span>
+            {% endif %}
+        </div>
+        {% if step.codeReferences | length > 0 %}
+        <pre class="card__code" hx-trigger="load" hx-get="/code/{{ step.codeReferences[0] }}"><code class="language-java">Loading code…</code></pre>
+        {% else %}
+        <div class="card__body"><p class="card__lead">This step is all about the dashboard — no code to show here.</p></div>
+        {% endif %}
+    </section>
+
+    <!-- 4. See it in the dashboard -->
+    <section class="card card--dashboard" data-step="{{ step.number }}" data-kind="dashboard">
+        <div class="card__dashhead">
+            <div>
+                <span class="card__eyebrow"><i class="fas fa-chart-line"></i> See it live</span>
+                {% if step.tryIt %}<div class="card__dashlead">{{ step.tryIt | raw }}</div>{% endif %}
+            </div>
+            <button type="button" class="card__expand" data-fullscreen aria-label="Open dashboard fullscreen">
+                <i class="fas fa-expand"></i>
+            </button>
+        </div>
+        {% if step.dashboardUrl %}
+        <div class="card__frame">
+            <iframe src="{{ step.dashboardUrl }}" loading="lazy" data-clarity-unmask="true" title="JobRunr dashboard"></iframe>
+        </div>
+        {% endif %}
+    </section>
+
+    {% endfor %}
+
+    <!-- Free-trial CTA after each chapter -->
+    <section class="card card--trial" data-kind="trial">
+        <div class="card__body card__body--center">
+            <span class="card__chapter">🚀 Free trial</span>
+            <h2 class="card__title">Build this with JobRunr Pro</h2>
+            <div class="card__lead">Enjoying the demo? Drop your business email and we'll send you everything you need to start a free JobRunr Pro trial.</div>
+            <form class="trial-form" novalidate>
+                <input type="email" name="email" inputmode="email" autocomplete="email" autocapitalize="off" placeholder="you@company.com" required>
+                <button type="submit"><span>Start free trial</span></button>
+                <p class="trial-error" role="alert"></p>
+            </form>
+            <div class="trial-success">
+                <div class="trial-success__icon"><i class="fas fa-envelope-circle-check"></i></div>
+                <h3>Check your inbox</h3>
+                <p>Your trial details are on the way — you'll receive an email in a couple of minutes.</p>
+            </div>
+        </div>
+    </section>
+    {% endfor %}
+</main>
+
+<!-- Bottom bar -->
+<nav class="m-bottombar">
+    <button type="button" class="m-nav" id="m-prev" aria-label="Previous card"><i class="fas fa-chevron-left"></i></button>
+    <div class="m-dots" id="m-dots">
+        <span data-kind="title"></span>
+        <span data-kind="challenge"></span>
+        <span data-kind="code"></span>
+        <span data-kind="dashboard"></span>
+    </div>
+    <button type="button" class="m-nav" id="m-next" aria-label="Next card"><i class="fas fa-chevron-right"></i></button>
+    <button type="button" class="m-chapters-btn" id="m-chapters-btn">
+        <i class="fas fa-list-ul"></i> See all chapters
+    </button>
+</nav>
+
+<!-- Chapters sheet -->
+<div class="m-scrim" id="m-scrim"></div>
+<aside class="m-sheet" id="m-sheet" aria-hidden="true">
+    <div class="m-sheet__handle"></div>
+    <h2 class="m-sheet__title">Chapters</h2>
+    <div class="m-sheet__list">
+        {% for entry in storyline.stepsByCategory %}
+        <div class="chapter">
+            <div class="chapter__head">
+                <span class="chapter__icon">{{ entry.key.icon | raw }}</span>
+                <span class="chapter__name">{{ entry.key.name }}</span>
+            </div>
+            <div class="chapter__steps">
+                {% for step in entry.value %}
+                <button type="button" class="chapter__step" data-jump="{{ step.number }}">
+                    <span class="chapter__num">{{ step.number }}</span>
+                    <span class="chapter__steptitle">{{ step.title }}</span>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</aside>
+
+<!-- Fullscreen dashboard overlay -->
+<div class="m-fs" id="m-fs" aria-hidden="true">
+    <div class="m-fs__bar">
+        <span class="m-fs__title"><i class="fas fa-chart-line"></i> Live dashboard</span>
+        <button type="button" class="m-fs__close" id="m-fs-close" aria-label="Close dashboard">
+            <i class="fas fa-xmark"></i> Close
+        </button>
+    </div>
+    <div class="m-fs__body" id="m-fs-body"></div>
+</div>
+
+<script src="/js/mobile.js"></script>
+</body>
+</html>
