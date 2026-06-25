@@ -194,6 +194,9 @@
     <div class="m-fs__body" id="m-fs-body"></div>
 </div>
 
+<!-- OOB sink: /code fragments swap a #code-view-switch toggle we don't use on mobile -->
+<div hidden aria-hidden="true"><div id="code-view-switch"></div></div>
+
 <script src="/js/mobile.js"></script>
 </body>
 </html>

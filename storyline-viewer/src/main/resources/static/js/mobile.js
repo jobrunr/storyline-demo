@@ -37,18 +37,18 @@
         syncFrames();
     }
 
-    // Only load dashboard iframes near the current card; unload far ones to keep
-    // mobile memory bounded (21 live dashboard SPAs at once crashes mobile Safari).
+    // Load a dashboard iframe only while its card is the one on screen; unload it
+    // otherwise. The live JobRunr dashboard SPA is heavy, so we never keep more than
+    // the current card's dashboard in memory.
     function syncFrames() {
         cards.forEach((card, i) => {
             if (card.dataset.kind !== 'dashboard') return;
             const iframe = card.querySelector('iframe[data-src]');
             if (!iframe) return;
-            const near = Math.abs(i - current) <= 1;
             const src = iframe.getAttribute('src');
             const loaded = src && src !== 'about:blank';
-            if (near && !loaded) iframe.setAttribute('src', iframe.dataset.src);
-            else if (!near && loaded) iframe.setAttribute('src', 'about:blank');
+            if (i === current && !loaded) iframe.setAttribute('src', iframe.dataset.src);
+            else if (i !== current && loaded) iframe.setAttribute('src', 'about:blank');
         });
     }
 
