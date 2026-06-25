@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '4.0.2'
+    id 'org.springframework.boot' version '4.1.0'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'com.google.cloud.tools.jib' version '3.5.3'
 }
@@ -37,7 +37,7 @@ dependencies {
 
     // JobRunr Pro & Jackson serialization
     implementation project(':storyline-viewer')
-    implementation 'org.jobrunr:jobrunr-pro-spring-boot-4-starter:1.0.0-SNAPSHOT'
+    implementation 'org.jobrunr:jobrunr-pro-spring-boot-4-starter:8.7.0'
 
     implementation 'com.zaxxer:HikariCP'
     implementation 'org.postgresql:postgresql'
@@ -68,45 +68,4 @@ jib {
 	dockerClient {
 		executable = '/usr/local/bin/docker'
 	}
-}
-
-tasks.register("ensureJobRunrProVersion") {
-    group = "verification"
-    description = "Ensures JobRunr dependency version is correct"
-
-    doLast {
-        // Only run if the CI variable is defined
-        if (System.getenv('CI') == null) {
-            return
-        }
-
-        def expectedVersion = '1.0.0-SNAPSHOT'
-        def group = 'org.jobrunr'
-        def allowlist = ['storyline-viewer']
-
-        // Looking through all the dependencies in the configurations to find the JobRunr dependency
-        configurations.findAll().each { config ->
-            config.dependencies.each { dep ->
-                if (dep.group == group) {
-                    if (!allowlist.contains(dep.name)) {
-                        def actualVersion = dep.version
-
-                        // Enforce version match
-                        if (actualVersion != expectedVersion) {
-                            def error = """
-                            JobRunr Version Check FAILED --- Expected version: $expectedVersion --- Actual version: $actualVersion
-                            Your dependency declaration: $group:$name:$actualVersion
-                            To fix, update to version: $expectedVersion
-                            """
-                            throw new GradleException(error)
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-tasks.named("build") {
-    dependsOn "ensureJobRunrProVersion"
 }

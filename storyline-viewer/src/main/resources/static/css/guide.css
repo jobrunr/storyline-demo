@@ -567,6 +567,8 @@ pre code {
     .timeline-sidebar {
         height: auto;
         max-height: 300px;
+        position: relative;
+        top: 0;
     }
 
     .content-area {
