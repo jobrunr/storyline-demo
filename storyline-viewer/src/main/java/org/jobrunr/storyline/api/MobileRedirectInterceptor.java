@@ -28,7 +28,8 @@ public class MobileRedirectInterceptor implements HandlerInterceptor {
 
         String userAgent = request.getHeader("User-Agent");
         if (userAgent != null && MOBILE_UA.matcher(userAgent).find()) {
-            response.sendRedirect("/m");
+            String query = request.getQueryString();
+            response.sendRedirect(query == null || query.isBlank() ? "/m" : "/m?" + query);
             return false;
         }
         return true;
