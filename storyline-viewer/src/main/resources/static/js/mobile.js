@@ -16,6 +16,16 @@
     function render() {
         cards.forEach((card, i) => {
             const rel = i - current;
+            // Window the deck: only the visible cards (the one animating out, the top
+            // card, and the two peeking behind) are painted. Everything else is
+            // display:none and gets NO GPU layer. Painting all ~90 full-screen cards
+            // means ~90 full-screen compositing layers (~1GB of backing store) which
+            // crashes mobile Safari. This keeps it to ~4 layers regardless of deck size.
+            if (rel < -1 || rel > 2) {
+                card.style.display = 'none';
+                return;
+            }
+            card.style.display = '';
             let t, opacity, pe;
             if (rel < 0) {
                 t = 'translateX(-130%) rotate(-16deg)'; opacity = 0; pe = 'none';
@@ -23,10 +33,8 @@
                 t = 'translate(0) rotate(0)'; opacity = 1; pe = 'auto';
             } else if (rel === 1) {
                 t = 'translateY(14px) scale(0.94)'; opacity = 0.55; pe = 'none';
-            } else if (rel === 2) {
+            } else { // rel === 2
                 t = 'translateY(28px) scale(0.88)'; opacity = 0.28; pe = 'none';
-            } else {
-                t = 'translateY(28px) scale(0.88)'; opacity = 0; pe = 'none';
             }
             card.style.transform = t;
             card.style.opacity = opacity;
