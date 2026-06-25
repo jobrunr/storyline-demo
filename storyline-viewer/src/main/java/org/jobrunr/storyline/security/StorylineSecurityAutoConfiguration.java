@@ -43,6 +43,8 @@ public class StorylineSecurityAutoConfiguration {
                     .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, "/", "/storyline/**", "/code/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/dashboard/**", "/api/**", "/sse/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/m").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/m/trial").permitAll()
                         .requestMatchers("/login/**", "/register/**", "/ott/**", "/error", "/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/*.svg", "/*.webp", "/*.png", "/*.ico").permitAll()
                         .anyRequest().authenticated())
@@ -54,7 +56,7 @@ public class StorylineSecurityAutoConfiguration {
                     .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login")))
                     .logout(logout -> logout.logoutSuccessUrl("/"))
-                    .csrf(csrf -> csrf.ignoringRequestMatchers( "/api/**"))
+                    .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**", "/m/trial"))
                     .build();
         }
 
