@@ -34,6 +34,22 @@
             card.style.zIndex = rel < 0 ? 0 : 100 - rel;
         });
         updateChrome();
+        syncFrames();
+    }
+
+    // Only load dashboard iframes near the current card; unload far ones to keep
+    // mobile memory bounded (21 live dashboard SPAs at once crashes mobile Safari).
+    function syncFrames() {
+        cards.forEach((card, i) => {
+            if (card.dataset.kind !== 'dashboard') return;
+            const iframe = card.querySelector('iframe[data-src]');
+            if (!iframe) return;
+            const near = Math.abs(i - current) <= 1;
+            const src = iframe.getAttribute('src');
+            const loaded = src && src !== 'about:blank';
+            if (near && !loaded) iframe.setAttribute('src', iframe.dataset.src);
+            else if (!near && loaded) iframe.setAttribute('src', 'about:blank');
+        });
     }
 
     function updateChrome() {
@@ -134,7 +150,7 @@
     document.querySelectorAll('[data-fullscreen]').forEach(btn => {
         btn.addEventListener('click', () => {
             const iframe = btn.closest('.card').querySelector('.card__frame iframe');
-            if (iframe) openFs(iframe.src);
+            if (iframe) openFs(iframe.dataset.src || iframe.getAttribute('src'));
         });
     });
     document.getElementById('m-fs-close').addEventListener('click', closeFs);

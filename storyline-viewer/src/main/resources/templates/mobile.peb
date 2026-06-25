@@ -114,7 +114,7 @@
         </div>
         {% if step.dashboardUrl %}
         <div class="card__frame">
-            <iframe src="{{ step.dashboardUrl }}" loading="lazy" data-clarity-unmask="true" title="JobRunr dashboard"></iframe>
+            <iframe data-src="{{ step.dashboardUrl }}" data-clarity-unmask="true" title="JobRunr dashboard"></iframe>
         </div>
         {% endif %}
     </section>
