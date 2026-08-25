@@ -36,3 +36,18 @@ tryIt: |
 dashboardUrl: /dashboard/jobs?state=FAILED
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/job-chaining/
+
+tour:
+  narration: |
+    A retry buys time. It does not wake anyone up. <code>onFailure()</code> hangs a notification job off
+    the parent, so the ops team hears about a permanent failure the moment it happens instead of in
+    tomorrow's standup. And when the parent recovers after all, JobRunr quietly parks the notification in
+    NOT_APPLICABLE, because nobody needs an alert about a problem that solved itself.
+  anchor:
+    page: /dashboard/jobs?state=FAILED
+    selector: "#failed-menu-btn"
+    fallbackSelector: "#jobs-table-container"
+  placement: right
+  actions:
+    - label: Generate 20 reports that sometimes fail
+      url: /bulk-generate-summary-reports?count=20

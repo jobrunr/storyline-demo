@@ -13,6 +13,7 @@ public record Storyline(
     String guideIntro,
     String codeRoot,
     String githubLink,
+    TourIntro tourIntro,
     SequencedMap<Category, List<StorylineStep>> stepsByCategory
 ) {
 

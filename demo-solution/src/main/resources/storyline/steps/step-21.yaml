@@ -1,52 +1,63 @@
-title: "Compliance by Default"
+title: "Replacing Outdated Jobs"
 estimatedTime: PT4M
 
 scenario: |
-  The compliance team has a new requirement: every payment job state change must be
-  audited — when it starts processing, when it succeeds, and especially when it fails permanently.
+  A customer updated their address AFTER submitting a credit card application,
+  but BEFORE the job processed. The pending job has the old address.
   <br><br>
-  Adding audit logging inside every job method is error-prone and couples business logic to
-  infrastructure concerns. There must be a better way.
+  We need to update the job with the new information.
 
 challenge: |
-  How do we react to job state changes without modifying the jobs themselves?
+  How do we update or replace a job that's already enqueued or even processing?
 
 solution: |
-  Implement a <strong>JobFilter</strong> — a hook that runs automatically on every job lifecycle event.
+  Use <strong>enqueueOrReplace()</strong> to update existing jobs:
   <br><br>
   <pre class="p-0 m-0">
   <code class="language-java hljs">
-  @Component
-  public class PaymentAuditFilter implements ApplyStateFilter {
+  // Create job with a unique ID
+  UUID jobId = JobProId.fromIdentifier(customer.getEmail());
+  jobScheduler.enqueue(jobId, () -> processApplication(customer));
 
-      @Override
-      public void onStateApplied(Job job, JobState oldState, JobState newState) {
-          // runs on every state change of every job
-      }
-  }
+  // Later, customer updates their info...
+  customer.setAddress(newAddress);
+
+  // Replace the job with updated data
+  jobScheduler.enqueueOrReplace(jobId, () -> processApplication(customer));
   </code></pre>
   <br>
-  Because it's a Spring <code>@Component</code>, JobRunr picks it up automatically.
-  No changes needed in <code>PaymentService</code> — the audit trail is added as a cross-cutting concern.
-  <br><br>
-  Other filter types let you hook in at different points:
-  <ul>
-    <li><code>JobClientFilter</code> — when a job is created</li>
-    <li><code>ElectStateFilter</code> — when JobRunr decides what state a job should move to</li>
-    <li><code>JobServerFilter</code> — before and after a job is processed</li>
-  </ul>
+  If the job is already processing, it will be interrupted and restarted with 
+  the new data!
 
 codeReferences:
-  - org/jobrunr/storylinedemo/payments/PaymentAuditFilter.java?focus=L30-L42
+  - org/jobrunr/storylinedemo/creditcards/CreditCardService.java?focus=L41-L47
 
 tryIt: |
-  Create a few payments and watch the server logs — every state transition is audited.
-  <br><br>
-  Force a failure by making a payment to a credit card that doesn't exist.
-  You'll see the <code>AUDIT | Payment job … failed permanently</code> warning appear automatically.
+  <ol>
+  <li>Register a credit card</li>
+  <li>Immediately update the registration with new details</li>
+  <li>Watch the job get replaced in the dashboard!</li>
+  </ol>
 
-tryItUrl: /payments/new
+tryItUrl: /credit-cards/register
+dashboardUrl: /dashboard/jobs
 
-dashboardUrl: /dashboard/jobs?state=FAILED
+learnMore: https://www.jobrunr.io/en/documentation/pro/replace-jobs/
 
-learnMore: https://www.jobrunr.io/en/documentation/pro/job-filters/
+tour:
+  narration: |
+    Ada applies for a Mastercard, then changes her mind while the job is still in line. It happens. Her
+    job id is derived from her email address, so <code>enqueueOrReplace()</code> swaps the pending job for
+    one carrying the new card type, interrupting it if it already started. Press both buttons and look for
+    exactly one job with her name on it.
+  anchor:
+    page: /dashboard/jobs?state=ENQUEUED
+    selector: "#enqueued-menu-btn"
+    fallbackSelector: "#jobs-table-container"
+    match: prefix
+  placement: right
+  actions:
+    - label: Ada applies for a Mastercard
+      url: /demo/application?cardType=MASTERCARD
+    - label: Ada wants an Amex instead
+      url: /demo/application?cardType=AMERICAN_EXPRESS

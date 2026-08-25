@@ -3,6 +3,7 @@ package org.jobrunr.storyline;
 import org.jobrunr.storyline.api.CodeController;
 import org.jobrunr.storyline.api.MobileRedirectInterceptor;
 import org.jobrunr.storyline.api.StorylineController;
+import org.jobrunr.storyline.api.TourController;
 import org.jobrunr.storyline.api.TrialController;
 import org.jobrunr.storyline.model.Storyline;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -11,7 +12,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@Import({StorylineController.class, CodeController.class, TrialController.class})
+@Import({StorylineController.class, TourController.class, CodeController.class, TrialController.class})
 @AutoConfiguration
 public class StorylineConfiguration {
 
@@ -26,8 +27,9 @@ public class StorylineConfiguration {
         return new WebMvcConfigurer() {
             @Override
             public void addInterceptors(InterceptorRegistry registry) {
+                // Only the page routes: /tour/me and /tour/magic-link are called by the tour itself.
                 registry.addInterceptor(new MobileRedirectInterceptor())
-                        .addPathPatterns("/", "/storyline", "/storyline/**");
+                        .addPathPatterns("/", "/storyline", "/storyline/**", "/tour", "/tour/", "/tour/step/**");
             }
         };
     }

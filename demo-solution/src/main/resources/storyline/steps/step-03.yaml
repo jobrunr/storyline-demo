@@ -28,3 +28,13 @@ tryIt: |
 dashboardUrl: /dashboard/recurring-jobs
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/advanced-cron-expressions/
+
+tour:
+  narration: |
+    Statements go out on the last business day of the month. Try writing that in standard cron, we'll wait.
+    JobRunr Pro extends the syntax, so this recurring job runs on <code>0 0 LW * *</code> and the next run
+    column already shows the date it worked out. Count back from the end of the month to check its math.
+  anchor:
+    page: /dashboard/recurring-jobs
+    selector: "#recurring-jobs-table-container"
+    fallbackSelector: "#recurring-jobs-btn"

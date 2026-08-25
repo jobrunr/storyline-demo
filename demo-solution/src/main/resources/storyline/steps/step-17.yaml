@@ -45,3 +45,13 @@ tryIt: |
 dashboardUrl: /dashboard/jobs
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/results/
+
+tour:
+  narration: |
+    A credit score takes thirty seconds to calculate, which in HTTP terms is somewhere between rude and a
+    timeout. So the job returns a value, JobRunr stores it, and the client polls using the backoff JobRunr
+    hands out. Open any succeeded job in this list and read the result it left behind.
+  anchor:
+    page: /dashboard/jobs?state=SUCCEEDED
+    selector: "#jobs-table-container"
+    fallbackSelector: "#succeeded-menu-btn"

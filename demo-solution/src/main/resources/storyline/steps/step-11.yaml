@@ -36,3 +36,18 @@ tryItUrl: /payments/new
 dashboardUrl: /dashboard/jobs
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/dynamic-queues/
+
+tour:
+  narration: |
+    American Express pays higher fees, so American Express waits less. Capitalism, but make it queues. A
+    dynamic queue reads the <code>cardType</code> label off each job and gives Amex five turns for every
+    one Mastercard gets, without ever starving anyone. Deal out a spread of payments and the two rows will
+    move at very different speeds.
+  anchor:
+    page: /dashboard/dynamic-queues
+    selector: "#dynamic-queues-btn"
+    fallbackSelector: "#jobs-btn"
+  placement: bottom
+  actions:
+    - label: Deal out 60 payments across both card types
+      url: /bulk-create-payments?count=60

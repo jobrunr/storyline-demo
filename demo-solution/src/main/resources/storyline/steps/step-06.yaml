@@ -38,3 +38,20 @@ tryItUrl: /payments/new
 dashboardUrl: /dashboard/jobs?jobSignature=org.jobrunr.storylinedemo.payment.PaymentService.processPayment%28java.lang.Long%2C+org.jobrunr.jobs.context.JobContext%29
 
 learnMore: https://www.jobrunr.io/en/documentation/background-methods/best-practices/
+
+tour:
+  narration: |
+    A payment job that dies halfway must never charge the card twice on the retry. Your customers
+    would have "opinions". This is durable execution: <code>context.runStepOnce()</code> records every
+    step the job completes, so a retry continues from the step that failed instead of replaying the
+    whole job. Press the button below, then open the Process payment job, hit Requeue and read the
+    history: every step already ran, so every step is skipped.
+  anchor:
+    page: /dashboard/jobs
+    selector: "#job-signature-select"
+    fallbackSelector: "#job-filter-panel-header"
+    reveal: "#job-filter-panel-header"
+  placement: bottom
+  actions:
+    - label: Make a payment (four recorded steps)
+      url: /demo/payment

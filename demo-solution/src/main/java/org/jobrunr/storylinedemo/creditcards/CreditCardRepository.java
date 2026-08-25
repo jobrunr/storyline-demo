@@ -18,4 +18,7 @@ public interface CreditCardRepository extends CrudRepository<CreditCard, Long> {
 
     @Query("SELECT * FROM credit_card WHERE state = 'ACTIVE' ORDER BY RANDOM() LIMIT :limit")
     List<CreditCard> findRandomActiveCards(int limit);
+
+    @Query("SELECT * FROM credit_card ORDER BY RANDOM() LIMIT :limit")
+    List<CreditCard> findRandomCards(int limit);
 }

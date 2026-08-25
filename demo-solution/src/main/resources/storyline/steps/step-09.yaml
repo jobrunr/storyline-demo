@@ -41,3 +41,16 @@ tryItUrl: /credit-cards/register
 dashboardUrl: /dashboard/jobs
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/jobrunr-pro-dashboard/
+
+tour:
+  narration: |
+    Support has a customer name, you have a hundred thousand jobs. Every reminder here carries its
+    customer as a label, which you can read in the Labels column and search on right here. Paste one
+    email address into the filter and the haystack collapses to the exact needle you were asked about.
+  anchor:
+    page: /dashboard/jobs?state=SCHEDULED
+    selector: "#job-label"
+    fallbackSelector: "#job-filter-panel-header"
+    reveal: "#job-filter-panel-header"
+    match: prefix
+  placement: bottom

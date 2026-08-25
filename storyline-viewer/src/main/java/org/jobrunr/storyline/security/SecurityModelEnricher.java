@@ -36,7 +36,19 @@ public class SecurityModelEnricher {
 
         CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
         if (csrf != null) {
-            model.addAttribute("_csrf", csrf);
+            model.addAttribute("_csrf", Csrf.of(csrf));
+        }
+    }
+
+    /**
+     * Spring Security hands out a package-private CsrfToken implementation, which template engines
+     * cannot reflect into. Copying the three values templates actually use keeps
+     * {@code {{ _csrf.parameterName }}} working without reaching into a class we do not own.
+     */
+    public record Csrf(String parameterName, String headerName, String token) {
+
+        static Csrf of(CsrfToken csrfToken) {
+            return new Csrf(csrfToken.getParameterName(), csrfToken.getHeaderName(), csrfToken.getToken());
         }
     }
 }

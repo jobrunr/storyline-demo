@@ -39,3 +39,17 @@ tryIt: |
 dashboardUrl: /dashboard/jobs
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/rate-limiters/
+
+tour:
+  narration: |
+    PayPal blocks you above five concurrent calls, Stripe bills you above ten a minute, and the government
+    API simply falls over. Rate limiters live in configuration, so your job code stays blissfully unaware,
+    and JobRunr holds jobs back until there is room. Send a wave of payments and watch each limiter meter
+    its own lane.
+  anchor:
+    page: /dashboard/rate-limiters
+    selector: "#rate-limiters-table-container"
+    fallbackSelector: "#rate-limiters-btn"
+  actions:
+    - label: Unleash 60 payments across all platforms
+      url: /bulk-create-payments?count=60

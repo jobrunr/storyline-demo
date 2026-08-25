@@ -37,3 +37,16 @@ tryIt: |
 dashboardUrl: /dashboard
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/jobrunr-pro-dashboard/
+
+tour:
+  skip: true   # the tour lives on the dashboard from step 1, so a separate look-around step only slowed it down
+  narration: |
+    This is the whole job estate on one screen: everything queued, running or failed, plus how the servers
+    are feeling. The graph replays succeeded against failed live, which is strangely calming while it stays
+    green. Click around as much as you like, the tour keeps your place and always offers the way back.
+  anchor:
+    page: /dashboard
+    selector: "#realtime-graph"
+    fallbackSelector: "#dashboard-btn"
+    match: prefix
+  placement: bottom

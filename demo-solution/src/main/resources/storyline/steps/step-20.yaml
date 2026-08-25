@@ -1,45 +1,47 @@
-title: "Replacing Outdated Jobs"
-estimatedTime: PT4M
+title: "Debug Like a Detective"
+estimatedTime: PT5M
 
 scenario: |
-  A customer updated their address AFTER submitting a credit card application,
-  but BEFORE the job processed. The pending job has the old address.
+  After a routine redeploy, credit card creation jobs are taking 10x longer
+  than usual. Users are complaining, but the code hasn't changed.
   <br><br>
-  We need to update the job with the new information.
+  We need to identify which step or resource is causing the slowdown.
 
 challenge: |
-  How do we update or replace a job that's already enqueued or even processing?
+  How do we identify which step or resource is slowing down our jobs?
 
 solution: |
-  Use <strong>enqueueOrReplace()</strong> to update existing jobs:
+  JobRunr Pro integrates with <strong>OpenTelemetry</strong> to provide detailed job traces:
   <br><br>
   <pre class="p-0 m-0">
-  <code class="language-java hljs">
-  // Create job with a unique ID
-  UUID jobId = JobProId.fromIdentifier(customer.getEmail());
-  jobScheduler.enqueue(jobId, () -> processApplication(customer));
-
-  // Later, customer updates their info...
-  customer.setAddress(newAddress);
-
-  // Replace the job with updated data
-  jobScheduler.enqueueOrReplace(jobId, () -> processApplication(customer));
+  <code class="language-properties hljs">
+  # In application.properties
+  management.tracing.sampling.probability=1.0
+  management.opentelemetry.tracing.export.otlp.endpoint=http://localhost:4318/v1/traces
+  jobrunr.jobs.metrics.otel-observability.enabled=true
   </code></pre>
   <br>
-  If the job is already processing, it will be interrupted and restarted with 
-  the new data!
-
-codeReferences:
-  - org/jobrunr/storylinedemo/creditcards/CreditCardService.java?focus=L38-L44
+  JobRunr automatically creates spans for job execution, so you can pinpoint
+  exactly where time is being spent — whether it's the database, an external API,
+  or your own code.
 
 tryIt: |
   <ol>
-  <li>Register a credit card</li>
-  <li>Immediately update the registration with new details</li>
-  <li>Watch the job get replaced in the dashboard!</li>
+    <li>Register a credit card and watch the job complete</li>
+    <li>Open <a href="http://localhost:16686" target="_blank">Jaeger</a> and search for service "storyline-demo"</li>
+    <li>Analyze the different spans of the job's trace to find the bottleneck</li>
   </ol>
 
-tryItUrl: /credit-cards/register
-dashboardUrl: /dashboard/jobs
+dashboardUrl: http://localhost:16686
 
-learnMore: https://www.jobrunr.io/en/documentation/pro/replace-jobs/
+learnMore: https://www.jobrunr.io/en/documentation/pro/observability/
+
+liveNotice: "Jaeger is not wired into this live demo. Run the demo locally and click through the traces yourself."
+
+tour:
+  narration: |
+    Jobs suddenly take ten times longer and nothing in your code changed. Sound familiar? JobRunr emits
+    OpenTelemetry spans for every job, so a single trace shows whether the time went to the database, to
+    an external API or to your own logic. No interrogating log files at midnight.
+  mode: info
+  screenshot: /images/tour/step-20-jaeger.png

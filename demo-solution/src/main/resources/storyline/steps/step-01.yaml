@@ -29,3 +29,20 @@ tryItUrl: /credit-cards/register
 dashboardUrl: /dashboard/jobs?state=SUCCEEDED
 
 learnMore: https://www.jobrunr.io/en/documentation/background-methods/enqueueing-jobs/
+
+tour:
+  narration: |
+    Twenty five people want a credit card. None of them wants to watch a spinner while the bank checks
+    they exist. The page says yes in milliseconds because identity checks, fraud scoring and provisioning
+    go to <code>enqueue()</code> instead of the request thread. Each check takes about six seconds, so send
+    the applications in and watch them pile up here before they drain into Succeeded.
+  anchor:
+    page: /dashboard/jobs?state=ENQUEUED
+    selector: "#enqueued-menu-btn"
+    fallbackSelector: "#jobs-table-container"
+  placement: right
+  actions:
+    - label: Send in 25 card applications
+      url: /simulate/credit-cards
+      method: POST
+      anonymous: true

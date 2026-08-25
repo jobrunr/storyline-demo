@@ -34,3 +34,14 @@ tryIt: |
 dashboardUrl: /dashboard/jobs
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/batches/
+
+tour:
+  narration: |
+    Ten thousand statements have to finish before the summary may start. A batch creates every child in
+    AWAITING, releases them together, and runs its <code>continueWith()</code> only once the whole family
+    has succeeded. Any job still waiting on its siblings shows up in this list.
+  anchor:
+    page: /dashboard/jobs?state=AWAITING
+    selector: "#awaiting-menu-btn"
+    fallbackSelector: "#jobs-table-container"
+  placement: right

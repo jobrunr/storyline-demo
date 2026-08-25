@@ -76,6 +76,10 @@ public class AdminController {
     public String bulkCreatePayments(@RequestParam(defaultValue = "100") int count) {
         var activeCards = creditCardRepository.findRandomActiveCards(50);
         if (activeCards.isEmpty()) {
+            creditCardService.activateWaitingCards(10);
+            activeCards = creditCardRepository.findRandomActiveCards(50);
+        }
+        if (activeCards.isEmpty()) {
             throw new IllegalStateException("No active credit cards found. Please create some cards first via /bulk-add-cards.");
         }
 

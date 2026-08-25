@@ -40,3 +40,17 @@ quickAction:
 dashboardUrl: /dashboard/jobs
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/mutexes/
+
+tour:
+  narration: |
+    The statement printer takes one document at a time and is firm about it. These jobs queue behind a
+    mutex instead of corrupting each other: everything holding for the lock sits in AWAITING and gets let
+    through single file. Trigger a pile of statements and watch one row process while the rest wait their
+    turn politely.
+  anchor:
+    page: /dashboard/jobs?state=AWAITING
+    selector: "#jobs-table-container"
+    fallbackSelector: "#awaiting-menu-btn"
+  actions:
+    - label: Send 20 statements to the one printer
+      url: /bulk-generate-expenses?count=20

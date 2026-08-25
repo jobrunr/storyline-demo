@@ -47,3 +47,19 @@ tryItUrl: /payments/new
 dashboardUrl: /dashboard/jobs?queue=High
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/priority-queues/
+
+tour:
+  narration: |
+    Two hundred low priority reports just landed in the queue. The payment that arrives a second later
+    still goes first, because JobRunr drains the High queue completely before it so much as glances at
+    anything below. Bury the backlog, then send the payment and watch it stroll past the lot.
+  anchor:
+    page: /dashboard/jobs?state=ENQUEUED&priority=0
+    selector: "[id='0-queue-menu-btn']"
+    fallbackSelector: "#enqueued-menu-btn"
+  placement: right
+  actions:
+    - label: Bury the Low queue under 200 reports
+      url: /bulk-generate-summary-reports?count=200
+    - label: Now send one VIP payment
+      url: /demo/priority-payment

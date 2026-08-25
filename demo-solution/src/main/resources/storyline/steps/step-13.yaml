@@ -34,3 +34,15 @@ tryIt: |
 dashboardUrl: /dashboard/jobs?state=FAILED
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/job-timeout/
+
+tour:
+  narration: |
+    Somewhere a government API has stopped answering, and a worker thread is finding that out the hard
+    way. <code>@Job(processTimeOut = "PT30S")</code> lets JobRunr reclaim the thread after thirty seconds,
+    mark the job FAILED and retry once the API has hopefully rediscovered its purpose. Everything it left
+    hanging lands here.
+  anchor:
+    page: /dashboard/jobs?state=FAILED
+    selector: "#failed-menu-btn"
+    fallbackSelector: "#jobs-table-container"
+  placement: right

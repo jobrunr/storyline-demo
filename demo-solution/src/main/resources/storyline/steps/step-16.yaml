@@ -42,3 +42,17 @@ quickAction:
 dashboardUrl: /dashboard/jobs?state=PROCESSING
 
 learnMore: https://www.jobrunr.io/en/documentation/background-methods/logging-progress/
+
+tour:
+  narration: |
+    Fifty thousand statements is a long time to stare at a silent dashboard. A progress bar and a job
+    logger write straight into it while the work runs, so nobody has to guess or wander over and ask.
+    Start a run, then open the job itself and watch the bar crawl and the log lines land.
+  anchor:
+    page: /dashboard/jobs?state=PROCESSING
+    selector: "#processing-menu-btn"
+    fallbackSelector: "#jobs-table-container"
+  placement: right
+  actions:
+    - label: Generate statements with a progress bar
+      url: /bulk-generate-with-progress

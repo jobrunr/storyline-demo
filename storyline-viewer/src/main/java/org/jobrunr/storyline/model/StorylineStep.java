@@ -18,6 +18,7 @@ public record StorylineStep(int number,
     String dashboardUrl,
     String videoUrl,
     String learnMore,
-    String liveNotice) {
+    String liveNotice,
+    TourInfo tour) {
 
 }

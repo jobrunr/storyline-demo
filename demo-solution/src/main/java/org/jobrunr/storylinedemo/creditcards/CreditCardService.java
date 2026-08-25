@@ -11,12 +11,15 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.util.UUID;
 
 @Service
 public class CreditCardService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CreditCardService.class);
+
+    private static final Duration APPLICATION_PROCESSING_TIME = Duration.ofSeconds(6);
 
     private final JobScheduler jobScheduler;
     private final CreditCardRepository creditCardRepository;
@@ -54,15 +57,45 @@ public class CreditCardService {
         applicationEventPublisher.publishEvent(new CreditCardActivatedEvent(creditCardFromRepo));
     }
 
-    @Transactional
+    /**
+     * Payments need a card that is active, and the tour only ever registers new ones. This lets a payment
+     * demo stand on its own instead of dead-ending on "no active credit cards found".
+     */
+    public int activateWaitingCards(int max) {
+        int activated = 0;
+        for (CreditCard card : creditCardRepository.findByState(CreditCard.State.REQUESTED).stream().limit(max).toList()) {
+            try {
+                processActivation(card.getNumber());
+                activated++;
+            } catch (RuntimeException e) {
+                // Its reminder job has already run or been cleaned up; the next card will do just as well.
+                LOGGER.debug("Could not activate card {}", card.getNumber(), e);
+            }
+        }
+        return activated;
+    }
+
     @Job(name = "Create %0") // Nice name for the dashboard with customer info
     public void createNewCreditCard(CreditCard creditCard) {
+        // Identity verification, fraud scoring and card provisioning: the seconds that do not fit in a web request
+        runIdentityAndFraudChecks();
+
         // Step 1: Save to repository
         var creditCardFromRepo = creditCardRepository.save(creditCard);
         LOGGER.info("Created new credit card: {}", creditCardFromRepo);
 
         // Step 2: Publish event to schedule the reminder email
         applicationEventPublisher.publishEvent(new CreditCardRegisteredEvent(creditCardFromRepo));
+    }
+
+    private static void runIdentityAndFraudChecks() {
+        try {
+            // Not re-setting the interrupt flag: JobRunr interrupts this thread to cancel the job and
+            // needs a working database connection right after to record that it did
+            Thread.sleep(APPLICATION_PROCESSING_TIME);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

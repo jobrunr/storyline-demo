@@ -1,0 +1,127 @@
+{% extends "base" %}
+
+{% block head %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+    <link rel="stylesheet" href="/css/tour.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/java.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div id="tour"
+     data-security-enabled="{{ securityEnabled ? 'true' : 'false' }}"
+     data-authenticated="{{ isAuthenticated ? 'true' : 'false' }}"
+     data-user="{{ currentUser }}"
+     data-live-demo="{{ isLiveDemo ? 'true' : 'false' }}">
+
+    <!-- The stage: the live JobRunr Pro dashboard, everything else floats on top of it -->
+    <iframe id="tour-stage" class="tour-stage" title="JobRunr Pro dashboard" data-clarity-unmask="true"></iframe>
+
+    <div id="tour-beacon" class="tour-beacon" hidden>
+        <span class="tour-beacon__ring"></span>
+        <span class="tour-beacon__core"></span>
+    </div>
+
+    <section id="tour-popup" class="tour-popup" hidden aria-live="polite"></section>
+
+    <!-- Slide-in for steps where the story continues in the banking app itself -->
+    <aside id="tour-app-panel" class="tour-panel tour-panel--app" hidden aria-label="JobRunr Finance">
+        <header class="tour-panel__head">
+            <span class="tour-panel__title" id="tour-app-title">JobRunr Finance</span>
+            <button type="button" class="tour-panel__close" id="tour-app-close" aria-label="Close">
+                <i class="fas fa-xmark"></i>
+            </button>
+        </header>
+        <iframe id="tour-app-frame" src="about:blank" title="JobRunr Finance" data-clarity-unmask="true"></iframe>
+    </aside>
+
+    <aside id="tour-code-panel" class="tour-panel tour-panel--code" hidden aria-label="Source code">
+        <header class="tour-panel__head">
+            <span class="tour-panel__title">The code behind this step</span>
+            <button type="button" class="tour-panel__close" id="tour-code-close" aria-label="Close">
+                <i class="fas fa-xmark"></i>
+            </button>
+        </header>
+        <div class="tour-code__files" id="tour-code-files"></div>
+        <pre class="tour-code__source"><code class="language-java" id="tour-code-source"></code></pre>
+    </aside>
+
+    <!-- Always visible: where you are, where you can go, and the way back on track -->
+    <nav class="tour-pill" id="tour-pill" hidden aria-label="Tour progress">
+        <button type="button" class="tour-pill__main" id="tour-pill-toggle" aria-expanded="false" aria-controls="tour-jump">
+            <span class="tour-pill__acts">
+                {% for entry in tourActs %}
+                <span class="tour-pill__act" data-act="{{ entry.act.index }}"><span class="tour-pill__act-fill"></span></span>
+                {% endfor %}
+            </span>
+            <span class="tour-pill__label">
+                <span class="tour-pill__count" id="tour-pill-count"></span>
+                <span class="tour-pill__title" id="tour-pill-title"></span>
+            </span>
+            <i class="fas fa-chevron-up tour-pill__chevron"></i>
+        </button>
+        <button type="button" class="tour-pill__cta" id="tour-pill-show" hidden>
+            <i class="fas fa-comment-dots"></i><span>Show the step</span>
+        </button>
+        <button type="button" class="tour-pill__cta tour-pill__cta--back" id="tour-pill-back" hidden>
+            <i class="fas fa-location-crosshairs"></i><span>Take me back</span>
+        </button>
+    </nav>
+
+    <div class="tour-jump" id="tour-jump" hidden>
+        <div class="tour-jump__acts">
+            {% for entry in tourActs %}
+            <section class="tour-jump__act">
+                <h3 class="tour-jump__act-name">{{ entry.act.icon | raw }} {{ entry.act.name }}</h3>
+                <ul class="tour-jump__steps">
+                    {% for step in entry.steps %}
+                    <li>
+                        <button type="button" class="tour-jump__step" data-step="{{ step.number }}">
+                            <span class="tour-jump__step-number">{{ step.number }}</span>
+                            <span class="tour-jump__step-title">{{ step.title }}</span>
+                        </button>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </section>
+            {% endfor %}
+        </div>
+        <footer class="tour-jump__foot">
+            <button type="button" class="tour-link" id="tour-restart">Start the tour over</button>
+            <a class="tour-link" href="/storyline">Prefer to read it? Open the written guide</a>
+        </footer>
+    </div>
+
+    <!-- The one thing a first-time visitor sees: the neobank, the five acts, one button -->
+    <div class="tour-intro" id="tour-intro">
+        <div class="tour-intro__card">
+            <p class="tour-intro__kicker">{{ storyline.icon }} {{ storyline.title }}</p>
+            <h1 class="tour-intro__headline">{{ storyline.tourIntro.headline }}</h1>
+            <div class="tour-intro__body">{{ storyline.tourIntro.body | raw }}</div>
+            <ol class="tour-intro__acts">
+                {% for entry in tourActs %}
+                <li class="tour-intro__act">
+                    <span class="tour-intro__act-icon">{{ entry.act.icon | raw }}</span>
+                    <span class="tour-intro__act-text">
+                        <span class="tour-intro__act-name">{{ entry.act.name }}</span>
+                        <span class="tour-intro__act-desc">{{ entry.act.description }}</span>
+                    </span>
+                    <span class="tour-intro__act-steps">{{ entry.act.firstStep }}&ndash;{{ entry.act.lastStep }}</span>
+                </li>
+                {% endfor %}
+            </ol>
+            <div class="tour-intro__cta">
+                <button type="button" class="tour-btn tour-btn--primary" id="tour-start">{{ storyline.tourIntro.cta }}</button>
+                <button type="button" class="tour-btn tour-btn--ghost" id="tour-restart-intro" hidden>Start from step 1</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="tour-toast" id="tour-toast" hidden role="status"></div>
+</div>
+
+<script id="tour-data" type="application/json">{{ tourJson | raw }}</script>
+<script src="/js/tour.js"></script>
+{% endblock %}
+
+{% block footer %}{% endblock %}

@@ -41,3 +41,14 @@ tryIt: |
 dashboardUrl: /dashboard/servers
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/server-tags/
+
+tour:
+  narration: |
+    PayPal and Stripe credentials exist only on hardened servers, and they are staying there. Each payment
+    job carries a server tag, and JobRunr routes it to a server advertising the same one. This page lists
+    every server with its tags, so you can check the routing holds instead of taking our word for it.
+  anchor:
+    page: /dashboard/servers
+    selector: "#servers-btn"
+    fallbackSelector: "#jobs-btn"
+  placement: bottom

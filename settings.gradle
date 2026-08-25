@@ -1,2 +1,2 @@
 rootProject.name = 'storyline-demo'
-include('demo-start', 'demo-solution', 'storyline-viewer')
+include('demo-start', 'demo-solution', 'storyline-viewer', 'ui-runner')

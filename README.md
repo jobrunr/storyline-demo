@@ -61,6 +61,13 @@ It's Monday morning at JobRunr Finance. Thousands of customers are waiting for t
 
 ---
 
+## Two ways through it
+
+- **[The guided tour](http://localhost:8080/tour)** puts the live JobRunr Pro dashboard on stage and
+  points at what each pattern does to it. See [TOUR.md](TOUR.md).
+- **[The written guide](http://localhost:8080/storyline)** reads like a document, with the full code
+  for every step.
+
 ## Project Structure
 
 The project contains three subprojects:
@@ -102,6 +109,8 @@ This starts PostgreSQL, Prometheus, and Jaeger.
 | Service | URL |
 |---------|-----|
 | Web App | http://localhost:8080/ |
+| Guided tour (dashboard-centered) | http://localhost:8080/tour |
+| Written guide | http://localhost:8080/storyline |
 | JobRunr Dashboard | http://localhost:8080/dashboard |
 | Prometheus | http://localhost:9090/ |
 | Jaeger | http://localhost:16686/ |

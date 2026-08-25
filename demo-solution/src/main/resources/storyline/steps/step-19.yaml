@@ -1,39 +1,55 @@
-title: "Debug Like a Detective"
-estimatedTime: PT5M
+title: "Metrics That Matter"
+estimatedTime: PT4M
 
 scenario: |
-  After a routine redeploy, credit card creation jobs are taking 10x longer
-  than usual. Users are complaining, but the code hasn't changed.
+  DevOps needs to set up monitoring and alerting for background jobs:
+  How many jobs are we processing per minute? What's the failure rate? 
+  Are queues backing up?
   <br><br>
-  We need to identify which step or resource is causing the slowdown.
+  They need metrics that feed into Prometheus and Grafana (or some competing observability platform).
 
 challenge: |
-  How do we identify which step or resource is slowing down our jobs?
+  How do we expose job metrics for monitoring and alerting systems?
 
 solution: |
-  JobRunr Pro integrates with <strong>OpenTelemetry</strong> to provide detailed job traces:
+  JobRunr Pro integrates with <strong>Micrometer</strong> to expose metrics:
   <br><br>
   <pre class="p-0 m-0">
   <code class="language-properties hljs">
   # In application.properties
-  management.tracing.sampling.probability=1.0
-  management.opentelemetry.tracing.export.otlp.endpoint=http://localhost:4318/v1/traces
-  jobrunr.jobs.metrics.otel-observability.enabled=true
+  jobrunr.jobs.metrics.enabled=true
+  jobrunr.jobs.metrics.micrometer-timers.enabled=true
   </code></pre>
   <br>
-  JobRunr automatically creates spans for job execution, so you can pinpoint
-  exactly where time is being spent — whether it's the database, an external API,
-  or your own code.
+  Available metrics include:
+  <ul>
+    <li><code>jobrunr_jobs_by_state</code> — Jobs per state (ENQUEUED, PROCESSING, etc.)</li>
+    <li><code>jobrunr_jobs_in_progress</code> — Jobs in progress</li>
+    <li><code>jobrunr_jobs_runs_*</code> — Jobs execution times</li>
+    <li><code>jobrunr_background_job_server_*</code> — Server health metrics</li>
+  </ul>
+
+codeReferences:
+  - org/jobrunr/storylinedemo/StorylineDemoApplication.java
 
 tryIt: |
-  <ol>
-    <li>Register a credit card and watch the job complete</li>
-    <li>Open <a href="http://localhost:16686" target="_blank">Jaeger</a> and search for service "storyline-demo"</li>
-    <li>Analyze the different spans of the job's trace to find the bottleneck</li>
-  </ol>
+  Open Prometheus and query JobRunr metrics:
+  <br><br>
+  <a href="http://localhost:9090/query?g0.expr=jobrunr_jobs_by_state" target="_blank">http://localhost:9090</a>
+  <br><br>
+  Try: <code>jobrunr_jobs_by_state</code> or <code>rate(jobrunr_jobs_in_progress_seconds_count[5m])</code>
 
-dashboardUrl: http://localhost:16686
+dashboardUrl: http://localhost:9090/query?g0.expr=jobrunr_jobs_by_state
 
 learnMore: https://www.jobrunr.io/en/documentation/pro/observability/
 
-liveNotice: "Jaeger is not available in this live demo. Run the demo locally to explore distributed traces."
+liveNotice: "Prometheus is not wired into this live demo. Run the demo locally and the metrics are all yours."
+
+tour:
+  narration: |
+    Micrometer publishes every number DevOps will ever ask for: jobs by state, jobs in progress, how long
+    runs take, how healthy each server is. Two properties switch it on and Prometheus scrapes the rest.
+    Alerting on a growing queue becomes one PromQL query, and nobody has to build a metrics side project
+    first.
+  mode: info
+  screenshot: /images/tour/step-19-prometheus.png

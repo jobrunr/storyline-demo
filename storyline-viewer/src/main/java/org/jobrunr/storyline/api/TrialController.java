@@ -14,8 +14,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Captures free-trial sign-ups from the mobile demo and forwards them to the n8n webhook
- * server-side (avoids browser CORS and keeps the webhook URL off the client).
+ * Captures free-trial sign-ups from the mobile demo and from the tour's closing card, and forwards them
+ * to the n8n webhook server-side (avoids browser CORS and keeps the webhook URL off the client). The
+ * form name is what tells the two apart once they land there.
  */
 @Controller
 public class TrialController {
@@ -31,7 +32,17 @@ public class TrialController {
 
     @PostMapping("/m/trial")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> submit(@RequestBody TrialRequest request) {
+    public ResponseEntity<Map<String, Object>> submitFromMobile(@RequestBody TrialRequest request) {
+        return submit(request, "trial-demo-mobile");
+    }
+
+    @PostMapping("/tour/trial")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> submitFromTour(@RequestBody TrialRequest request) {
+        return submit(request, "trial-demo-tour");
+    }
+
+    private ResponseEntity<Map<String, Object>> submit(TrialRequest request, String form) {
         String email = request.email() == null ? "" : request.email().trim();
         if (email.isEmpty() || !email.contains("@")) {
             return ResponseEntity.badRequest().body(Map.of("ok", false, "error", "invalid email"));
@@ -40,7 +51,8 @@ public class TrialController {
         Map<String, Object> payload = new LinkedHashMap<>();
         payload.put("email", email);
         payload.put("username", "");
-        payload.put("form", "trial-demo-mobile");
+        payload.put("company", nullToEmpty(request.company()));
+        payload.put("form", form);
         payload.put("utm_source", nullToEmpty(request.utm_source()));
         payload.put("utm_medium", nullToEmpty(request.utm_medium()));
         payload.put("utm_campaign", nullToEmpty(request.utm_campaign()));
@@ -67,6 +79,7 @@ public class TrialController {
 
     public record TrialRequest(
             String email,
+            String company,
             String utm_source,
             String utm_medium,
             String utm_campaign,

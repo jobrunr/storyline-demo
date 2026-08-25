@@ -33,3 +33,16 @@ tryItUrl: /credit-cards/register
 dashboardUrl: /dashboard/jobs?state=SCHEDULED
 
 learnMore: https://www.jobrunr.io/en/documentation/background-methods/scheduling-jobs/
+
+tour:
+  narration: |
+    Every card you just created scheduled a reminder email seven days out. They all wait here. Open one
+    and the job page tells you when it runs, whose card it is and which method fires. If the customer
+    activates early, the bank deletes the job with the reason attached, sparing them a nag about a thing
+    they already did.
+  anchor:
+    page: /dashboard/jobs?state=SCHEDULED
+    selector: "#scheduled-menu-btn"
+    fallbackSelector: "#jobs-table-container"
+    match: prefix
+  placement: right

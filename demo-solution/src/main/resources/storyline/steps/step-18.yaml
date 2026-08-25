@@ -1,46 +1,65 @@
-title: "Metrics That Matter"
+title: "Work That Runs Elsewhere"
 estimatedTime: PT4M
 
 scenario: |
-  DevOps needs to set up monitoring and alerting for background jobs:
-  How many jobs are we processing per minute? What's the failure rate? 
-  Are queues backing up?
+  Applications the cheap checks cannot decide go to the fraud model, which runs on a GPU cluster
+  next to the bank rather than inside this JVM. A run takes minutes. Borderline cases go further still,
+  to a compliance officer who answers when they answer.
   <br><br>
-  They need metrics that feed into Prometheus and Grafana (or some competing observability platform).
+  Blocking a worker thread on either of those burns a worker for nothing, and a restart loses the fact
+  that the work was ever started.
 
 challenge: |
-  How do we expose job metrics for monitoring and alerting systems?
+  How do we keep work that runs somewhere else on the dashboard, with the same retries, timeouts and results?
 
 solution: |
-  JobRunr Pro integrates with <strong>Micrometer</strong> to expose metrics:
+  Create an <strong>external job</strong>. JobRunr runs your method, which hands the case to the other
+  system, and then parks the job in <code>PROCESSED</code> instead of finishing it:
   <br><br>
   <pre class="p-0 m-0">
-  <code class="language-properties hljs">
-  # In application.properties
-  jobrunr.jobs.metrics.enabled=true
-  jobrunr.jobs.metrics.micrometer-timers.enabled=true
+  <code class="language-java hljs">
+  UUID jobId = jobScheduler.create(anExternalJob()
+      .withName("Fraud review of " + card.getEmail())
+      .withProcessTimeOut(Duration.ofMinutes(30))
+      .withDetails(() -> handOverToRiskCluster(card))).asUUID();
+
+  // ... minutes later, the cluster calls back
+  jobScheduler.signalExternalJobSucceeded(jobId, verdict);
+  jobScheduler.signalExternalJobFailed(jobId, "model flagged this application");
+  jobScheduler.signalExternalJobProgress(jobId, progress);
   </code></pre>
   <br>
-  Available metrics include:
-  <ul>
-    <li><code>jobrunr_jobs_by_state</code> — Jobs per state (ENQUEUED, PROCESSING, etc.)</li>
-    <li><code>jobrunr_jobs_in_progress</code> — Jobs in progress</li>
-    <li><code>jobrunr_jobs_runs_*</code> — Jobs execution times</li>
-    <li><code>jobrunr_background_job_server_*</code> — Server health metrics</li>
-  </ul>
+  No worker thread is held while the model runs, but the job is still yours: it keeps its labels, its
+  result and its place in the dashboard. And because it carries a process timeout, a cluster that never
+  reports back fails the job instead of leaving it waiting forever.
 
 codeReferences:
-  - org/jobrunr/storylinedemo/StorylineDemoApplication.java
+  - org/jobrunr/storylinedemo/creditcards/FraudReviewService.java?focus=L37-L44,L61-L67
 
 tryIt: |
-  Open Prometheus and query JobRunr metrics:
-  <br><br>
-  <a href="http://localhost:9090/query?g0.expr=jobrunr_jobs_by_state" target="_blank">http://localhost:9090</a>
-  <br><br>
-  Try: <code>jobrunr_jobs_by_state</code> or <code>rate(jobrunr_jobs_in_progress_seconds_count[5m])</code>
+  <ol>
+  <li>Send an application to the risk cluster and find it under Processing, waiting in <code>PROCESSED</code></li>
+  <li>Report the verdict, the way the cluster's webhook would</li>
+  <li>Open the job and read the answer the external system left behind</li>
+  </ol>
 
-dashboardUrl: http://localhost:9090/query?g0.expr=jobrunr_jobs_by_state
+dashboardUrl: /dashboard/jobs?state=PROCESSED
 
-learnMore: https://www.jobrunr.io/en/documentation/pro/observability/
+learnMore: https://www.jobrunr.io/en/documentation/pro/job-timeout/
 
-liveNotice: "Prometheus is not available in this live demo. Run the demo locally to explore the metrics."
+tour:
+  narration: |
+    The fraud model runs on a GPU cluster that has never heard of your worker threads. This job hands the
+    case over and stops there: JobRunr parks it in PROCESSED, the second number beside Processing, and
+    holds no thread while the model thinks. When the cluster reports back, the job succeeds with the
+    verdict attached.
+  anchor:
+    page: /dashboard/jobs?state=PROCESSED
+    selector: "#processing-menu-btn"
+    fallbackSelector: "#jobs-table-container"
+  placement: right
+  actions:
+    - label: Send an application to the risk cluster
+      url: /demo/fraud-review
+    - label: Let the cluster report its verdict
+      url: /demo/fraud-review/verdict

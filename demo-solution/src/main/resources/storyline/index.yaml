@@ -7,7 +7,7 @@ intro: |
   we'll build the backend for a neobank — from customer onboarding to international payments,
   all powered by background jobs.
   <br>
-  Through 21 hands-on steps, you'll implement real production patterns with working code you can explore.
+  Through 22 hands-on steps, you'll implement real production patterns with working code you can explore.
   <br>
   <em>No toy examples — just real patterns.</em>
 
@@ -16,7 +16,7 @@ guideIntro: |
   the playground. We picked banking because it stresses everything at once: reliability, auditability,
   scheduling, retries, long-running work.
   <br><br>
-  Through 21 hands-on steps, you'll work through real patterns you'd find in production. Each step is
+  Through 22 hands-on steps, you'll work through real patterns you'd find in production. Each step is
   structured the same way:
   <ul>
     <li><strong>Scenario</strong>: the business context and why the problem matters</li>
@@ -32,6 +32,18 @@ guideIntro: |
 
 codeRoot: demo-solution/src/main/java
 githubLink: https://raw.githubusercontent.com/jobrunr/storyline-demo/refs/heads/main
+
+tour:
+  headline: "JobRunr Pro, live at JobRunr Finance"
+  body: |
+    <p>This is <strong>JobRunr Pro</strong> with its sleeves rolled up. Over 22 short steps you'll see the
+    features that earn their keep in production: retries and idempotency, batches, priority queues, mutexes,
+    rate limiters, server tags, external jobs, job results and an audit trail.</p>
+    <p>Feature lists are boring, so we gave ours a job: running <strong>JobRunr Finance</strong>, a neobank
+    where the money is imaginary and the background jobs are very real. Cards get applied for, statements
+    land on the last business day, payments cross borders, and a regulator reads every line of it.
+    Wander off whenever you like, the tour always knows the way back.</p>
+  cta: "Start the tour"
 
 flow:
   - category: "Getting Started"
@@ -68,10 +80,11 @@ flow:
       - ./steps/step-16.yaml
   - category: "Production Ready"
     icon: '<i class="fas fa-chart-line has-text-success"></i>'
-    description: "Job results, metrics, tracing, job replacement, and compliance filters."
+    description: "Job results, external jobs, metrics, tracing, job replacement, and compliance filters."
     steps:
       - ./steps/step-17.yaml
       - ./steps/step-18.yaml
       - ./steps/step-19.yaml
       - ./steps/step-20.yaml
       - ./steps/step-21.yaml
+      - ./steps/step-22.yaml
