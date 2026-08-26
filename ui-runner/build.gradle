@@ -1,20 +1,28 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '4.0.2'
+    id 'org.springframework.boot' version '4.1.0'
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'org.jobrunr'
 version = '0.0.1-SNAPSHOT'
+description = 'Dev runner for the guide and tour UI: no license, no database, no Docker'
 
 dependencies {
     implementation project(':storyline-viewer')
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-restclient'
-    implementation 'io.pebbletemplates:pebble-spring-boot-starter:4.0.0'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
 
+// The storyline content and the tour stills live in demo-solution. Copy them onto this module's
+// classpath at build time: a symlink here cannot survive a CI checkout or a Windows clone.
+tasks.named('processResources') {
+    from(rootProject.file('demo-solution/src/main/resources/storyline')) { into 'storyline' }
+    from(rootProject.file('demo-solution/src/main/resources/static')) { into 'static' }
+}
+
+// Run from the repository root so the code viewer finds demo-solution's sources on disk
 tasks.named('bootRun') {
     workingDir = rootProject.projectDir
 }

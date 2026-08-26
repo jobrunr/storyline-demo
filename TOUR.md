@@ -43,6 +43,11 @@ Beyond the normal `docker compose up` and `./gradlew :demo-solution:bootRun`:
 Add `?tourDebug=1` to any tour URL to log every navigation and anchor decision to the console and to
 expose `window.jobrunrTour` (`open(n)`, `resolved()`, `data`).
 
+For pure template, CSS or JS work there is `./gradlew :ui-runner:bootRun`: the viewer UI alone, with
+security off and no license, database or Docker needed. It copies the storyline content and tour
+stills out of demo-solution at build time (never symlink them: CI checkouts and Windows clones break).
+The tour shell renders there too, but with no live dashboard behind it the beacons never anchor.
+
 ## Authoring a step
 
 Everything is one `tour:` block appended to the step's existing YAML:
