@@ -63,7 +63,7 @@
     function updateChrome() {
         const card = cards[current];
         const kind = card.dataset.kind;
-        if (kind === 'intro') stepLabel.textContent = 'Welcome';
+        if (kind === 'intro' || kind === 'desktop') stepLabel.textContent = 'Welcome';
         else if (kind === 'trial') stepLabel.textContent = 'Free trial';
         else stepLabel.textContent = `Step ${card.dataset.step} of ${totalSteps}`;
         progressFill.style.width = `${((current + 1) / total) * 100}%`;
@@ -208,6 +208,44 @@
                 markTrialDone();
             } catch (err2) {
                 err.textContent = 'Something went wrong — please try again.';
+                btn.disabled = false;
+                btn.innerHTML = original;
+            }
+        });
+    });
+
+    /* ---------- continue-on-desktop email ---------- */
+    const DESKTOP_KEY = 'jobrunr-desktop-link-sent';
+
+    function markDesktopDone() {
+        document.querySelectorAll('.card--desktop').forEach(c => c.classList.add('is-done'));
+    }
+
+    if (localStorage.getItem(DESKTOP_KEY)) markDesktopDone();
+
+    document.querySelectorAll('.desktop-form').forEach(form => {
+        form.addEventListener('submit', async e => {
+            e.preventDefault();
+            const input = form.querySelector('input[type="email"]');
+            const btn = form.querySelector('button');
+            const err = form.querySelector('.trial-error');
+            const email = input.value.trim();
+            if (!email || !email.includes('@')) { err.textContent = 'That does not look like an email address.'; return; }
+            err.textContent = '';
+            const original = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            try {
+                const res = await fetch('/m/desktop-link', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, ...utmParams() })
+                });
+                if (!res.ok) throw new Error('bad status ' + res.status);
+                localStorage.setItem(DESKTOP_KEY, '1');
+                markDesktopDone();
+            } catch (err2) {
+                err.textContent = 'Something went wrong. Please try again.';
                 btn.disabled = false;
                 btn.innerHTML = original;
             }

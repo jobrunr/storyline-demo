@@ -22,7 +22,7 @@ import java.util.Map;
 public class TrialController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TrialController.class);
-    private static final String WEBHOOK_URL = "https://n8n.srv851199.hstgr.cloud/webhook/f7a5e38e-4b1d-4f5b-b534-e014ff6b80fe";
+    static final String WEBHOOK_URL = "https://n8n.srv851199.hstgr.cloud/webhook/f7a5e38e-4b1d-4f5b-b534-e014ff6b80fe";
 
     private final RestClient restClient;
 

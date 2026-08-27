@@ -33,8 +33,8 @@ import javax.sql.DataSource;
 @EnableConfigurationProperties(StorylineSecurityProperties.class)
 public class StorylineSecurityAutoConfiguration {
 
-    /** The endpoints the tour may call before anyone has signed in, and the only ones worth throttling. */
-    private static final String[] PRE_AUTH_ENDPOINTS = {"/simulate/*", "/tour/magic-link", "/tour/trial"};
+    /** The endpoints anonymous visitors may call, and the only ones worth throttling. */
+    private static final String[] PRE_AUTH_ENDPOINTS = {"/simulate/*", "/tour/magic-link", "/tour/trial", "/m/desktop-link"};
 
     @Bean
     FilterRegistrationBean<Filter> storylineAnonymousRateLimit(StorylineSecurityProperties properties) {
@@ -62,7 +62,7 @@ public class StorylineSecurityAutoConfiguration {
                         .requestMatchers(HttpMethod.GET, "/m", "/tour", "/tour/**").permitAll()
                         // Step 19 tells visitors to scrape these; the rest of /actuator stays closed.
                         .requestMatchers(HttpMethod.GET, "/actuator/prometheus", "/actuator/health").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/m/trial", "/tour/trial", "/simulate/**", "/tour/magic-link").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/m/trial", "/m/desktop-link", "/tour/trial", "/simulate/**", "/tour/magic-link").permitAll()
                         .requestMatchers("/login/**", "/register/**", "/ott/**", "/error", "/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/*.svg", "/*.webp", "/*.png", "/*.ico").permitAll()
                         .anyRequest().authenticated())
@@ -74,7 +74,7 @@ public class StorylineSecurityAutoConfiguration {
                     .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login")))
                     .logout(logout -> logout.logoutSuccessUrl("/"))
-                    .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**", "/m/trial", "/tour/trial", "/simulate/**", "/tour/magic-link"))
+                    .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**", "/m/trial", "/m/desktop-link", "/tour/trial", "/simulate/**", "/tour/magic-link"))
                     .build();
         }
 

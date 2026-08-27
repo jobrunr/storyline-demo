@@ -1,6 +1,7 @@
 package org.jobrunr.storyline;
 
 import org.jobrunr.storyline.api.CodeController;
+import org.jobrunr.storyline.api.DesktopLinkController;
 import org.jobrunr.storyline.api.MobileRedirectInterceptor;
 import org.jobrunr.storyline.api.StorylineController;
 import org.jobrunr.storyline.api.TourController;
@@ -12,7 +13,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@Import({StorylineController.class, TourController.class, CodeController.class, TrialController.class})
+@Import({StorylineController.class, TourController.class, CodeController.class, TrialController.class, DesktopLinkController.class})
 @AutoConfiguration
 public class StorylineConfiguration {
 

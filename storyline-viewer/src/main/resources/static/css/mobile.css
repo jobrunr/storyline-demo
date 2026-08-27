@@ -91,7 +91,7 @@ body {
 
 /* ---------- Title & intro cards ---------- */
 .card--title, .card--intro { background: radial-gradient(120% 120% at 0% 0%, #8a5cd6 0%, var(--primary) 45%, var(--primary-dark) 100%); color: #fff; }
-.card--title .card__chapter, .card--intro .card__chapter {
+.card--title .card__chapter, .card--intro .card__chapter, .card--desktop .card__chapter {
     display: inline-block; align-self: flex-start; font-size: 0.72rem; font-weight: 700;
     letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink);
     background: var(--secondary); padding: 5px 12px; border-radius: 99px; margin-bottom: 18px;
@@ -112,18 +112,18 @@ body {
 .card--trial { background: linear-gradient(160deg, #2a2440 0%, var(--ink) 100%); color: #fff; }
 .card--trial .card__title { font-size: 1.9rem; }
 .card--trial .card__lead { color: rgba(255, 255, 255, 0.88); }
-.trial-form { margin-top: 24px; display: flex; flex-direction: column; gap: 12px; }
-.trial-form input {
+.trial-form, .desktop-form { margin-top: 24px; display: flex; flex-direction: column; gap: 12px; }
+.trial-form input, .desktop-form input {
     width: 100%; padding: 15px 16px; border-radius: 13px; border: 1px solid rgba(255, 255, 255, 0.18);
     background: rgba(255, 255, 255, 0.96); color: var(--ink); font-size: 1rem;
 }
-.trial-form input::placeholder { color: #9a93ad; }
-.trial-form input:focus { outline: 2px solid var(--secondary); outline-offset: 1px; }
-.trial-form button {
+.trial-form input::placeholder, .desktop-form input::placeholder { color: #9a93ad; }
+.trial-form input:focus, .desktop-form input:focus { outline: 2px solid var(--secondary); outline-offset: 1px; }
+.trial-form button, .desktop-form button {
     padding: 15px; border: none; border-radius: 13px; background: var(--secondary); color: var(--ink);
     font-weight: 800; font-size: 1rem; min-height: 52px;
 }
-.trial-form button:disabled { opacity: 0.7; }
+.trial-form button:disabled, .desktop-form button:disabled { opacity: 0.7; }
 .trial-error { color: #ffb4b4; font-size: 0.85rem; min-height: 1em; margin: 2px 0 0; }
 .trial-success { margin-top: 24px; text-align: center; }
 .trial-success__icon { font-size: 2.8rem; color: var(--secondary); margin-bottom: 12px; }
@@ -134,6 +134,15 @@ body {
 .card--trial.is-done .trial-success { display: block; }
 .card__hint { padding: 14px; text-align: center; font-size: 0.82rem; color: rgba(255, 255, 255, 0.85); }
 .card__hint i { margin-right: 6px; }
+
+/* ---------- Desktop hand-off card ---------- */
+.card--desktop { background: linear-gradient(160deg, #2a2440 0%, var(--ink) 100%); color: #fff; }
+.card--desktop .card__title { font-size: 1.9rem; }
+.card--desktop .card__lead { color: rgba(255, 255, 255, 0.88); }
+.desktop-note { margin: 12px 0 0; font-size: 0.78rem; text-align: center; color: rgba(255, 255, 255, 0.55); }
+.card--desktop .trial-success { display: none; }
+.card--desktop.is-done .desktop-form, .card--desktop.is-done .desktop-note { display: none; }
+.card--desktop.is-done .trial-success { display: block; }
 
 /* ---------- Challenge card ---------- */
 .block { padding: 18px; border-radius: 16px; margin-bottom: 16px; }

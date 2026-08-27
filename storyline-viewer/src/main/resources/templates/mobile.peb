@@ -49,6 +49,27 @@
         <div class="card__hint"><i class="fas fa-hand-pointer"></i> Swipe to start</div>
     </section>
 
+    <!-- 0b. Mobile visitor: offer to email the desktop tour link -->
+    <section class="card card--desktop" data-kind="desktop">
+        <div class="card__body card__body--center">
+            <span class="card__chapter">🖥️ Better on a big screen</span>
+            <h1 class="card__title">This demo wants a desktop</h1>
+            <div class="card__lead">You're getting the mobile version, and it's a fine way to read along. But the full thing is a guided tour with a live JobRunr Pro dashboard on stage, and that stage needs more pixels than a phone can offer. Leave your email and the link will be waiting when you're back at your desk.</div>
+            <form class="desktop-form" novalidate>
+                <input type="email" name="email" inputmode="email" autocomplete="email" autocapitalize="off" placeholder="you@company.com" required>
+                <button type="submit"><span>Send me the link</span></button>
+                <p class="trial-error" role="alert"></p>
+            </form>
+            <p class="desktop-note">One email, one link. No newsletter ambush.</p>
+            <div class="trial-success">
+                <div class="trial-success__icon"><i class="fas fa-envelope-circle-check"></i></div>
+                <h3>It's in your inbox</h3>
+                <p>See you on the big screen. Until then, swipe on, the mobile version will keep you company.</p>
+            </div>
+        </div>
+        <div class="card__hint"><i class="fas fa-hand-pointer"></i> or swipe on to keep reading here</div>
+    </section>
+
     {% for entry in storyline.stepsByCategory %}
     {% for step in entry.value %}
 
