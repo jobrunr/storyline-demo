@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * Emails mobile visitors a permanent link to the guided tour so they can pick it up on a desktop
  * (the magic-link email is a 15-minute sign-in token, so it is the wrong tool for "later today").
- * The address also goes to the same n8n webhook as the trial forms, as {@code form: continue-on-desktop}.
+ * The address also goes to the same n8n webhook as the trial forms, as {@code form: tour_mobile}.
  */
 @Controller
 public class DesktopLinkController {
@@ -78,7 +78,7 @@ public class DesktopLinkController {
         payload.put("email", email);
         payload.put("username", "");
         payload.put("company", "");
-        payload.put("form", "continue-on-desktop");
+        payload.put("form", "tour_mobile");
         payload.put("utm_source", nullToEmpty(body.utm_source()));
         payload.put("utm_medium", nullToEmpty(body.utm_medium()));
         payload.put("utm_campaign", nullToEmpty(body.utm_campaign()));
