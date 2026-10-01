@@ -17,7 +17,7 @@ solution: |
   <code class="language-java hljs">
   jobScheduler.create(aJob()
       .withLabels("customer: john.smith@email.com", "card: AMEX")
-      .withDetails(() -> createCreditCard(card)));
+      .withJobLambda(() -> createCreditCard(card)));
 
   // or via the @Job annotation
   @Job(labels = "{"customer: %0", "card: %1"}")

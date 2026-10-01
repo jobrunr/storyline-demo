@@ -42,7 +42,7 @@ public class PaymentService {
 
     private void createPaymentProcessingJob(Payment payment) {
         jobScheduler.create(aJob()
-                .withDetails(() -> processPayment(payment.getId(), JobContext.Null)));
+                .withJobLambda(() -> processPayment(payment.getId(), JobContext.Null)));
 
         // TODO Step 10: Payments are high priority!
         // TODO Step 11: Process more payments on average for premium cards

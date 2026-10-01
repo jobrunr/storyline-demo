@@ -40,7 +40,7 @@ public class FraudReviewService {
                 .withLabels("customer: " + creditCard.getEmail())
                 // Nothing is lost if the cluster never reports back: the job fails by itself
                 .withProcessTimeOut(Duration.ofMinutes(30))
-                .withDetails(() -> handOverToRiskCluster(creditCard))).asUUID();
+                .withJobLambda(() -> handOverToRiskCluster(creditCard))).asUUID();
     }
 
     public void handOverToRiskCluster(CreditCard creditCard) {
