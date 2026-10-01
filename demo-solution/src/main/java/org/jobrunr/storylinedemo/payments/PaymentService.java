@@ -57,14 +57,14 @@ public class PaymentService {
         var processPaymentJob = jobScheduler.create(aJob()
                 .withName("Process payment #" + payment.getId())
                 // Step 10: Payments are high priority!
-                .withQueue(Priority.HIGH)
+                .withPriorityQueue(Priority.HIGH)
                 // Step 11: Process more payments on average for premium cards
                 .withLabels("cardType:" + creditCard.getType().name())
                 // Step 14: Payments to Stripe or Paypal can only be processed on dedicated servers
                 .withServerTag(payment.getPlatform().getServerTag())
                 // Step 15A: Payments to Stripe or Paypal are risky if the number of requests are not limited
                 .withRateLimiter(payment.getPlatform().isExternal() ? payment.getPlatform().name() : null)
-                .withDetails(() -> processPayment(payment.getId(), JobContext.Null)));
+                .withJobLambda(() -> processPayment(payment.getId(), JobContext.Null)));
 
         // Chain government reporting for large payments (> $10k)
         if (payment.requiresGovernmentReporting()) {
@@ -75,7 +75,7 @@ public class PaymentService {
                     // Step 15B: The government app is easily DDoSable, rate-limiting to the rescue!
                     .withRateLimiter("REPORTING")
                     .runAfterSuccessOf(processPaymentJob.asUUID())
-                    .withDetails(() -> reportToGovernment(payment.getId())));
+                    .withJobLambda(() -> reportToGovernment(payment.getId())));
         }
     }
 

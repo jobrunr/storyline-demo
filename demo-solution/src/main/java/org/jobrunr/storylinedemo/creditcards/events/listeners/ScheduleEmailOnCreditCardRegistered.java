@@ -34,7 +34,7 @@ public class ScheduleEmailOnCreditCardRegistered implements ApplicationListener<
                 .scheduleAt(LocalDateTime.now().plusDays(7))
                 // Step 9: add a job label for filtering
                 .withLabels("customer: " + event.getCreditCard().getEmail())
-                .withDetails(() -> sendActivationReminderEmail(creditCard)));
+                .withJobLambda(() -> sendActivationReminderEmail(creditCard)));
 
         // Alternatively we can give the job a deterministic identifier
         /*
@@ -43,7 +43,7 @@ public class ScheduleEmailOnCreditCardRegistered implements ApplicationListener<
                 .withId(JobId.fromIdentifier("activation-reminder:" + creditCard.getId()))
                 .scheduleAt(LocalDateTime.now().plusDays(7))
                 .withLabels("customer: " + event.getCreditCard().getEmail())
-                .withDetails(() -> sendActivationReminderEmail(creditCard)));
+                .withJobLambda(() -> sendActivationReminderEmail(creditCard)));
         */
     }
 

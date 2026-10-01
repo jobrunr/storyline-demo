@@ -19,7 +19,7 @@ solution: |
   // Tag the job based on platform
   jobScheduler.create(aJob()
       .withServerTag(payment.getPlatform().getServerTag())
-      .withDetails(() -> processPayment(payment)));
+      .withJobLambda(() -> processPayment(payment)));
 
   // In application.properties (on dedicated servers only)
   jobrunr.background-job-server.tags=external

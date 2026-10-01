@@ -88,7 +88,7 @@ public class CreditCardStatementService {
     // Step 8: Notification job that runs when the batch fails
     @Job(name = "Notify Ops Team of Failure")
     public void notifyOpsTeam(JobContext context) {
-        var batchJobId = context.getAwaitedJob();
+        var batchJobId = context.getAwaitedJobId();
         var batchJob = storageProvider.getJobById(batchJobId);
         var progressBar = JobDashboardProgressBar.get(batchJob);
         LOGGER.error("🚨 ALERT: Monthly statement generation failed! {} total statements were scheduled.", progressBar.getTotalAmount());

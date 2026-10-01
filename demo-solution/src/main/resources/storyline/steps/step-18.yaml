@@ -21,7 +21,7 @@ solution: |
   UUID jobId = jobScheduler.create(anExternalJob()
       .withName("Fraud review of " + card.getEmail())
       .withProcessTimeOut(Duration.ofMinutes(30))
-      .withDetails(() -> handOverToRiskCluster(card))).asUUID();
+      .withJobLambda(() -> handOverToRiskCluster(card))).asUUID();
 
   // ... minutes later, the cluster calls back
   jobScheduler.signalExternalJobSucceeded(jobId, verdict);
