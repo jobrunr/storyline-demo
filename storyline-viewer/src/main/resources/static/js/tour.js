@@ -1263,6 +1263,10 @@
             ROOT.classList.add('is-intro');
             this.node.hidden = false;
             const resume = Progress.introSeen && Progress.lastStep > FIRST_STEP;
+            const analyticsTimePeriodStorage = localStorage.getItem("analyticsSelectedTimePeriod");
+            if (!analyticsTimePeriodStorage) {
+                localStorage.setItem("analyticsSelectedTimePeriod", `{"label":"Last 31 Days"}`);
+            }
             if (resume) {
                 this.start.textContent = 'Resume at step ' + Progress.lastStep;
                 this.restart.hidden = false;
