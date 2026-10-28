@@ -41,7 +41,8 @@ public record TourData(
             String tryItUrl,
             String externalUrl,
             String screenshot,
-            String liveNotice) {
+            String liveNotice,
+            String historyView) {
     }
 
     /**
@@ -91,12 +92,13 @@ public record TourData(
                 step.tryItUrl(),
                 externalUrl(step),
                 tour.screenshot(),
-                step.liveNotice());
+                tour.liveNotice(),
+                tour.historyView());
     }
 
     /**
-     * Steps 19 and 20 point at Prometheus and Jaeger, which only exist when you run the demo
-     * yourself. The tour offers the link locally and a still of what you would have seen live.
+     * Steps 19 and 20 also point at Prometheus and Jaeger, which only exist when you run the demo
+     * yourself, so the tour offers that link next to the live dashboard when running locally.
      */
     private static String externalUrl(StorylineStep step) {
         String dashboardUrl = step.dashboardUrl();

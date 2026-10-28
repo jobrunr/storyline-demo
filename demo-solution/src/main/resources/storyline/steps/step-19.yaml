@@ -47,9 +47,36 @@ liveNotice: "Prometheus is not wired into this live demo. Run the demo locally a
 
 tour:
   narration: |
-    Micrometer publishes every number DevOps will ever ask for: jobs by state, jobs in progress, how long
-    runs take, how healthy each server is. Two properties switch it on and Prometheus scrapes the rest.
-    Alerting on a growing queue becomes one PromQL query, and nobody has to build a metrics side project
-    first.
-  mode: info
-  screenshot: /images/tour/step-19-prometheus.png
+    DevOps wants numbers, not vibes. The dashboard home answers the first questions itself: success ratio,
+    failed jobs and retries for the period you pick, a processing trend, and a breakdown by state, server or
+    job signature. Change the period in the date picker to zoom out. For Prometheus and Grafana, two
+    Micrometer properties publish the same kind of numbers, so nobody has to build a metrics side project first.
+  mode: dashboard
+  anchor:
+    page: /dashboard
+    selector: "#total-jobs-failed-text"
+    fallbackSelector: "#nbr-of-servers-text"
+  placement: bottom
+  liveNotice: "Prometheus is not wired into this live demo. Run the demo locally to query the Micrometer metrics yourself."
+
+mobile:
+  solution: |
+    The JobRunr Pro dashboard answers the first questions itself. Its home page shows <strong>Job Analytics</strong>
+    for the period you pick: success ratio, succeeded and failed jobs, retries, a processing trend and a
+    breakdown by state, server or job signature.
+    <br><br>
+    For Prometheus and Grafana, JobRunr Pro also publishes metrics through <strong>Micrometer</strong>:
+    <br><br>
+    <pre class="p-0 m-0">
+    <code class="language-properties hljs">
+    # In application.properties
+    jobrunr.jobs.metrics.enabled=true
+    jobrunr.jobs.metrics.micrometer-timers.enabled=true
+    </code></pre>
+    <br>
+    That gives you <code>jobrunr_jobs_by_state</code>, <code>jobrunr_jobs_in_progress</code>, job execution
+    times and server health, ready for alerting.
+  tryIt: |
+    Scroll to Job Analytics: success ratio, failed jobs and retries sit at the top, the processing trend and
+    the breakdown by state, server or signature right below.
+  dashboardUrl: /dashboard

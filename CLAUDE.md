@@ -53,7 +53,10 @@ docker compose up
   `storyline/steps/step-NN.yaml`; the engine is `storyline-viewer` `templates/tour.peb`,
   `static/css/tour.css` and `static/js/tour.js`.
 
-  **Read [TOUR.md](TOUR.md) before touching anything under `/tour`.** It has the step schema, the
+  `/m` is the phone version of the same steps. It reads the guide's fields unless a step's `mobile:` block
+  overrides them.
+
+  **Read [TOUR.md](TOUR.md) before touching anything under `/tour` or `/m`.** It has the step schema, the
   invariants that are easy to break (iframe history, MUI visibility, the pill lane), the anchor sweep
   to run after a JobRunr Pro upgrade, and what is still open.
 

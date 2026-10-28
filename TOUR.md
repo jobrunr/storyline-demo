@@ -70,19 +70,55 @@ tour:
   placement: right        # auto (default), top, right, bottom, left
   mode: dashboard         # dashboard (default when dashboardUrl is a /dashboard path), app, info
   screenshot: /images/tour/step-19-prometheus.png   # info mode only
+  historyView: chart      # optional: job pages open on the history Chart while this step is open
+  liveNotice: "..."       # optional: replaces the guide's liveNotice on the live demo, "" drops it
   actions:
     - label: Generate 20 reports that sometimes fail
       url: /bulk-generate-summary-reports?count=20
       method: GET         # GET (default) or POST
       anonymous: false    # true only for the /simulate/* endpoints
+      focus: "#job-history-chart-panel [role='group']"   # optional, see "Following a trigger" below
+      placement: left     # optional popup side once the stage followed the trigger
 ```
 
 Defaults fill in the rest, so a step with no `tour:` block still narrates (its `challenge`) and still
 knows where to stand (its `dashboardUrl`). Bad values fail at startup with the step path in the message.
 
 - `mode: app` adds an "Open JobRunr Finance" button that slides `tryItUrl` in from the right.
-- `mode: info` drops the beacon entirely and shows a wide centered card, for the two steps whose tools
-  (Prometheus, Jaeger) do not exist in the live demo.
+- `mode: info` drops the beacon entirely and shows a wide centered card. No step uses it since steps 19
+  and 20 moved onto the v9 Job Analytics; their Prometheus and Jaeger stills are no longer referenced.
+- `historyView` is written to the dashboard's `jobHistoryDisplayMode` on every step change: `chart` where
+  the step sets it (steps 5 and 6), `timeline` everywhere else, because the other narrations were written
+  for it (step 16's log lines live there). The Detailed analytics tab (`analyticsDataGridDetailedSelectedTab`)
+  is reset to Job Signatures at the same moment, and before a trigger reloads the stage, because the step 20
+  anchor is missing from the Exceptions tab.
+
+### Following a trigger
+
+A trigger may answer `{"ok": true, "message": "...", "stageUrl": "/dashboard/jobs/<id>"}`. The stage then
+soft-navigates there (no history entry) and that page becomes the step's anchor until the visitor changes
+step: off-track detection, "take me back" and reanchoring all use it. The beacon points at the action's
+`focus`, the popup moves to its `placement`. Step 6 uses this to open the payment it just created on its
+Chart. That payment carries the `transfer:times-out-once` label, so `HandleTransferToJobRunrFinance`
+throws a `TransferTimeoutException` on its first attempt, after the card was charged; the retry then shows
+`payment-processing` and `charge-card` as skipped.
+
+## The mobile deck (`/m`)
+
+`/m` renders the guide's fields, but a step can override them for phones with a `mobile:` block, without
+touching `/storyline`:
+
+```yaml
+mobile:
+  scenario: ...           # optional, like challenge, solution and tryIt: falls back to the guide
+  dashboardUrl: /dashboard
+  latestJob:              # optional dashboard API queries, tried in order; the card embeds the newest
+    - states=SUCCEEDED&label=transfer%3Atimes-out-once     # job the first one finds, else dashboardUrl
+  historyView: chart
+```
+
+`mobile.js` writes the same `jobHistoryDisplayMode`, analytics tab and analytics period presets as the tour
+before it loads a card's iframe.
 - Anything that writes to the bank is gated. Only `/simulate/*` may be `anonymous: true`; the gated
   one-click triggers live on `/demo/*` and are GETs, because the tour fetches without a CSRF token.
 
@@ -130,7 +166,8 @@ version bump, so sweep them:
    }
    ```
 3. Every step with an anchor must resolve to its own `selector`, never to `fallbackSelector` and
-   never to nothing. The two `info` steps resolve to nothing by design.
+   never to nothing. `resolved()` prints the element id, or its tag name when it has none: step 19's
+   Failure rate column header shows up as `div`, while its fallback would print its own id.
 
 Note that a CSS id selector may not start with a digit: the High queue is `[id='0-queue-menu-btn']`.
 
@@ -172,7 +209,21 @@ Three changes went slightly beyond the tour itself and are worth a second opinio
   scrape at all, so step 18's "run the demo locally to explore the metrics" was untrue. The rest of
   `/actuator` stays authenticated.
 
+Fifth pass (28 Oct 2026), for JobRunr Pro v9: steps 19 and 20 left their screenshots for the live Job
+Analytics (19 on the KPIs, 20 on Detailed analytics with a trigger for failing reports), steps 5 and 6
+open job pages on the new history Chart, and step 6's payment times out once so the Chart shows durable
+steps being skipped. The trigger opens that exact job. The mobile deck got `mobile:` overrides for steps
+4, 5, 6, 19 and 20. The analytics period preset moved from the intro card to boot, so deep links get it
+too. PaymentService gained a returned job id, extra labels and a cacheable job lambda (no more "Job details
+not cacheable" banner), which shifted the code-chip line ranges of steps 6, 10, 11, 13, 14 and 15.
+
 Open, deliberately not done:
+
+- **Deep links to `/dashboard/analytics/<signature>` return 404** from the embedded dashboard: the dots and
+  parentheses make Spring treat the path as a static resource. Client-side navigation works, so the tour
+  never loads that URL directly. Worth reporting to JobRunr Pro.
+- **The guide's step 6 `dashboardUrl` filters on `...payment.PaymentService`**, a package that does not
+  exist (it is `payments`), so `/storyline` shows an empty list there. The mobile deck has its own URL.
 
 - **The landing page and `/storyline` still do not link to `/tour`.** Pointing the CTA at it, or running
   a soft A/B banner, is a separate call.

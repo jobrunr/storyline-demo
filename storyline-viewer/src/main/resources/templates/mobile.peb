@@ -79,8 +79,8 @@
             <span class="card__chapter">{{ step.category }}</span>
             <span class="card__eyebrow">Step {{ step.number }} · {{ step.estimatedTime.toMinutes }} min</span>
             <h1 class="card__title">{{ step.title }}</h1>
-            {% if step.scenario %}
-            <div class="card__lead">{{ step.scenario | raw }}</div>
+            {% if step.mobile.scenario %}
+            <div class="card__lead">{{ step.mobile.scenario | raw }}</div>
             {% endif %}
         </div>
         <div class="card__hint"><i class="fas fa-hand-pointer"></i> Swipe to continue</div>
@@ -91,11 +91,11 @@
         <div class="card__body">
             <div class="block block--challenge">
                 <span class="block__tag"><i class="fas fa-circle-question"></i> The Challenge</span>
-                <div class="block__text">{{ step.challenge | raw }}</div>
+                <div class="block__text">{{ step.mobile.challenge | raw }}</div>
             </div>
             <div class="block block--solution">
                 <span class="block__tag"><i class="fas fa-lightbulb"></i> How we solve it</span>
-                <div class="block__text">{{ step.solution | raw }}</div>
+                <div class="block__text">{{ step.mobile.solution | raw }}</div>
                 {% if step.learnMore %}
                 <a class="block__link" href="{{ step.learnMore }}" target="_blank" rel="noopener">
                     <i class="fas fa-book"></i> Read the docs →
@@ -127,15 +127,18 @@
         <div class="card__dashhead">
             <div>
                 <span class="card__eyebrow"><i class="fas fa-chart-line"></i> See it live</span>
-                {% if step.tryIt %}<div class="card__dashlead">{{ step.tryIt | raw }}</div>{% endif %}
+                {% if step.mobile.tryIt %}<div class="card__dashlead">{{ step.mobile.tryIt | raw }}</div>{% endif %}
             </div>
             <button type="button" class="card__expand" data-fullscreen aria-label="Open dashboard fullscreen">
                 <i class="fas fa-expand"></i>
             </button>
         </div>
-        {% if step.dashboardUrl %}
+        {% if step.mobile.dashboardUrl %}
         <div class="card__frame">
-            <iframe data-src="{{ step.dashboardUrl }}" data-clarity-unmask="true" title="JobRunr dashboard"></iframe>
+            <iframe data-src="{{ step.mobile.dashboardUrl }}"
+                    {% if step.mobile.historyView %}data-history-view="{{ step.mobile.historyView }}"{% endif %}
+                    {% if step.mobile.latestJob | length > 0 %}data-latest-job="{{ step.mobile.latestJob | join('|') }}"{% endif %}
+                    data-clarity-unmask="true" title="JobRunr dashboard"></iframe>
         </div>
         {% endif %}
     </section>

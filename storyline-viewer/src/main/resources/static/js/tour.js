@@ -119,6 +119,39 @@
         }
     };
 
+    /**
+     * More dashboard preferences the tour shares with the iframe. Steps whose story is the job history
+     * Chart (retries, durable steps) open job pages on it, every other step on the Timeline its narration
+     * was written for. Detailed analytics reopens on Job Signatures, the only tab with the table the
+     * beacon points at, and Job Analytics opens on a month instead of an often empty today.
+     */
+    const DashboardViews = {
+        HISTORY_KEY: 'jobHistoryDisplayMode',
+        ANALYTICS_TAB_KEY: 'analyticsDataGridDetailedSelectedTab',
+        PERIOD_KEY: 'analyticsSelectedTimePeriod',
+
+        forStep(step) {
+            try {
+                localStorage.setItem(this.HISTORY_KEY, step.historyView || 'timeline');
+                this.signaturesTab();
+            } catch (e) {
+                debug('could not preset the dashboard views');
+            }
+        },
+
+        signaturesTab() {
+            try { localStorage.setItem(this.ANALYTICS_TAB_KEY, '0'); } catch (e) { debug('could not preset the analytics tab'); }
+        },
+
+        analyticsPeriod() {
+            try {
+                if (!localStorage.getItem(this.PERIOD_KEY)) localStorage.setItem(this.PERIOD_KEY, '{"label":"Last 31 Days"}');
+            } catch (e) {
+                debug('could not preset the analytics period');
+            }
+        }
+    };
+
     /* ------------------------------------------------------------------ stage */
 
     const Stage = {
@@ -1022,7 +1055,7 @@
                 credentials: 'same-origin',
                 headers: { Accept: 'application/json' }
             });
-            await reportActionResult(response, step);
+            await reportActionResult(response, action);
         } catch (e) {
             Popup.feedback('Could not reach JobRunr Finance. Try again in a moment.', 'error');
         }
@@ -1031,7 +1064,7 @@
         button.innerHTML = label;
     }
 
-    async function reportActionResult(response, step) {
+    async function reportActionResult(response, action) {
         if (response.status === 429) {
             Popup.feedback(await rateLimitMessage(response), 'error');
             return;
@@ -1055,7 +1088,8 @@
         if (body.ok !== false) {
             Beacon.flash();
             Toast.show('Jobs are on their way to the dashboard.');
-            await refreshStage(step);
+            if (body.stageUrl) await Tour.follow(body.stageUrl, action);
+            else await refreshStage();
         }
     }
 
@@ -1064,14 +1098,16 @@
      * reloads on the step's own page and the new jobs walk in without anyone hunting for a refresh
      * button. A reload leaves no history entry behind, which keeps invariant 1 intact.
      */
-    async function refreshStage(step) {
-        if (!step.anchor) return;
+    async function refreshStage() {
+        const anchor = Tour.anchor;
+        if (!anchor) return;
         const win = Stage.win;
-        if (win && sameLocation(Stage.here(), step.anchor.page)) {
+        if (win && sameLocation(Stage.here(), anchor.page)) {
+            DashboardViews.signaturesTab();
             win.location.reload();
             await Stage.loaded();
         } else {
-            await Stage.navigate(step.anchor.page);
+            await Stage.navigate(anchor.page);
         }
         await Tour.reanchor();
     }
@@ -1139,13 +1175,13 @@
 
     const OffTrack = {
         timer: null,
-        step: null,
+        anchor: null,
         away: false,
 
-        watch(step) {
+        watch(anchor) {
             this.stop();
-            if (!step.anchor) return;
-            this.step = step;
+            if (!anchor) return;
+            this.anchor = anchor;
             this.away = false;
             this.timer = setInterval(() => this.check(), OFF_TRACK_TICK);
         },
@@ -1160,8 +1196,8 @@
             const path = Stage.path();
             if (!path) return;
 
-            const wanted = new URL(this.step.anchor.page, location.origin).pathname;
-            const onTrack = this.step.anchor.match === 'prefix' ? path.startsWith(wanted) : path === wanted;
+            const wanted = new URL(this.anchor.page, location.origin).pathname;
+            const onTrack = this.anchor.match === 'prefix' ? path.startsWith(wanted) : path === wanted;
             if (onTrack === !this.away) return;
 
             this.away = !onTrack;
@@ -1170,7 +1206,7 @@
                 Beacon.detach();
                 Popup.minimize();
                 Pill.showResume(false);
-                track('tour-offtrack', { step: this.step.number });
+                track('tour-offtrack', { step: Tour.current });
             } else {
                 Tour.reanchor();
             }
@@ -1182,6 +1218,7 @@
     const Tour = {
         current: FIRST_STEP,
         token: 0,
+        anchor: null,   // the step's anchor, until a trigger moves the stage to the job it created
 
         async open(number, options) {
             const step = STEPS.get(number);
@@ -1190,6 +1227,7 @@
             const token = ++this.token;
 
             this.current = number;
+            this.anchor = step.anchor;
             Progress.visit(number);
             history[settings.replace ? 'replaceState' : 'pushState']({ step: number }, '', '/tour/step/' + number + location.search);
 
@@ -1200,6 +1238,7 @@
             Pill.update(step);
             Pill.openJump(false);
             Popup.prepare(step);
+            DashboardViews.forStep(step);
             track('tour-step-view', { step: number, title: step.title });
 
             // Show the narration even when the dashboard is slow: never make anyone wait to read.
@@ -1221,27 +1260,41 @@
             clearTimeout(settle);
             if (target) Beacon.attach(target); else Beacon.detach();
             Popup.show(Beacon.point);
-            OffTrack.watch(step);
+            OffTrack.watch(this.anchor);
+        },
+
+        /**
+         * A trigger answered with the page of what it created, so the stage goes there and that page
+         * becomes the step's home: snap-back and reanchor return to it until the visitor changes step.
+         */
+        async follow(url, action) {
+            if (!this.anchor) return;
+            this.anchor = Object.assign({}, this.anchor, {
+                page: url, selector: action.focus || this.anchor.selector, fallbackSelector: null, reveal: null, match: 'path'
+            });
+            if (action.placement) Popup.placement = action.placement;
+            OffTrack.stop();
+            await Stage.navigate(url);
+            await this.reanchor();
+            OffTrack.watch(this.anchor);
         },
 
         /** After a snap-back the dashboard has re-rendered, so the anchor has to be found again. */
         async reanchor() {
-            const step = STEPS.get(this.current);
-            if (!step || !step.anchor) return;
+            if (!this.anchor) return;
             const token = ++this.token;
-            const target = await resolveAnchor(step.anchor);
+            const target = await resolveAnchor(this.anchor);
             if (token !== this.token) return;
             if (target) Beacon.attach(target); else Beacon.detach();
             Popup.show(Beacon.point);
         },
 
         async takeMeBack() {
-            const step = STEPS.get(this.current);
             track('tour-offtrack-snapback', { step: this.current });
             OffTrack.stop();
-            await Stage.navigate(step.anchor.page);
+            await Stage.navigate(this.anchor.page);
             await this.reanchor();
-            OffTrack.watch(step);
+            OffTrack.watch(this.anchor);
         },
 
         finish() {
@@ -1263,10 +1316,6 @@
             ROOT.classList.add('is-intro');
             this.node.hidden = false;
             const resume = Progress.introSeen && Progress.lastStep > FIRST_STEP;
-            const analyticsTimePeriodStorage = localStorage.getItem("analyticsSelectedTimePeriod");
-            if (!analyticsTimePeriodStorage) {
-                localStorage.setItem("analyticsSelectedTimePeriod", `{"label":"Last 31 Days"}`);
-            }
             if (resume) {
                 this.start.textContent = 'Resume at step ' + Progress.lastStep;
                 this.restart.hidden = false;
@@ -1357,6 +1406,7 @@
 
     (function boot() {
         DashboardColumns.showLabels();
+        DashboardViews.analyticsPeriod();
 
         const deepLinked = stepFromUrl();
         const step = STEPS.get(deepLinked) || STEPS.get(Progress.lastStep) || STEPS.get(FIRST_STEP);

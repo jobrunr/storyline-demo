@@ -7,6 +7,7 @@ import org.jobrunr.storylinedemo.creditcards.FraudReviewService;
 import org.jobrunr.storylinedemo.payments.Payment;
 import org.jobrunr.storylinedemo.payments.PaymentPlatform;
 import org.jobrunr.storylinedemo.payments.PaymentService;
+import org.jobrunr.storylinedemo.payments.events.listeners.HandleTransferToJobRunrFinance;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * The one-click triggers the tour hands to signed-in visitors. Everything here writes to the bank, so
@@ -42,18 +44,23 @@ public class TourDemoController {
         this.paymentService = paymentService;
     }
 
-    /** Step 6: one payment whose job records every completed step, so a requeue repeats none of them. */
+    /**
+     * Step 6: one payment whose transfer times out on its first attempt, after the card was already charged.
+     * The stage opens the job itself, so its Chart shows the retry skipping the steps that already ran.
+     */
     @GetMapping("/demo/payment")
     public DemoResult payment() {
         List<CreditCard> cards = activeCards();
         CreditCard payer = cards.getFirst();
         BigDecimal amount = BigDecimal.valueOf(new Random().nextInt(50, 4000));
 
-        paymentService.submitPayment(
-                new Payment(payer.getId(), amount, PaymentPlatform.JOBRUNR_FINANCE, cards.getLast().getNumber()));
+        UUID jobId = paymentService.submitPayment(
+                new Payment(payer.getId(), amount, PaymentPlatform.JOBRUNR_FINANCE, cards.getLast().getNumber()),
+                HandleTransferToJobRunrFinance.TIMEOUT_ONCE_LABEL);
 
         return DemoResult.ok(payer.getName() + " just paid " + amount.intValue()
-                + " euro in four recorded steps. Open the Process payment job and press Requeue: every step gets skipped.");
+                + " euro. The transfer will time out once, so give the retry a few seconds to show up in the Chart.",
+                "/dashboard/jobs/" + jobId);
     }
 
     /** Step 10: one payment on the High queue, to overtake whatever is piling up below it. */

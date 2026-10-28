@@ -28,7 +28,7 @@ solution: |
   Start a dedicated server with <code>jobrunr.background-job-server.tags=external</code> to process PayPal and Stripe payments securely!
 
 codeReferences:
-  - org/jobrunr/storylinedemo/payments/PaymentService.java?focus=L57-L64
+  - org/jobrunr/storylinedemo/payments/PaymentService.java?focus=L61-L68
 
 tryIt: |
   <ol>

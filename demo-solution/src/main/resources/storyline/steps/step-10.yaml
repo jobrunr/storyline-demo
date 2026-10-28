@@ -31,7 +31,7 @@ solution: |
   queues first.
 
 codeReferences:
-  - org/jobrunr/storylinedemo/payments/PaymentService.java?focus=L57-L60
+  - org/jobrunr/storylinedemo/payments/PaymentService.java?focus=L61-L64
 
 tryIt: |
   <ol>

@@ -25,7 +25,7 @@ solution: |
   No one gets starved, but premium cards get premium treatment!
 
 codeReferences:
-  - org/jobrunr/storylinedemo/payments/PaymentService.java?focus=L57-L62
+  - org/jobrunr/storylinedemo/payments/PaymentService.java?focus=L61-L66
 
 tryIt: |
   Trigger payments for both American Express and Mastercard holders.

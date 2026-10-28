@@ -29,7 +29,7 @@ solution: |
   No more angry API providers or surprise bills!
 
 codeReferences:
-  - org/jobrunr/storylinedemo/payments/PaymentService.java?focus=L53-L80
+  - org/jobrunr/storylinedemo/payments/PaymentService.java?focus=L56-L85
 
 tryIt: |
   Create bulk payments across all platforms. Watch the dashboard — PayPal and
