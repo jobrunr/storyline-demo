@@ -1,6 +1,7 @@
 package org.jobrunr.storyline;
 
 import org.jobrunr.storyline.model.Category;
+import org.jobrunr.storyline.model.MobileInfo;
 import org.jobrunr.storyline.model.QuickAction;
 import org.jobrunr.storyline.model.Storyline;
 import org.jobrunr.storyline.model.StorylineStep;
@@ -33,6 +34,7 @@ public class StorylineReader {
     private static final Set<String> TOUR_PLACEMENTS = Set.of("auto", "top", "right", "bottom", "left");
     private static final Set<String> TOUR_MATCHES = Set.of(TourAnchor.MATCH_PATH, TourAnchor.MATCH_PREFIX);
     private static final Set<String> TOUR_METHODS = Set.of("GET", "POST");
+    private static final Set<String> HISTORY_VIEWS = Set.of(TourInfo.HISTORY_TIMELINE, TourInfo.HISTORY_CHART);
 
     private final Storyline storyline;
     private final ObjectMapper yamlMapper;
@@ -112,7 +114,8 @@ public class StorylineReader {
             stepYaml.videoUrl,
             stepYaml.learnMore,
             stepYaml.liveNotice,
-            tourInfo(stepYaml, stepPath)
+            tourInfo(stepYaml, stepPath),
+            mobileInfo(stepYaml, stepPath)
         );
     }
 
@@ -148,7 +151,26 @@ public class StorylineReader {
                 mode,
                 tourActions(tour.actions, stepPath),
                 tour.screenshot,
-                Boolean.TRUE.equals(tour.skip));
+                Boolean.TRUE.equals(tour.skip),
+                historyView(tour.historyView, "tour.historyView", stepPath),
+                Optional.ofNullable(tour.liveNotice).orElse(step.liveNotice));
+    }
+
+    /** The phone deck tells the guide's story unless the step's {@code mobile:} block says otherwise. */
+    private static MobileInfo mobileInfo(StepYaml step, String stepPath) {
+        MobileYaml mobile = Optional.ofNullable(step.mobile).orElseGet(MobileYaml::new);
+        return new MobileInfo(
+                Optional.ofNullable(mobile.scenario).orElse(step.scenario),
+                Optional.ofNullable(mobile.challenge).orElse(step.challenge),
+                Optional.ofNullable(mobile.solution).orElse(step.solution),
+                Optional.ofNullable(mobile.tryIt).orElse(step.tryIt),
+                Optional.ofNullable(mobile.dashboardUrl).orElse(step.dashboardUrl),
+                Optional.ofNullable(mobile.latestJob).orElse(emptyList()),
+                historyView(mobile.historyView, "mobile.historyView", stepPath));
+    }
+
+    private static String historyView(String value, String field, String stepPath) {
+        return isBlank(value) ? null : oneOf(value, null, HISTORY_VIEWS, field, stepPath);
     }
 
     private static String defaultMode(StepYaml step) {
@@ -173,7 +195,9 @@ public class StorylineReader {
                         action.label,
                         action.url,
                         httpMethod(action.method, stepPath),
-                        Boolean.TRUE.equals(action.anonymous)))
+                        Boolean.TRUE.equals(action.anonymous),
+                        action.focus,
+                        isBlank(action.placement) ? null : oneOf(action.placement, null, TOUR_PLACEMENTS, "action.placement", stepPath)))
                 .toList();
     }
 
@@ -239,6 +263,17 @@ public class StorylineReader {
         public String learnMore;
         public String liveNotice;
         public TourYaml tour;
+        public MobileYaml mobile;
+    }
+
+    private static class MobileYaml {
+        public String scenario;
+        public String challenge;
+        public String solution;
+        public String tryIt;
+        public String dashboardUrl;
+        public List<String> latestJob;
+        public String historyView;
     }
 
     private static class TourYaml {
@@ -249,6 +284,8 @@ public class StorylineReader {
         public String screenshot;
         public List<ActionYaml> actions;
         public Boolean skip;
+        public String historyView;
+        public String liveNotice;
     }
 
     private static class AnchorYaml {
@@ -264,5 +301,7 @@ public class StorylineReader {
         public String url;
         public String method;
         public Boolean anonymous;
+        public String focus;
+        public String placement;
     }
 }

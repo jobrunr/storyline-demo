@@ -55,9 +55,46 @@
             if (!iframe) return;
             const src = iframe.getAttribute('src');
             const loaded = src && src !== 'about:blank';
-            if (i === current && !loaded) iframe.setAttribute('src', iframe.dataset.src);
+            if (i === current && !loaded) loadFrame(iframe);
             else if (i !== current && loaded) iframe.setAttribute('src', 'about:blank');
         });
+    }
+
+    // The dashboard keeps these preferences in localStorage, which it shares with this page. Steps about
+    // retries and durable steps open job pages on the Chart, the rest on the Timeline.
+    function presetDashboard(iframe) {
+        try {
+            localStorage.setItem('jobHistoryDisplayMode', iframe.dataset.historyView || 'timeline');
+            localStorage.setItem('analyticsDataGridDetailedSelectedTab', '0');
+            if (!localStorage.getItem('analyticsSelectedTimePeriod')) {
+                localStorage.setItem('analyticsSelectedTimePeriod', '{"label":"Last 31 Days"}');
+            }
+        } catch (e) { /* private mode: the dashboard keeps its own defaults */ }
+    }
+
+    async function loadFrame(iframe) {
+        presetDashboard(iframe);
+        const queries = iframe.dataset.latestJob;
+        if (queries) {
+            delete iframe.dataset.latestJob;
+            const jobPage = await latestJobPage(queries.split('|'));
+            if (jobPage) iframe.dataset.src = jobPage;
+            if (!iframe.closest('.card') || cards.indexOf(iframe.closest('.card')) !== current) return;
+        }
+        iframe.setAttribute('src', iframe.dataset.src);
+    }
+
+    // Some cards show one real job instead of a list: the newest one the first matching query finds.
+    async function latestJobPage(queries) {
+        for (const query of queries) {
+            try {
+                const res = await fetch('/api/jobs?' + query + '&offset=0&limit=1&order=updatedAt%3ADESC', { headers: { Accept: 'application/json' } });
+                if (!res.ok) continue;
+                const page = await res.json();
+                if (page.items && page.items.length) return '/dashboard/jobs/' + page.items[0].id;
+            } catch (e) { /* try the next query, then fall back to the list */ }
+        }
+        return null;
     }
 
     function updateChrome() {

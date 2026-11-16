@@ -39,12 +39,20 @@ tour:
   narration: |
     PDF generation fails now and then, mostly because it is PDF generation. JobRunr shrugs and reschedules
     with exponential backoff: three seconds, then nine, then twenty seven. Start a batch of reports, half
-    of which throw on purpose, and watch the failures line up for another go.
+    of which throw on purpose, watch the failures line up for another go, then open one: its History
+    opens on the Chart, with every failed attempt and the wait before each retry drawn on a time axis.
   anchor:
     page: /dashboard/jobs?state=SCHEDULED
     selector: "#scheduled-menu-btn"
     fallbackSelector: "#jobs-table-container"
   placement: right
+  historyView: chart
   actions:
     - label: Generate 20 reports that sometimes fail
       url: /bulk-generate-summary-reports?count=20
+
+mobile:
+  tryIt: |
+    Reports fail at random here and JobRunr reschedules them. Open one of these scheduled jobs: its History
+    opens on the Chart, with every failed attempt and the wait before each retry drawn on a time axis.
+  historyView: chart

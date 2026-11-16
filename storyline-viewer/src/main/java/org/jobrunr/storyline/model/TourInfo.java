@@ -13,8 +13,10 @@ import java.util.List;
  * @param placement  preferred popup side: auto, top, right, bottom or left
  * @param mode       dashboard (beacon on the stage), app (slide-in banking form) or info (centered card)
  * @param actions    one-click triggers rendered as buttons inside the popup
- * @param screenshot absolute path of a still to show for {@code info} steps
- * @param skip       leaves this step out of the tour entirely; the written guide keeps it
+ * @param screenshot  absolute path of a still to show for {@code info} steps
+ * @param skip        leaves this step out of the tour entirely; the written guide keeps it
+ * @param historyView how a job page shows its history while this step is open: timeline or chart
+ * @param liveNotice  replaces the guide's notice on the live demo, an empty value drops it
  */
 public record TourInfo(
         String narration,
@@ -23,11 +25,16 @@ public record TourInfo(
         String mode,
         List<TourAction> actions,
         String screenshot,
-        boolean skip) {
+        boolean skip,
+        String historyView,
+        String liveNotice) {
 
     public static final String MODE_DASHBOARD = "dashboard";
     public static final String MODE_APP = "app";
     public static final String MODE_INFO = "info";
+
+    public static final String HISTORY_TIMELINE = "timeline";
+    public static final String HISTORY_CHART = "chart";
 
     /**
      * @param page             dashboard URL the stage must be on, e.g. {@code /dashboard/jobs?state=FAILED}
@@ -43,8 +50,13 @@ public record TourInfo(
     }
 
     /**
+     * A trigger may answer with a {@code stageUrl}, typically the page of the job it just created. The
+     * stage then moves there and the beacon re-anchors on {@code focus}, with the popup on {@code placement}.
+     *
      * @param anonymous whether the endpoint may be called without signing in
+     * @param focus     selector to point at once the stage followed the trigger's {@code stageUrl}
+     * @param placement popup side once the stage followed the trigger, null keeps the step's
      */
-    public record TourAction(String label, String url, String method, boolean anonymous) {
+    public record TourAction(String label, String url, String method, boolean anonymous, String focus, String placement) {
     }
 }

@@ -27,7 +27,7 @@ solution: |
   the charge and continue from the receipt.
 
 codeReferences:
-  - org/jobrunr/storylinedemo/payments/PaymentService.java?focus=L82-L95
+  - org/jobrunr/storylinedemo/payments/PaymentService.java?focus=L87-L100
 
 tryIt: |
   Make a payment using the credit card you've created earlier and watch the job context track completed steps. 
@@ -41,17 +41,31 @@ learnMore: https://www.jobrunr.io/en/documentation/background-methods/best-pract
 
 tour:
   narration: |
-    A payment job that dies halfway must never charge the card twice on the retry. Your customers
-    would have "opinions". This is durable execution: <code>context.runStepOnce()</code> records every
-    step the job completes, so a retry continues from the step that failed instead of replaying the
-    whole job. Press the button below, then open the Process payment job, hit Requeue and read the
-    history: every step already ran, so every step is skipped.
+    A payment job that dies halfway must never charge the card twice on the retry, or your customers
+    will have "opinions". This is durable execution: <code>context.runStepOnce()</code> records every step
+    the job completes, so a retry picks up at the step that failed. Press the button for a payment whose
+    transfer times out once, right after the card was charged, and the stage opens that job's Chart.
+    Give it a few seconds: on the retry, the steps that already ran turn into hollow diamonds, skipped.
   anchor:
     page: /dashboard/jobs
     selector: "#job-signature-select"
     fallbackSelector: "#job-filter-panel-header"
     reveal: "#job-filter-panel-header"
   placement: bottom
+  historyView: chart
   actions:
-    - label: Make a payment (four recorded steps)
+    - label: Make a payment that times out once
       url: /demo/payment
+      focus: "#job-history-chart-panel [role='group']"
+      placement: left
+
+mobile:
+  tryIt: |
+    This is a real payment job. Its History Chart has one row per durable step, with how long each one took.
+    When an attempt failed, the retry shows the steps that already ran as hollow diamonds: skipped, so the
+    card is charged exactly once.
+  dashboardUrl: /dashboard/jobs?state=SUCCEEDED&jobSignature=org.jobrunr.storylinedemo.payments.PaymentService.processPayment%28java.lang.Long%2C+org.jobrunr.jobs.context.JobContext%29
+  latestJob:
+    - states=SUCCEEDED&label=transfer%3Atimes-out-once
+    - states=SUCCEEDED&jobSignature=org.jobrunr.storylinedemo.payments.PaymentService.processPayment%28java.lang.Long%2C%20org.jobrunr.jobs.context.JobContext%29
+  historyView: chart

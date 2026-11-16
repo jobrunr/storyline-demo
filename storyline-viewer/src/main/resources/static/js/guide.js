@@ -11,6 +11,7 @@ if (document.readyState === "loading") {
 function init() {
     loadProgress();
     updateProgressDisplay();
+    changeDefaultTimePeriodIfNotPresent();
     hljs.highlightAll();
 
     // Re-initialize after HTMX loads new content
@@ -32,6 +33,14 @@ function init() {
     initializeTabSwitching();
     initializeCompleteButtons();
     updateTimeline();
+}
+
+
+function changeDefaultTimePeriodIfNotPresent() {
+    const saved = localStorage.getItem("analyticsSelectedTimePeriod");
+    if (!saved) {
+        localStorage.setItem("analyticsSelectedTimePeriod", `{"label":"Last 31 Days"}`);
+    }
 }
 
 // Load progress from localStorage

@@ -20,6 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.jobrunr.scheduling.JobBuilder.aJob;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Stream;
 
 @Service
 public class PaymentService {
@@ -45,26 +48,27 @@ public class PaymentService {
     }
 
     @Transactional
-    public void submitPayment(Payment payment) {
+    public UUID submitPayment(Payment payment, String... extraLabels) {
         var savedPayment = paymentRepository.save(payment);
-        createPaymentProcessingJob(savedPayment);
+        return createPaymentProcessingJob(savedPayment, extraLabels);
     }
 
-    private void createPaymentProcessingJob(Payment payment) {
+    private UUID createPaymentProcessingJob(Payment payment, String... extraLabels) {
         CreditCard creditCard = creditCardRepository.findById(payment.getCreditCardId())
                 .orElseThrow(() -> new IllegalArgumentException("Credit card not found: " + payment.getCreditCardId()));
+        Long paymentId = payment.getId();
 
         var processPaymentJob = jobScheduler.create(aJob()
-                .withName("Process payment #" + payment.getId())
+                .withName("Process payment #" + paymentId)
                 // Step 10: Payments are high priority!
                 .withPriorityQueue(Priority.HIGH)
                 // Step 11: Process more payments on average for premium cards
-                .withLabels("cardType:" + creditCard.getType().name())
+                .withLabels(labels("cardType:" + creditCard.getType().name(), extraLabels))
                 // Step 14: Payments to Stripe or Paypal can only be processed on dedicated servers
                 .withServerTag(payment.getPlatform().getServerTag())
                 // Step 15A: Payments to Stripe or Paypal are risky if the number of requests are not limited
                 .withRateLimiter(payment.getPlatform().isExternal() ? payment.getPlatform().name() : null)
-                .withJobLambda(() -> processPayment(payment.getId(), JobContext.Null)));
+                .withJobLambda(() -> processPayment(paymentId, JobContext.Null)));
 
         // Chain government reporting for large payments (> $10k)
         if (payment.requiresGovernmentReporting()) {
@@ -75,8 +79,9 @@ public class PaymentService {
                     // Step 15B: The government app is easily DDoSable, rate-limiting to the rescue!
                     .withRateLimiter("REPORTING")
                     .runAfterSuccessOf(processPaymentJob.asUUID())
-                    .withJobLambda(() -> reportToGovernment(payment.getId())));
+                    .withJobLambda(() -> reportToGovernment(paymentId)));
         }
+        return processPaymentJob.asUUID();
     }
 
     public void processPayment(Long paymentId, JobContext context) {
@@ -143,6 +148,10 @@ public class PaymentService {
         LOGGER.info("Reporting payment > $10k to government: {}", payment);
         simulateWork(500);
         LOGGER.info("Government reporting verified: {} - response: {}", payment);
+    }
+
+    private static List<String> labels(String label, String... extraLabels) {
+        return Stream.concat(Stream.of(label), Stream.of(extraLabels)).toList();
     }
 
     private void simulateWork(long millis) {

@@ -40,8 +40,41 @@ liveNotice: "Jaeger is not wired into this live demo. Run the demo locally and c
 
 tour:
   narration: |
-    Jobs suddenly take ten times longer and nothing in your code changed. Sound familiar? JobRunr emits
-    OpenTelemetry spans for every job, so a single trace shows whether the time went to the database, to
-    an external API or to your own logic. No interrogating log files at midnight.
-  mode: info
-  screenshot: /images/tour/step-20-jaeger.png
+    Jobs suddenly take ten times longer and nothing in your code changed. Detailed analytics breaks it down
+    per job signature, per server and per exception, down to how often each exception struck and when it
+    last did. Generate some failing reports, flip through the three tabs, then click a job signature for its
+    own page with succeeded and failed runs side by side. The Failed jobs list then filters on that exception,
+    and each job's Trace Id opens the exact run in Jaeger.
+  mode: dashboard
+  anchor:
+    page: /dashboard
+    selector: "#job-type-analytics-table-container [data-field='failureRate']"
+    fallbackSelector: "#job-type-analytics-table-container"
+  placement: right
+  actions:
+    - label: Generate 20 reports that sometimes fail
+      url: /bulk-generate-summary-reports?count=20
+  liveNotice: "Jaeger is not wired into this live demo, so the Trace Id leads nowhere here. Run the demo locally to follow it all the way down."
+
+mobile:
+  solution: |
+    The JobRunr Pro dashboard narrows it down without leaving the browser. <strong>Detailed analytics</strong>
+    on its home page splits processing per job signature, per server and per exception: failure rate,
+    processing time, and how often each exception struck and when it last did. Every job signature also gets
+    its own page with succeeded and failed runs side by side, and the Failed jobs list filters on any exception.
+    <br><br>
+    For the last mile, JobRunr Pro integrates with <strong>OpenTelemetry</strong>:
+    <br><br>
+    <pre class="p-0 m-0">
+    <code class="language-properties hljs">
+    # In application.properties
+    management.tracing.sampling.probability=1.0
+    management.opentelemetry.tracing.export.otlp.endpoint=http://localhost:4318/v1/traces
+    jobrunr.jobs.metrics.otel-observability.enabled=true
+    </code></pre>
+    <br>
+    Every job page then carries a Trace Id that opens the run in Jaeger, so you see whether the time went to
+    the database, an external API or your own code.
+  tryIt: |
+    Scroll down to Detailed analytics and flip between the Job Signatures, Servers and Exceptions tabs.
+  dashboardUrl: /dashboard

@@ -50,3 +50,18 @@ tour:
     fallbackSelector: "#dashboard-btn"
     match: prefix
   placement: bottom
+
+mobile:
+  solution: |
+    The JobRunr Pro Dashboard gives you a real-time view of your entire job ecosystem, and in v9 its
+    home page gained Job Analytics:
+    <ul>
+      <li><strong>Job Analytics</strong>: success ratio, failed jobs, retries and a processing trend for the period you pick</li>
+      <li><strong>Detailed analytics</strong>: failure rate and processing time per job signature, per server and per exception</li>
+      <li><strong>Jobs view</strong>: filter by state, job signature, exception, label or server tag</li>
+      <li><strong>Job history</strong>: a Timeline of every state, or a Chart that draws retries and durable steps on a time axis</li>
+    </ul>
+    The embedded dashboard, a JobRunr Pro Enterprise feature, runs inside your Spring Boot app, no separate deployment needed.
+  tryIt: |
+    Open the dashboard fullscreen and scroll its home page: success ratio, failures and retries first, then
+    the processing trend and the detailed tables per job signature, server and exception.

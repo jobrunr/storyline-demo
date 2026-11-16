@@ -55,7 +55,7 @@ tasks.named('bootRun') {
 
 jib {
 	from {
-		image = 'azul/zulu-openjdk-alpine:25-jre-latest'
+		image = 'azul-zulu:25-jre-headless-alpine'
 	}
 	to {
 		image = 'registry.jobrunr.io/jobrunr/jobrunr-pro-finance-demo'
