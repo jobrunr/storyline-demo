@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '4.1.1'
+    id 'org.springframework.boot' version '4.1.2'
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
@@ -11,7 +11,7 @@ description = 'storyline-demo'
 dependencies {
     // Spring dependencies + hot reload, templating, validation, data source autoconfig, metrics actuator
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'io.pebbletemplates:pebble-spring-boot-starter:4.1.2'
+    implementation 'io.pebbletemplates:pebble-spring-boot-starter:4.1.3'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
@@ -25,13 +25,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-opentelemetry'
 
     // JobRunr Pro & Jackson serialization
-    implementation 'org.jobrunr:jobrunr-pro-spring-boot-4-starter:9.0.0'
+    implementation 'org.jobrunr:jobrunr-pro-spring-boot-4-starter:9.0.4'
 
     implementation 'com.zaxxer:HikariCP'
     implementation 'org.postgresql:postgresql'
 
     // Fake data generation
-    implementation 'net.datafaker:datafaker:2.5.3'
+    implementation 'net.datafaker:datafaker:2.7.0'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 }
