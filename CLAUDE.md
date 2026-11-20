@@ -33,7 +33,7 @@ docker compose up
 
 ## Architecture
 
-**Multi-module Gradle project** (Java 25, Spring Boot 4.0.0):
+**Multi-module Gradle project** (Java 25, Spring Boot 4):
 
 - **demo-solution** - Complete implementation with all 22 JobRunr Pro steps
 - **demo-start** - Skeleton for implementing features yourself
